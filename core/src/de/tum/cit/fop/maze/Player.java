@@ -22,6 +22,16 @@ public class Player {
     private List<Animation<TextureRegion>> characterAnimation;
     private Maze maze;
 
+//    public static class Effect {
+//        public int x;
+//        public int y;
+//        public int speed;
+//        public Effect(int x, int y, int speed) {
+//            this.x = x;
+//            this.y = y;
+//            this.speed = speed;
+//        }
+//    }
 
     private enum action {
         DOWN, RIGHT, UP, LEFT
@@ -31,9 +41,13 @@ public class Player {
         characterAnimation = new ArrayList<>();
         loadCharacterAnimation();
         this.maze = maze;
-        x = (int) (GameScreen.tileSize * 1.5);
-        y = (int) (GameScreen.tileSize * 1.5);
-       // for (int i = 0 < maze.)
+        String entrance;
+        for (var entry : maze.getMap().entrySet()) {
+            if (entry.getValue().equals(3)) {
+                x = entry.getKey().x * GameScreen.tileSize + GameScreen.tileSize / 2;
+                y = entry.getKey().y * GameScreen.tileSize + GameScreen.tileSize / 2;;
+            }
+        }
         baseSpeed = GameScreen.tileSize * 7;
     }
 

@@ -129,7 +129,9 @@ public class GameScreen implements Screen {
                 camera.zoom -= 0.01f;
             }
         } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            camera.zoom += 0.01f;
+            if (camera.zoom < 2) {
+                camera.zoom += 0.01f;
+            }
         }
     }
 

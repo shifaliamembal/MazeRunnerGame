@@ -13,6 +13,8 @@ import java.util.*;
 public class Maze {
     private Properties mazeProperties;
     private Map<Point, Integer> mazeMap;
+    private Map<Point, Integer> entityMap;
+    private List<Entity> entities;
     private Array<TextureRegion> textures;
     private static final int WALL = 0;
     private static final int PATH = 1;
@@ -22,6 +24,8 @@ public class Maze {
     public Maze(String filename) {
         mazeProperties = new Properties();
         mazeMap = new HashMap<>();
+        entityMap = new HashMap<>();
+        entities = new ArrayList<>();
         try {
             mazeProperties.load(new FileInputStream(filename));
         } catch (IOException e) {
@@ -33,8 +37,19 @@ public class Maze {
             String[] coords = key.split(",");
             int x = Integer.parseInt(coords[0]);
             int y = Integer.parseInt(coords[1]);
-            //System.out.println(x + ", " + y);
-            mazeMap.put(new Point(x, y), Integer.parseInt(mazeProperties.getProperty(key)));
+
+            if (Integer.parseInt(mazeProperties.getProperty(key)) < 10) {
+                mazeMap.put(new Point(x, y), Integer.parseInt(mazeProperties.getProperty(key)));
+            } else {
+                mazeMap.put(new Point(x, y), PATH);
+                entityMap.put(new Point(x, y), Integer.parseInt(mazeProperties.getProperty(key)));
+            }
+        }
+//        if (entityMap.isEmpty()) {
+//            entityMap.put(new Point(0, 0), 0);
+//        }
+        for (var entry : entityMap.entrySet()) {
+            entities.add(new TreasureChest(entry.getKey().x, entry.getKey().y));
         }
     }
 
@@ -51,13 +66,15 @@ public class Maze {
     }
 
     public void draw(SpriteBatch batch) {
-
         for (Point point : mazeMap.keySet()) {
             if (mazeMap.get(point) <= 1) {
                 batch.draw(textures.get(mazeMap.get(point)), point.x * GameScreen.tileSize, point.y * GameScreen.tileSize, GameScreen.tileSize, GameScreen.tileSize);
             } else {
                 batch.draw(textures.get(2), point.x * GameScreen.tileSize, point.y * GameScreen.tileSize, GameScreen.tileSize, GameScreen.tileSize);
             }
+        }
+        for (Entity entity : entities) {
+            entity.draw(batch);
         }
     }
 
@@ -76,8 +93,9 @@ public class Maze {
 
         for (int i = 1; i < rows - 1; i++) {
             for (int j = 1; j < cols - 1; j++) {
-                if (maze[i][j] == WALL && random.nextInt(20) == 0) {
-                    setArea(maze, j, i, random.nextInt(1, 6), PATH);
+                if (maze[i][j] == WALL && random.nextInt(8) == 0) {
+//                    setArea(maze, j, i, random.nextInt(1, 6), PATH);
+                    setArea(maze, j, i, 3, PATH);
                 }
             }
         }
@@ -101,16 +119,29 @@ public class Maze {
         }
 
         Arrays.fill(maze[rows - 1], WALL);
+        Arrays.fill(maze[0], WALL);
         for (int i = 1; i < rows - 1; i++) {
+            maze[i][0] = WALL;
             maze[i][cols - 1] = WALL;
         }
 
         createEntrance(maze, random);
         createExit(maze, random);
+        createEntities(maze, random);
 
         return maze;
     }
 
+    public static void createEntities(int[][] maze, Random random) {
+        for (int i = 0; i < maze.length; i++) {
+            for (int j = 0; j < maze[i].length; j++) {
+                if (maze[i][j] == PATH && countSurroundingTiles(maze, j, i, WALL) >= 7 && random.nextInt(4) == 0) {
+                    maze[i][j] = 10;
+                    //System.out.println(i + " " + j + " " + countSurroundingTiles(maze, i, j, WALL));
+                }
+            }
+        }
+    }
 
     public static void createEntrance(int[][] maze, Random random) {
         int x = random.nextInt(1,maze[0].length);
@@ -156,7 +187,7 @@ public class Maze {
             int nx = x + dx[i];
             int ny = y + dy[i];
 
-            if (nx >= 0 && nx < maze[0].length && ny >= 0 && ny < maze.length && maze[ny][nx] == type) {
+            if (inBounds(maze, nx, ny) && maze[ny][nx] == type) {
                 count++;
             }
         }

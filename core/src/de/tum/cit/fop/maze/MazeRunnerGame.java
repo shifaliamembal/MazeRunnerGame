@@ -19,6 +19,7 @@ public class MazeRunnerGame extends Game {
     // Screens
     private MenuScreen menuScreen;
     private GameScreen gameScreen;
+    //private Player player;
 
     // Sprite Batch for rendering
     private SpriteBatch spriteBatch;
@@ -26,8 +27,6 @@ public class MazeRunnerGame extends Game {
     // UI Skin
     private Skin skin;
 
-    // Character animation downwards
-    private Animation<TextureRegion> characterDownAnimation;
 
     /**
      * Constructor for MazeRunnerGame.
@@ -45,13 +44,14 @@ public class MazeRunnerGame extends Game {
     public void create() {
         spriteBatch = new SpriteBatch(); // Create SpriteBatch
         skin = new Skin(Gdx.files.internal("craft/craftacular-ui.json")); // Load UI skin
-        this.loadCharacterAnimation(); // Load character animation
+        this.loadAssets(); // Load character animation
 
         // Play some background music
         // Background sound
         Music backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("background.mp3"));
         backgroundMusic.setLooping(true);
-        backgroundMusic.play();
+        //backgroundMusic.play();
+        Maze.saveMaze(Maze.generateMaze(101,101), "maps/test.properties");
 
         goToMenu(); // Navigate to the menu screen
     }
@@ -81,22 +81,8 @@ public class MazeRunnerGame extends Game {
     /**
      * Loads the character animation from the character.png file.
      */
-    private void loadCharacterAnimation() {
+    private void loadAssets() {
         Texture walkSheet = new Texture(Gdx.files.internal("character.png"));
-
-        int frameWidth = 16;
-        int frameHeight = 32;
-        int animationFrames = 4;
-
-        // libGDX internal Array instead of ArrayList because of performance
-        Array<TextureRegion> walkFrames = new Array<>(TextureRegion.class);
-
-        // Add all frames to the animation
-        for (int col = 0; col < animationFrames; col++) {
-            walkFrames.add(new TextureRegion(walkSheet, col * frameWidth, 0, frameWidth, frameHeight));
-        }
-
-        characterDownAnimation = new Animation<>(0.1f, walkFrames);
     }
 
     /**
@@ -115,9 +101,12 @@ public class MazeRunnerGame extends Game {
         return skin;
     }
 
-    public Animation<TextureRegion> getCharacterDownAnimation() {
-        return characterDownAnimation;
-    }
+    //public Animation<TextureRegion> getCharacterDownAnimation() {
+    //    return characterDownAnimation;
+    //}
+//    public Player getPlayer() {
+//        return player;
+//    }
 
     public SpriteBatch getSpriteBatch() {
         return spriteBatch;

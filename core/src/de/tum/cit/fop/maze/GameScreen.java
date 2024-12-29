@@ -28,9 +28,9 @@ public class GameScreen implements Screen {
     private float sinusInput = 0f;
 
     private Maze maze;
-    //private Player player;
+    private Player player;
     private Viewport viewport;
-    //private List<Maze> levels;
+    private List<Maze> levels;
     public static final int tileSize = 64;
 
     /**
@@ -41,7 +41,7 @@ public class GameScreen implements Screen {
     public GameScreen(MazeRunnerGame game) {
         this.game = game;
         maze = new Maze("maps/test.properties");
-        //player = new Player(maze);
+        player = new Player(maze);
 
         // Create and configure the camera for the game view
         camera = new OrthographicCamera();
@@ -65,7 +65,7 @@ public class GameScreen implements Screen {
 
         ScreenUtils.clear(0, 0, 0, 1); // Clear the screen
 
-        //camera.position.set(player.getX(), player.getY(), 0);
+        camera.position.set(player.getX(), player.getY(), 0);
         zoom();
         camera.update(); // Update the camera
 
@@ -84,13 +84,14 @@ public class GameScreen implements Screen {
 
         // Draw the character next to the text :) / We can reuse sinusInput here
         maze.draw(game.getSpriteBatch());
-//        game.getSpriteBatch().draw(
-//                player.getCurrentAnimation().getKeyFrame(sinusInput, player.takeInput(delta)),
-//                camera.position.x - (float) tileSize / 2,
-//                camera.position.y - (float) tileSize / 2,
-//                tileSize,
-//                tileSize * 2
-//        );
+        //System.out.println(player.getSpeed() + " " + delta);
+        game.getSpriteBatch().draw(
+                player.getCurrentAnimation().getKeyFrame(sinusInput, player.takeInput(delta)),
+                camera.position.x - (float) tileSize / 2,
+                camera.position.y - (float) tileSize / 2,
+                tileSize,
+                tileSize * 2
+        );
         //font.draw(game.getSpriteBatch(), "O", camera.position.x, camera.position.y);
 
 

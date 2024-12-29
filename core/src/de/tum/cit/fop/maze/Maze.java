@@ -24,9 +24,9 @@ public class Maze {
         mazeMap = new HashMap<>();
         try {
             mazeProperties.load(new FileInputStream(filename));
-        } catch (IOException e) { // TODO better exception handling
+        } catch (IOException e) {
             System.out.println("Maze file " + filename + " not found");
-            return;
+            mazeProperties.put(0,0);
         }
         loadTextures();
         for (String key : mazeProperties.stringPropertyNames()) {
@@ -53,7 +53,6 @@ public class Maze {
     public void draw(SpriteBatch batch) {
 
         for (Point point : mazeMap.keySet()) {
-            //System.out.println(point.x + " " + point.y);
             if (mazeMap.get(point) <= 1) {
                 batch.draw(textures.get(mazeMap.get(point)), point.x * GameScreen.tileSize, point.y * GameScreen.tileSize, GameScreen.tileSize, GameScreen.tileSize);
             } else {
@@ -101,32 +100,69 @@ public class Maze {
             }
         }
 
+        Arrays.fill(maze[rows - 1], WALL);
+        for (int i = 1; i < rows - 1; i++) {
+            maze[i][cols - 1] = WALL;
+        }
+
+        createEntrance(maze, random);
+        createExit(maze, random);
 
         return maze;
     }
 
-//    private static boolean surroundedBy(int[][] maze, int x, int y, int type) {
-//        return maze[y - 1][x - 1] == type && maze[y - 1][x] == type && maze[y - 1][x + 1] == type
-//                && maze[y][x - 1] == type && maze[y][x + 1] == type
-//                && maze[y + 1][x - 1] == type && maze[y + 1][x] == type && maze[y + 1][x + 1] == type;
-//    }
-private static int countSurroundingTiles(int[][] maze, int x, int y, int type) {
-    int count = 0;
 
-    int[] dx = {-1, -1, -1, 0, 0, 1, 1, 1};
-    int[] dy = {-1, 0, 1, -1, 1, -1, 0, 1};
+    public static void createEntrance(int[][] maze, Random random) {
+        int x = random.nextInt(1,maze[0].length);
+        int y = random.nextInt(1, maze.length);
 
-    for (int i = 0; i < 8; i++) {
-        int nx = x + dx[i];
-        int ny = y + dy[i];
+        maze[y][x] = 3;
+    }
 
-        if (nx >= 0 && nx < maze[0].length && ny >= 0 && ny < maze.length && maze[ny][nx] == type) {
-            count++;
+    private static void createExit(int[][] maze, Random random) {
+        int perimeter = 2 * (maze.length + maze[0].length) - 4;
+        int exitPos = random.nextInt(perimeter);
+
+        int x = -1, y = -1;
+
+        if (exitPos < maze[0].length) {
+            x = 0;
+            y = exitPos;
+        } else if (exitPos < maze[0].length + maze.length - 1) {
+            x = exitPos - maze[0].length + 1;
+            y = maze[0].length - 1;
+        } else if (exitPos < 2 * maze[0].length + maze.length - 2) {
+            x = maze.length - 1;
+            y = 2 * maze[0].length + maze.length - 3 - exitPos;
+        } else {
+            x = perimeter - exitPos;
+            y = 0;
+        }
+
+        if (countSurroundingTiles(maze, x, y, PATH) == 3) {
+            maze[y][x] = 2;
+        } else {
+            createExit(maze, random);
         }
     }
 
-    return count;
-}
+    private static int countSurroundingTiles(int[][] maze, int x, int y, int type) {
+        int count = 0;
+
+        int[] dx = {-1, -1, -1, 0, 0, 1, 1, 1};
+        int[] dy = {-1, 0, 1, -1, 1, -1, 0, 1};
+
+        for (int i = 0; i < 8; i++) {
+            int nx = x + dx[i];
+            int ny = y + dy[i];
+
+            if (nx >= 0 && nx < maze[0].length && ny >= 0 && ny < maze.length && maze[ny][nx] == type) {
+                count++;
+            }
+        }
+
+        return count;
+    }
 
     private static void setArea(int[][] maze, int x, int y, int size, int type) {
         for (int i = -size / 2; i < size / 2 + size % 2; i++) {

@@ -20,7 +20,6 @@ public class Player {
     private int baseSpeed;
     private int speed;
     private List<Animation<TextureRegion>> characterAnimation;
-    private Rectangle playerBounds;
     private Maze maze;
 
 
@@ -34,6 +33,7 @@ public class Player {
         this.maze = maze;
         x = (int) (GameScreen.tileSize * 1.5);
         y = (int) (GameScreen.tileSize * 1.5);
+       // for (int i = 0 < maze.)
         baseSpeed = GameScreen.tileSize * 7;
     }
 

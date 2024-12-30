@@ -51,7 +51,7 @@ public class MazeRunnerGame extends Game {
         Music backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("background.mp3"));
         backgroundMusic.setLooping(true);
         //backgroundMusic.play();
-        Maze.saveMaze(Maze.generateMaze(101,101), "maps/test.properties");
+        Maze.saveMaze(Maze.generateMaze(51,51), "maps/test.properties");
 
         goToMenu(); // Navigate to the menu screen
     }

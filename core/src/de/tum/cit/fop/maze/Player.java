@@ -42,7 +42,7 @@ public class Player {
         loadCharacterAnimation();
         this.maze = maze;
         String entrance;
-        for (var entry : maze.getMap().entrySet()) {
+        for (var entry : maze.getMazeMap().entrySet()) {
             if (entry.getValue().equals(3)) {
                 x = entry.getKey().x * GameScreen.tileSize + GameScreen.tileSize / 2;
                 y = entry.getKey().y * GameScreen.tileSize + GameScreen.tileSize / 2;;
@@ -94,8 +94,8 @@ public class Player {
                 new Point(x / tileSize, (y - tileSize / 8) / tileSize)
         };
         return Arrays.stream(points)
-                .anyMatch(point -> maze.getMap().containsKey(point)
-                        && maze.getMap().get(point) == 0);
+                .anyMatch(point -> maze.getMazeMap().containsKey(point)
+                        && maze.getMazeMap().get(point) == 0);
     }
 
 

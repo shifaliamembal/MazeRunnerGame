@@ -21,7 +21,7 @@ public class TreasureChest extends Entity {
         super.textures.add(new TextureRegion(walkSheet, 0, 0, frameWidth, frameHeight));
     }
 
-    public void draw(SpriteBatch batch) {
+    public void draw(SpriteBatch batch, float delta) {
         batch.draw(textures.get(0), x - (float) GameScreen.tileSize / 2 + 4, y - (float) GameScreen.tileSize / 2, GameScreen.tileSize, GameScreen.tileSize);
     }
 }

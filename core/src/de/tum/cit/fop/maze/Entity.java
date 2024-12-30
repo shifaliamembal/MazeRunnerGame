@@ -27,5 +27,5 @@ public abstract class Entity {
 
     public abstract void loadAssets();
 
-    public abstract void draw(SpriteBatch batch);
+    public abstract void draw(SpriteBatch batch, float delta);
 }

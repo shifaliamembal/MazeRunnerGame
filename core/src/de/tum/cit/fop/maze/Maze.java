@@ -14,8 +14,9 @@ public class Maze {
     private Properties mazeProperties;
     private Map<Point, Integer> mazeMap;
     private Map<Point, Integer> entityMap;
-    private List<Entity> entities;
     private Array<TextureRegion> textures;
+//    private int rows;
+//    private int cols;
     private static final int WALL = 0;
     private static final int PATH = 1;
     private static final int[] DX = {-1, 1, 0, 0};
@@ -25,7 +26,6 @@ public class Maze {
         mazeProperties = new Properties();
         mazeMap = new HashMap<>();
         entityMap = new HashMap<>();
-        entities = new ArrayList<>();
         try {
             mazeProperties.load(new FileInputStream(filename));
         } catch (IOException e) {
@@ -45,12 +45,13 @@ public class Maze {
                 entityMap.put(new Point(x, y), Integer.parseInt(mazeProperties.getProperty(key)));
             }
         }
-//        if (entityMap.isEmpty()) {
-//            entityMap.put(new Point(0, 0), 0);
-//        }
-        for (var entry : entityMap.entrySet()) {
-            entities.add(new TreasureChest(entry.getKey().x, entry.getKey().y));
-        }
+
+//        rows = (int) mazeMap.keySet().stream()
+//                .mapToDouble(Point::getY)
+//                .max().orElse(-1) + 1;
+//        cols = (int) mazeMap.keySet().stream()
+//                .mapToDouble(Point::getX)
+//                .max().orElse(-1) + 1;
     }
 
     private void loadTextures() {
@@ -72,9 +73,6 @@ public class Maze {
             } else {
                 batch.draw(textures.get(2), point.x * GameScreen.tileSize, point.y * GameScreen.tileSize, GameScreen.tileSize, GameScreen.tileSize);
             }
-        }
-        for (Entity entity : entities) {
-            entity.draw(batch);
         }
     }
 
@@ -136,16 +134,17 @@ public class Maze {
         for (int i = 0; i < maze.length; i++) {
             for (int j = 0; j < maze[i].length; j++) {
                 if (maze[i][j] == PATH && countSurroundingTiles(maze, j, i, WALL) >= 7 && random.nextInt(4) == 0) {
-                    maze[i][j] = 10;
+                    maze[i][j] = 11;
+                    return;
                     //System.out.println(i + " " + j + " " + countSurroundingTiles(maze, i, j, WALL));
                 }
             }
         }
     }
 
-    public static void createEntrance(int[][] maze, Random random) {
-        int x = random.nextInt(1,maze[0].length);
-        int y = random.nextInt(1, maze.length);
+    private static void createEntrance(int[][] maze, Random random) {
+        int x = random.nextInt(1,maze[0].length - 1);
+        int y = random.nextInt(1, maze.length - 1);
 
         maze[y][x] = 3;
     }
@@ -224,7 +223,7 @@ public class Maze {
         }
     }
 
-    private static boolean inBounds(int[][] maze, int x, int y) {
+    public static boolean inBounds(int[][] maze, int x, int y) {
         return y > 0 && y < maze.length && x > 0 && x < maze[0].length;
     }
 
@@ -244,7 +243,19 @@ public class Maze {
 
     }
 
-    public Map<Point, Integer> getMap() {
+    public Map<Point, Integer> getMazeMap() {
         return mazeMap;
     }
+
+    public Map<Point, Integer> getEntityMap() {
+        return entityMap;
+    }
+
+//    public int getCols() {
+//        return cols;
+//    }
+//
+//    public int getRows() {
+//        return rows;
+//    }
 }

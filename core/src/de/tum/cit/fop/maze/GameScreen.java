@@ -13,6 +13,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,6 +32,7 @@ public class GameScreen implements Screen {
     private Player player;
     private Viewport viewport;
     private List<Maze> levels;
+    private List<Entity> entities;
     public static final int tileSize = 64;
 
     /**
@@ -42,6 +44,7 @@ public class GameScreen implements Screen {
         this.game = game;
         maze = new Maze("maps/test.properties");
         player = new Player(maze);
+        entities = new ArrayList<Entity>();
 
         // Create and configure the camera for the game view
         camera = new OrthographicCamera();
@@ -52,6 +55,15 @@ public class GameScreen implements Screen {
 
         // Get the font from the game's skin
         font = game.getSkin().getFont("font");
+
+        for (var entry : maze.getEntityMap().entrySet()) {
+            if (entry.getValue() == 10) {
+                entities.add(new TreasureChest(entry.getKey().x, entry.getKey().y));
+            }
+            else if (entry.getValue() == 11) {
+                entities.add(new Enemy(entry.getKey().x, entry.getKey().y, maze, player));
+            }
+        }
     }
 
 
@@ -84,6 +96,10 @@ public class GameScreen implements Screen {
 
         // Draw the character next to the text :) / We can reuse sinusInput here
         maze.draw(game.getSpriteBatch());
+
+        for (Entity e : entities) {
+            e.draw(game.getSpriteBatch(), delta);
+        }
         //System.out.println(player.getSpeed() + " " + delta);
         game.getSpriteBatch().draw(
                 player.getCurrentAnimation().getKeyFrame(sinusInput, player.takeInput(delta)),

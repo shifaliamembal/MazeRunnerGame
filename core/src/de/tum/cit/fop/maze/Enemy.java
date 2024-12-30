@@ -24,6 +24,7 @@ public class Enemy extends Entity {
     private Player player;
     private TextureRegion currentFrame;
     private float frameCounter;
+    private boolean dir;
 
 
     public Enemy(int x, int y, Maze maze, Player player) {
@@ -42,6 +43,7 @@ public class Enemy extends Entity {
 
     public void loadAssets() {
         Texture walkSheet = new Texture(Gdx.files.internal("walk_bot(walk).png"));
+        Texture idleSheet = new Texture(Gdx.files.internal("walk_bot(idle).png"));
 
         int frameWidth = 16;
         int frameHeight = 16;
@@ -49,21 +51,20 @@ public class Enemy extends Entity {
         int animationFrames = 7;
 
         Array<TextureRegion> walkFrames = new Array<>(TextureRegion.class);
+        Array<TextureRegion> idleFrames = new Array<>(TextureRegion.class);
 
         for (int col = 0; col < animationFrames; col++) {
-//            if (col == animationFrames - 1)
-//                frameWidth -= 2;
             walkFrames.add(new TextureRegion(walkSheet, col * frameWidth + col * 2, 0, frameWidth, frameHeight));
         }
+        idleFrames.add(new TextureRegion(idleSheet, 0, 0, frameWidth, frameHeight));
+        idleFrames.add(new TextureRegion(idleSheet, frameWidth + 2, 0, frameWidth, frameHeight));
 
         animations.add(new Animation<>(0.1f, walkFrames));
+        animations.add(new Animation<>(0.5f, idleFrames));
     }
 
     public void draw(SpriteBatch batch, float delta) {
 
-        currentFrame = animations.get(0).getKeyFrame(frameCounter, true);
-
-        batch.draw(currentFrame, x - (float) GameScreen.tileSize / 2, y - (float) GameScreen.tileSize / 2, GameScreen.tileSize, GameScreen.tileSize);
 
         if (path.isEmpty()) {
             return;
@@ -73,30 +74,40 @@ public class Enemy extends Entity {
         int yDiff = path.get(0).y * GameScreen.tileSize + GameScreen.tileSize / 2 - y;
         int speed = (int) (5 * GameScreen.tileSize * delta);
         frameCounter += delta;
-        // System.out.println(path.get(0).x + "," + path.get(0).y);
 
+        if (path.size() < 10) {
+            currentFrame = animations.get(0).getKeyFrame(frameCounter, true);
+            if (dir != player.getX() < x) {
+                for (Animation<TextureRegion> a : animations) {
+                    for (TextureRegion t : a.getKeyFrames()) {
+                        t.flip(true, false);
+                    }
+                }
+                dir = player.getX() < x;
+            }
 
-        if (xDiff > 0 && xDiff > speed) {
-            x += speed;
-        } else if (xDiff < 0 && -xDiff > speed) {
-            x -= speed;
-            //currentFrame.flip(true, false);
-        }
-        if (yDiff > 0 && yDiff > speed) {
-            y += speed;
-        } else if (yDiff < 0 && -yDiff > speed) {
-            y -= speed;
-        }
-        if (Math.abs(xDiff) + Math.abs(yDiff) < speed * 3) {
+            if (xDiff > 0 && xDiff > speed) {
+                x += speed;
+            } else if (xDiff < 0 && -xDiff > speed) {
+                x -= speed;
+            }
+            if (yDiff > 0 && yDiff > speed) {
+                y += speed;
+            } else if (yDiff < 0 && -yDiff > speed) {
+                y -= speed;
+            }
+            if (Math.abs(xDiff) + Math.abs(yDiff) < speed * 3) {
+                path = bfs(new Point(x / GameScreen.tileSize, y / GameScreen.tileSize),
+                        new Point(player.getX() / GameScreen.tileSize, player.getY() / GameScreen.tileSize));
+                path.remove(0);
+            }
+
+        } else {
+            currentFrame = animations.get(1).getKeyFrame(frameCounter, true);
             path = bfs(new Point(x / GameScreen.tileSize, y / GameScreen.tileSize),
                     new Point(player.getX() / GameScreen.tileSize, player.getY() / GameScreen.tileSize));
-            path.remove(0);
-            //System.out.println(path.size());
-//            for (Point p : path) {
-//                System.out.println(p.x + " " + p.y);
-//            }
         }
-        //System.out.println(xDiff + " " + yDiff);
+        batch.draw(currentFrame, x - (float) GameScreen.tileSize / 2, y - (float) GameScreen.tileSize / 2, GameScreen.tileSize, GameScreen.tileSize);
     }
 
     public List<Point> bfs(Point start, Point target) {
@@ -104,15 +115,12 @@ public class Enemy extends Entity {
         Set<Point> visited = new HashSet<>();
         Map<Point, Point> parent = new HashMap<>(); // Keeps track of parent cells
 
-        //System.out.println("Start: " + start.x + " " + start.y);
-        //System.out.println("Target: " + target.x + " " + target.y);
         queue.add(start);
         visited.add(start);
 
         while (!queue.isEmpty()) {
             Point current = queue.poll();
 
-            // Check if we reached the goal
             if (current.equals(target)) {
                 List<Point> path = new ArrayList<>();
                 for (Point at = target; at != null; at = parent.get(at)) {
@@ -121,14 +129,13 @@ public class Enemy extends Entity {
                 Collections.reverse(path);
                 return path;
             }
-            // Explore neighbors
+
             for (int[] direction : DIRECTIONS) {
                 Point neighbor = new Point(
                         current.x + direction[0],
                         current.y + direction[1]
                 );
 
-                // Check if the neighbor is valid and traversable
                 if (maze.getMazeMap().containsKey(neighbor) && maze.getMazeMap().get(neighbor) != 0 && !visited.contains(neighbor)) {
                     queue.add(neighbor);
                     visited.add(neighbor);

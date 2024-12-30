@@ -134,9 +134,11 @@ public class Maze {
         for (int i = 0; i < maze.length; i++) {
             for (int j = 0; j < maze[i].length; j++) {
                 if (maze[i][j] == PATH && countSurroundingTiles(maze, j, i, WALL) >= 7 && random.nextInt(4) == 0) {
-                    maze[i][j] = 11;
-                    return;
+                    maze[i][j] = 10;
                     //System.out.println(i + " " + j + " " + countSurroundingTiles(maze, i, j, WALL));
+                }
+                if (maze[i][j] == PATH && random.nextInt(100) == 0) {
+                    maze[i][j] = 11;
                 }
             }
         }

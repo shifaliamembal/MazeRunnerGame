@@ -14,6 +14,7 @@ public class Maze {
     private Properties mazeProperties;
     private Map<Point, Integer> mazeMap;
     private Map<Point, Integer> entityMap;
+    private Texture texture;
     private Array<TextureRegion> textures;
 //    private int rows;
 //    private int cols;
@@ -41,7 +42,11 @@ public class Maze {
             if (Integer.parseInt(mazeProperties.getProperty(key)) < 10) {
                 mazeMap.put(new Point(x, y), Integer.parseInt(mazeProperties.getProperty(key)));
             } else {
-                mazeMap.put(new Point(x, y), PATH);
+                if (Integer.parseInt(mazeProperties.getProperty(key)) != 12) {
+                    mazeMap.put(new Point(x, y), PATH);
+                } else {
+                    mazeMap.put(new Point(x, y), 12);
+                }
                 entityMap.put(new Point(x, y), Integer.parseInt(mazeProperties.getProperty(key)));
             }
         }
@@ -56,22 +61,23 @@ public class Maze {
 
     private void loadTextures() {
         textures = new Array<>(TextureRegion.class);
-        Texture tileSheet = new Texture(Gdx.files.internal("basictiles.png"));
+        texture = new Texture(Gdx.files.internal("basictiles.png"));
         Texture floor = new Texture(Gdx.files.internal("floor.png"));
 
         int tileSize = 16;
 
-        textures.add(new TextureRegion(tileSheet, 0, 0, tileSize, tileSize));
+        textures.add(new TextureRegion(texture, 0, 0, tileSize, tileSize));
         textures.add(new TextureRegion(floor, tileSize, 0, 0, 0));
-        textures.add(new TextureRegion(tileSheet, tileSize, tileSize, tileSize, tileSize));
+        textures.add(new TextureRegion(floor, tileSize, 0, 0, 0));
+        textures.add(new TextureRegion(texture, tileSize, tileSize, tileSize, tileSize));
     }
 
     public void draw(SpriteBatch batch) {
         for (Point point : mazeMap.keySet()) {
-            if (mazeMap.get(point) <= 1) {
+            if (mazeMap.get(point) <= 2) {
                 batch.draw(textures.get(mazeMap.get(point)), point.x * GameScreen.tileSize, point.y * GameScreen.tileSize, GameScreen.tileSize, GameScreen.tileSize);
             } else {
-                batch.draw(textures.get(2), point.x * GameScreen.tileSize, point.y * GameScreen.tileSize, GameScreen.tileSize, GameScreen.tileSize);
+                batch.draw(textures.get(textures.size - 1), point.x * GameScreen.tileSize, point.y * GameScreen.tileSize, GameScreen.tileSize, GameScreen.tileSize);
             }
         }
     }
@@ -137,7 +143,7 @@ public class Maze {
                     maze[i][j] = 10;
                     //System.out.println(i + " " + j + " " + countSurroundingTiles(maze, i, j, WALL));
                 }
-                if (maze[i][j] == PATH && random.nextInt(100) == 0) {
+                if (maze[i][j] == PATH && random.nextInt(200) == 0) {
                     maze[i][j] = 11;
                 }
             }
@@ -172,7 +178,7 @@ public class Maze {
         }
 
         if (countSurroundingTiles(maze, x, y, PATH) == 3) {
-            maze[y][x] = 2;
+            maze[y][x] = 12;
         } else {
             createExit(maze, random);
         }
@@ -253,11 +259,7 @@ public class Maze {
         return entityMap;
     }
 
-//    public int getCols() {
-//        return cols;
-//    }
-//
-//    public int getRows() {
-//        return rows;
-//    }
+    public Texture getTexture() {
+        return texture;
+    }
 }

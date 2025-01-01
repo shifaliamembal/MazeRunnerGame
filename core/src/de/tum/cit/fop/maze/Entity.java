@@ -15,12 +15,17 @@ public abstract class Entity {
     protected int x;
     protected int y;
     protected List<Animation<TextureRegion>> animations;
+    protected List<Texture> spriteSheets;
     protected List<TextureRegion> textures;
+    protected Player player;
+    protected float frameCounter = 0;
 
-    public Entity(int x, int y) {
+    public Entity(int x, int y, Player player) {
         this.x = x * GameScreen.tileSize + GameScreen.tileSize / 2;
         this.y = y * GameScreen.tileSize + GameScreen.tileSize / 2;
+        this.player = player;
         animations = new ArrayList<>();
+        spriteSheets = new ArrayList<>();
         textures = new ArrayList<>();
         loadAssets();
     }
@@ -28,4 +33,12 @@ public abstract class Entity {
     public abstract void loadAssets();
 
     public abstract void draw(SpriteBatch batch, float delta);
+
+    public List<Animation<TextureRegion>> getAnimations() {
+        return animations;
+    }
+
+    public List<Texture> getTextures() {
+        return spriteSheets;
+    }
 }

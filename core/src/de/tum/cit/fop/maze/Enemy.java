@@ -23,12 +23,11 @@ public class Enemy extends Entity {
     private Maze maze;
     private Player player;
     private TextureRegion currentFrame;
-    private float frameCounter;
     private boolean dir;
 
 
     public Enemy(int x, int y, Maze maze, Player player) {
-        super(x, y);
+        super(x, y, player);
         this.maze = maze;
         //System.out.println("Spawn: " + x + " " + y);
 
@@ -42,8 +41,8 @@ public class Enemy extends Entity {
     }
 
     public void loadAssets() {
-        Texture walkSheet = new Texture(Gdx.files.internal("walk_bot(walk).png"));
-        Texture idleSheet = new Texture(Gdx.files.internal("walk_bot(idle).png"));
+        spriteSheets.add(new Texture(Gdx.files.internal("walk_bot(walk).png")));
+        spriteSheets.add(new Texture(Gdx.files.internal("walk_bot(idle).png")));
 
         int frameWidth = 16;
         int frameHeight = 16;
@@ -54,28 +53,28 @@ public class Enemy extends Entity {
         Array<TextureRegion> idleFrames = new Array<>(TextureRegion.class);
 
         for (int col = 0; col < animationFrames; col++) {
-            walkFrames.add(new TextureRegion(walkSheet, col * frameWidth + col * 2, 0, frameWidth, frameHeight));
+            walkFrames.add(new TextureRegion(spriteSheets.get(0), col * frameWidth + col * 2, 0, frameWidth, frameHeight));
         }
-        idleFrames.add(new TextureRegion(idleSheet, 0, 0, frameWidth, frameHeight));
-        idleFrames.add(new TextureRegion(idleSheet, frameWidth + 2, 0, frameWidth, frameHeight));
+        idleFrames.add(new TextureRegion(spriteSheets.get(1), 0, 0, frameWidth, frameHeight));
+        idleFrames.add(new TextureRegion(spriteSheets.get(1), frameWidth + 2, 0, frameWidth, frameHeight));
 
         animations.add(new Animation<>(0.1f, walkFrames));
         animations.add(new Animation<>(0.5f, idleFrames));
     }
 
     public void draw(SpriteBatch batch, float delta) {
+        int xDiff = 0;
+        int yDiff = 0;
 
-
-        if (path.isEmpty()) {
-            return;
+        if (!path.isEmpty()) {
+            xDiff = path.get(0).x * GameScreen.tileSize + GameScreen.tileSize / 2 - x;
+            yDiff = path.get(0).y * GameScreen.tileSize + GameScreen.tileSize / 2 - y;
         }
 
-        int xDiff = path.get(0).x * GameScreen.tileSize + GameScreen.tileSize / 2 - x;
-        int yDiff = path.get(0).y * GameScreen.tileSize + GameScreen.tileSize / 2 - y;
-        int speed = (int) (5 * GameScreen.tileSize * delta);
+        int speed = (int) (6 * GameScreen.tileSize * delta);
         frameCounter += delta;
 
-        if (path.size() < 10) {
+        if (path.size() < 10 && frameCounter > 3) {
             currentFrame = animations.get(0).getKeyFrame(frameCounter, true);
             if (dir != player.getX() < x) {
                 for (Animation<TextureRegion> a : animations) {
@@ -99,7 +98,8 @@ public class Enemy extends Entity {
             if (Math.abs(xDiff) + Math.abs(yDiff) < speed * 3) {
                 path = bfs(new Point(x / GameScreen.tileSize, y / GameScreen.tileSize),
                         new Point(player.getX() / GameScreen.tileSize, player.getY() / GameScreen.tileSize));
-                path.remove(0);
+                if (!path.isEmpty())
+                    path.remove(0);
             }
 
         } else {

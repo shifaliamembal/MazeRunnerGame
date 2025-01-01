@@ -5,7 +5,6 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.g3d.utils.AnimationController;
 import com.badlogic.gdx.utils.Array;
 
 import java.awt.*;
@@ -19,8 +18,17 @@ public class Player {
     private int dir;
     private int baseSpeed;
     private int speed;
+    private Texture texture;
     private List<Animation<TextureRegion>> characterAnimation;
     private Maze maze;
+    private List<Item> inventory;
+    private int health;
+    private int stamina;
+    private final int max_stamina = 400;
+    private boolean running_cooldown;
+    private boolean exitOpen;
+    private final int[] DX = {0, 1, 0, -1};
+    private final int[] DY = {-1, 0, 1, 0};
 
 //    public static class Effect {
 //        public int x;
@@ -39,23 +47,30 @@ public class Player {
 
     public Player(Maze maze) {
         characterAnimation = new ArrayList<>();
+        inventory = new ArrayList<>();
         loadCharacterAnimation();
         this.maze = maze;
-        String entrance;
         for (var entry : maze.getMazeMap().entrySet()) {
             if (entry.getValue().equals(3)) {
                 x = entry.getKey().x * GameScreen.tileSize + GameScreen.tileSize / 2;
                 y = entry.getKey().y * GameScreen.tileSize + GameScreen.tileSize / 2;;
             }
         }
-        baseSpeed = GameScreen.tileSize * 7;
+        baseSpeed = GameScreen.tileSize * 9;
+        stamina = max_stamina;
     }
 
     public boolean takeInput(float delta) {
-        if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
-             speed = (int) (baseSpeed * delta * 1.5);
-             getCurrentAnimation().setFrameDuration(0.1f);
+
+        if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) && stamina > 0 && !running_cooldown) {
+            stamina -= 2;
+            speed = (int) (baseSpeed * delta * 1.5);
+            getCurrentAnimation().setFrameDuration(0.1f);
         } else {
+            if (stamina < max_stamina) {
+                stamina++;
+            }
+            running_cooldown = stamina < 50;
             speed = (int) (baseSpeed * delta);
             getCurrentAnimation().setFrameDuration(0.15f);
         };
@@ -81,6 +96,12 @@ public class Player {
                 x -= speed;
             return true;
         }
+        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+            maze.getMazeMap().put(new Point(x / GameScreen.tileSize + DX[dir], y / GameScreen.tileSize + DY[dir]), 1);
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.ALT_LEFT)) {
+            maze.getMazeMap().put(new Point(x / GameScreen.tileSize + DX[dir], y / GameScreen.tileSize + DY[dir]), 0);
+        }
         return false;
     }
 
@@ -95,12 +116,12 @@ public class Player {
         };
         return Arrays.stream(points)
                 .anyMatch(point -> maze.getMazeMap().containsKey(point)
-                        && maze.getMazeMap().get(point) == 0);
+                        && (maze.getMazeMap().get(point) == 0 || (maze.getMazeMap().get(point) == 2 && !exitOpen)));
     }
 
 
     private void loadCharacterAnimation() {
-        Texture walkSheet = new Texture(Gdx.files.internal("character.png"));
+        texture = new Texture(Gdx.files.internal("character.png"));
 
         int frameWidth = 16;
         int frameHeight = 32;
@@ -110,29 +131,38 @@ public class Player {
             Array<TextureRegion> walkFrames = new Array<>(TextureRegion.class);
 
             for (int col = 0; col < animationFrames; col++) {
-                walkFrames.add(new TextureRegion(walkSheet, col * frameWidth, i * frameHeight, frameWidth, frameHeight));
+                walkFrames.add(new TextureRegion(texture, col * frameWidth, i * frameHeight, frameWidth, frameHeight));
             }
 
             characterAnimation.add(new Animation<>(0.1f, walkFrames));
         }
     }
 
-    List<Animation<TextureRegion>> getAnimation() {
-        return characterAnimation;
+    public void receiveItem(Item item) {
+        inventory.add(item);
+    }
+
+    public List<Item> getInventory() {
+        return inventory;
     }
 
     Animation<TextureRegion> getCurrentAnimation() {
         return characterAnimation.get(dir);
     }
 
-    int getSpeed() {
-        return speed;
-    }
-
-    int getX() {
+    public int getX() {
         return x;
     }
-    int getY() {
+    public int getY() {
         return y;
     }
+
+    public Texture getTexture() {
+        return texture;
+    }
+
+    public void allowExit() {
+        exitOpen = true;
+    }
+
 }

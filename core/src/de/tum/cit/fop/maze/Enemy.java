@@ -19,6 +19,9 @@ public class Enemy extends Entity {
             {-1, 0}, {1, 0}, {0, -1}, {0, 1}
     };
 
+    private static final int CLOSE_PROXIMITY_DAMAGE = 5;
+    private static final int ADJACENT_DAMAGE = 10;
+
     private List<Point> path;
     private Maze maze;
     private Player player;
@@ -108,6 +111,24 @@ public class Enemy extends Entity {
                     new Point(player.getX() / GameScreen.tileSize, player.getY() / GameScreen.tileSize));
         }
         batch.draw(currentFrame, x - (float) GameScreen.tileSize / 2, y - (float) GameScreen.tileSize / 2, GameScreen.tileSize, GameScreen.tileSize);
+    }
+
+    private void handleProximity(){
+        int enemyTileX = x / GameScreen.tileSize;
+        int enemyTileY = y / GameScreen.tileSize;
+
+        int playerTileX = player.getX() / GameScreen.tileSize;
+        int playerTileY = player.getY() / GameScreen.tileSize;
+
+        int distanceX = Math.abs(enemyTileX-playerTileX);
+        int distanceY = Math.abs(enemyTileY-playerTileY);
+
+        if (distanceX + distanceY == 1){
+            player.updateHealth(-ADJACENT_DAMAGE);
+        }
+        else if (distanceX + distanceY <= 2){
+            player.updateHealth(-CLOSE_PROXIMITY_DAMAGE);
+        }
     }
 
     public List<Point> bfs(Point start, Point target) {

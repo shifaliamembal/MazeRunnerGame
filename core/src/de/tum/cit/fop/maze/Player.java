@@ -22,7 +22,7 @@ public class Player {
     private List<Animation<TextureRegion>> characterAnimation;
     private Maze maze;
     private List<Item> inventory;
-    private int health;
+    private int health = 100;
     private int stamina;
     private final int max_stamina = 400;
     private boolean running_cooldown;
@@ -138,6 +138,21 @@ public class Player {
         }
     }
 
+    public void updateHealth(int amount) {
+        health += amount;
+        if (health > 100){
+            health = 100;
+        }
+        else if (health <= 0){
+            health = 0;
+            onPlayerDeath();
+        }
+    }
+
+    public void onPlayerDeath() {
+        System.out.println("Player has died!");
+    }
+
     public void receiveItem(Item item) {
         inventory.add(item);
     }
@@ -163,6 +178,10 @@ public class Player {
 
     public void allowExit() {
         exitOpen = true;
+    }
+
+    public int getHealth(){
+        return health;
     }
 
 }

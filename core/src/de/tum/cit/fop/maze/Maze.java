@@ -146,6 +146,13 @@ public class Maze {
                 if (maze[i][j] == PATH && random.nextInt(200) == 0) {
                     maze[i][j] = 11;
                 }
+                if (maze[i][j] == PATH && ((inBounds(maze, j - 1, i) && maze[i][j - 1] == WALL
+                        && inBounds(maze, j + 1, i) && maze[i][j + 1] == WALL)
+                        || (inBounds(maze, j, i - 1) && maze[i - 1][j] == WALL
+                        && inBounds(maze, j, i + 1) && maze[i + 1][j] == WALL))
+                        && random.nextInt(10) == 0) {
+                    maze[i][j] = 13;
+                }
             }
         }
     }

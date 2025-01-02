@@ -38,6 +38,10 @@ public abstract class Entity {
         return animations;
     }
 
+    protected int playerDistance() {
+        return Math.abs(x - player.getX()) + Math.abs(y - player.getY());
+    }
+
     public List<Texture> getTextures() {
         return spriteSheets;
     }

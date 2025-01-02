@@ -22,14 +22,14 @@ public class Player {
     private List<Animation<TextureRegion>> characterAnimation;
     private Maze maze;
     private List<Item> inventory;
-    private int health = 100;
+    private int health;
     private int stamina;
-    private final int max_stamina = 400;
     private boolean running_cooldown;
     private boolean exitOpen;
     private final int[] DX = {0, 1, 0, -1};
     private final int[] DY = {-1, 0, 1, 0};
-
+    private final int MAX_STAMINA = 400;
+    private final int MAX_HEALTH = 100;
 //    public static class Effect {
 //        public int x;
 //        public int y;
@@ -57,7 +57,8 @@ public class Player {
             }
         }
         baseSpeed = GameScreen.tileSize * 9;
-        stamina = max_stamina;
+        stamina = MAX_STAMINA;
+        health = MAX_HEALTH;
     }
 
     public boolean takeInput(float delta) {
@@ -67,7 +68,7 @@ public class Player {
             speed = (int) (baseSpeed * delta * 1.5);
             getCurrentAnimation().setFrameDuration(0.1f);
         } else {
-            if (stamina < max_stamina) {
+            if (stamina < MAX_STAMINA) {
                 stamina++;
             }
             running_cooldown = stamina < 50;
@@ -140,8 +141,8 @@ public class Player {
 
     public void updateHealth(int amount) {
         health += amount;
-        if (health > 100){
-            health = 100;
+        if (health > MAX_HEALTH){
+            health = MAX_HEALTH;
         }
         else if (health <= 0){
             health = 0;

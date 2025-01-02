@@ -5,14 +5,8 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -67,17 +61,23 @@ public class GameScreen implements Screen {
         font = game.getSkin().getFont("font");
 
         for (var entry : maze.getEntityMap().entrySet()) {
+            Point a = new Point(entry.getKey().x, entry.getKey().y + 1);
+            Point b = new Point(entry.getKey().x, entry.getKey().y - 1);
+            boolean vertical = maze.getMazeMap().containsKey(a) && maze.getMazeMap().get(a) == 0;
+            if (vertical && maze.getMazeMap().containsKey(b) && maze.getMazeMap().get(b) != 0) {
+                vertical = false;
+            }
             if (entry.getValue() == 10) {
                 entities.add(new TreasureChest(entry.getKey().x, entry.getKey().y, player));
             }
             else if (entry.getValue() == 11) {
                 entities.add(new Enemy(entry.getKey().x, entry.getKey().y, maze, player));
             } else if (entry.getValue() == 12) {
-                Point p = new Point(entry.getKey().x, entry.getKey().y + 1);
-                boolean vertical = maze.getMazeMap().containsKey(p) && maze.getMazeMap().get(p) == 0;
                 entities.add(new ExitBarrier(entry.getKey().x, entry.getKey().y, player, vertical));
-                maze.getMazeMap().put(new Point(p.x + (vertical ? 0 : 1), p.y - (vertical ? 0 : 1)), 2);
+                maze.getMazeMap().put(new Point(a.x + (vertical ? 0 : 1), a.y - (vertical ? 0 : 1)), 2);
                 maze.getMazeMap().put(entry.getKey(), 2);
+            } else if (entry.getValue() == 13) {
+                entities.add(new LaserTrap(entry.getKey().x, entry.getKey().y, player, vertical));
             }
         }
     }
@@ -135,6 +135,7 @@ public class GameScreen implements Screen {
         viewport.apply();
         hudBatch.begin();
         font.draw(hudBatch, "Timer: " + String.format("%.1f", sinusInput) + " s", 5, Gdx.graphics.getHeight() - 5);
+        font.draw(hudBatch, "Health: " + String.format("%d", player.getHealth()), 5, Gdx.graphics.getHeight() - 35);
         hudBatch.end();
     }
 

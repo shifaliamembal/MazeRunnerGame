@@ -21,12 +21,15 @@ public class Enemy extends Entity {
 
     private static final int CLOSE_PROXIMITY_DAMAGE = 5;
     private static final int ADJACENT_DAMAGE = 10;
+//    private static final float DAMAGE_COOLDOWN = 0.5f;
+//    private float
 
     private List<Point> path;
     private Maze maze;
     private Player player;
     private TextureRegion currentFrame;
     private boolean dir;
+    private float damageCooldown;
 
 
     public Enemy(int x, int y, Maze maze, Player player) {
@@ -76,6 +79,7 @@ public class Enemy extends Entity {
 
         int speed = (int) (6 * GameScreen.tileSize * delta);
         frameCounter += delta;
+        damageCooldown -= delta;
 
         if (path.size() < 10 && frameCounter > 3) {
             currentFrame = animations.get(0).getKeyFrame(frameCounter, true);
@@ -110,24 +114,30 @@ public class Enemy extends Entity {
             path = bfs(new Point(x / GameScreen.tileSize, y / GameScreen.tileSize),
                     new Point(player.getX() / GameScreen.tileSize, player.getY() / GameScreen.tileSize));
         }
+        handleProximity();
         batch.draw(currentFrame, x - (float) GameScreen.tileSize / 2, y - (float) GameScreen.tileSize / 2, GameScreen.tileSize, GameScreen.tileSize);
     }
 
     private void handleProximity(){
-        int enemyTileX = x / GameScreen.tileSize;
-        int enemyTileY = y / GameScreen.tileSize;
+//        int enemyTileX = x / GameScreen.tileSize;
+//        int enemyTileY = y / GameScreen.tileSize;
+//
+//        int playerTileX = player.getX() / GameScreen.tileSize;
+//        int playerTileY = player.getY() / GameScreen.tileSize;
 
-        int playerTileX = player.getX() / GameScreen.tileSize;
-        int playerTileY = player.getY() / GameScreen.tileSize;
+//        int distanceX = Math.abs(x - player.getX());
+//        int distanceY = Math.abs(y - player.getY());
+//
+//        if (distanceX + distanceY == 1){
+//            player.updateHealth(-ADJACENT_DAMAGE);
+//        }
+//        else if (distanceX + distanceY <= 2){
+//            player.updateHealth(-CLOSE_PROXIMITY_DAMAGE);
+//        }
 
-        int distanceX = Math.abs(enemyTileX-playerTileX);
-        int distanceY = Math.abs(enemyTileY-playerTileY);
-
-        if (distanceX + distanceY == 1){
+        if (playerDistance() < GameScreen.tileSize && damageCooldown <= 0) {
             player.updateHealth(-ADJACENT_DAMAGE);
-        }
-        else if (distanceX + distanceY <= 2){
-            player.updateHealth(-CLOSE_PROXIMITY_DAMAGE);
+            damageCooldown = 0.5f;
         }
     }
 

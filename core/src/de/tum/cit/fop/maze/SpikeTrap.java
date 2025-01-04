@@ -35,7 +35,6 @@ public class SpikeTrap extends Entity {
         }
 
         animations.add(new Animation<>(0.1f, animation));
-        System.out.println(animations.get(0).getAnimationDuration());
     }
 
     public void draw(SpriteBatch batch, float delta) {

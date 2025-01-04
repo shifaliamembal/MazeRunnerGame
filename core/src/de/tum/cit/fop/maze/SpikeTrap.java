@@ -9,40 +9,33 @@ import com.badlogic.gdx.utils.Array;
 
 import java.util.Random;
 
-public class LaserTrap extends Entity {
+public class SpikeTrap extends Entity {
     boolean active;
-    boolean vertical;
     private static final int ACTIVATE_INTERVAL = 3;
     private float timeOffset;
     private float damageCooldown;
 
-    public LaserTrap(int x, int y, Player player, boolean vertical) {
+    public SpikeTrap(int x, int y, Player player) {
         super(x, y, player);
-        this.vertical = vertical;
         this.active = true;
         damageCooldown = 0;
         timeOffset = new Random().nextFloat(ACTIVATE_INTERVAL);
     }
 
     public void loadAssets() {
-        spriteSheets.add(new Texture(Gdx.files.internal("laser_activate.png")));
-        spriteSheets.add(new Texture(Gdx.files.internal("laser_deactivate.png")));
+        spriteSheets.add(new Texture(Gdx.files.internal("spike_trap.png")));
 
-        int frameWidth = 30;
+        int frameWidth = 32;
         int frameHeight = 32;
 
-        Array<TextureRegion> activate = new Array<>(TextureRegion.class);
-        Array<TextureRegion> deactivate = new Array<>(TextureRegion.class);
+        Array<TextureRegion> animation = new Array<>(TextureRegion.class);
 
-        for (int col = 0; col < 12; col++) {
-            activate.add(new TextureRegion(spriteSheets.get(0), col * frameWidth + col * 2, 0, frameWidth, frameHeight));
-        }
-        for (int col = 0; col < 9; col++) {
-            deactivate.add(new TextureRegion(spriteSheets.get(1), col * frameWidth + col * 2, 0, frameWidth, frameHeight));
+        for (int col = 0; col < 14; col++) {
+            animation.add(new TextureRegion(spriteSheets.get(0), col * frameWidth, 0, frameWidth, frameHeight));
         }
 
-        animations.add(new Animation<>(0.1f, activate));
-        animations.add(new Animation<>(0.1f, deactivate));
+        animations.add(new Animation<>(0.1f, animation));
+        System.out.println(animations.get(0).getAnimationDuration());
     }
 
     public void draw(SpriteBatch batch, float delta) {
@@ -61,22 +54,22 @@ public class LaserTrap extends Entity {
             frameCounter = 0;
         }
 
-        batch.draw(animations.get(active ? 0 : 1).getKeyFrame(frameCounter, false),
-                x - (float) GameScreen.tileSize / 2 + (vertical ? 0 : GameScreen.tileSize),
+        batch.draw(animations.get(0).getKeyFrame(active ? frameCounter : 0, false),
+                x - (float) GameScreen.tileSize / 2,
                 y - (float) GameScreen.tileSize / 2,
                 0, 0,
                 GameScreen.tileSize, GameScreen.tileSize,
-                1, 1, vertical ? 0 : 90);
+                1, 1, 0);
 
         handlePlayer();
     }
 
     public void handlePlayer() {
-        if (((active && frameCounter > 1) || (!active && frameCounter < 0.5)) && damageCooldown <= 0
+        if (active && frameCounter > 0.8 && frameCounter < 1.2 && damageCooldown <= 0
                 &&  player.getX() / GameScreen.tileSize == x / GameScreen.tileSize
                 && player.getY() / GameScreen.tileSize == y / GameScreen.tileSize) {
-            player.updateHealth(-2);
-            damageCooldown = 0.1f;
+            player.updateHealth(-20);
+            damageCooldown = 1f;
         }
     }
 }

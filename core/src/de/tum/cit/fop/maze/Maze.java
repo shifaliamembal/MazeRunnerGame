@@ -140,18 +140,20 @@ public class Maze {
         for (int i = 0; i < maze.length; i++) {
             for (int j = 0; j < maze[i].length; j++) {
                 if (maze[i][j] == PATH && countSurroundingTiles(maze, j, i, WALL) >= 7 && random.nextInt(4) == 0) {
-                    maze[i][j] = 10;
-                    //System.out.println(i + " " + j + " " + countSurroundingTiles(maze, i, j, WALL));
+                    maze[i][j] = 10; //TreasureChest
                 }
                 if (maze[i][j] == PATH && random.nextInt(200) == 0) {
-                    maze[i][j] = 11;
+                    maze[i][j] = 11; //Enemy
                 }
                 if (maze[i][j] == PATH && ((inBounds(maze, j - 1, i) && maze[i][j - 1] == WALL
                         && inBounds(maze, j + 1, i) && maze[i][j + 1] == WALL)
                         || (inBounds(maze, j, i - 1) && maze[i - 1][j] == WALL
                         && inBounds(maze, j, i + 1) && maze[i + 1][j] == WALL))
                         && random.nextInt(10) == 0) {
-                    maze[i][j] = 13;
+                    maze[i][j] = 13; // LaserTrap
+                }
+                if (maze[i][j] == PATH && random.nextInt(150) == 0) {
+                    maze[i][j] = 14;
                 }
             }
         }

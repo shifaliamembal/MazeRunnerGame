@@ -46,7 +46,7 @@ public class Enemy extends Entity {
 //        }
     }
 
-    public void loadAssets() {
+    protected void loadAssets() {
         spriteSheets.add(new Texture(Gdx.files.internal("walk_bot(walk).png")));
         spriteSheets.add(new Texture(Gdx.files.internal("walk_bot(idle).png")));
 

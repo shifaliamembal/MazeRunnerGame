@@ -60,6 +60,10 @@ public class GameScreen implements Screen {
         // Get the font from the game's skin
         font = game.getSkin().getFont("font");
 
+        spawnEntities();
+    }
+
+    public void spawnEntities() {
         for (var entry : maze.getEntityMap().entrySet()) {
             Point a = new Point(entry.getKey().x, entry.getKey().y + 1);
             Point b = new Point(entry.getKey().x, entry.getKey().y - 1);
@@ -78,6 +82,8 @@ public class GameScreen implements Screen {
                 maze.getMazeMap().put(entry.getKey(), 2);
             } else if (entry.getValue() == 13) {
                 entities.add(new LaserTrap(entry.getKey().x, entry.getKey().y, player, vertical));
+            } else if (entry.getValue() == 14) {
+                entities.add(new SpikeTrap(entry.getKey().x, entry.getKey().y, player));
             }
         }
     }
@@ -120,13 +126,7 @@ public class GameScreen implements Screen {
             e.draw(game.getSpriteBatch(), delta);
         }
         //System.out.println(player.getSpeed() + " " + delta);
-        game.getSpriteBatch().draw(
-                player.getCurrentAnimation().getKeyFrame(sinusInput, player.takeInput(delta)),
-                camera.position.x - (float) tileSize / 2,
-                camera.position.y - (float) tileSize / 2,
-                tileSize,
-                tileSize * 2
-        );
+        player.draw(game.getSpriteBatch(), delta);
 
 
         game.getSpriteBatch().end(); // Important to call this after drawing everything
@@ -165,9 +165,7 @@ public class GameScreen implements Screen {
         player.getTexture().dispose();
         maze.getTexture().dispose();
         for (Entity e : entities) {
-            for (Texture t : e.getTextures()) {
-                t.dispose();
-            }
+            e.dispose();
         }
         game.getSpriteBatch().dispose();
         font.dispose();

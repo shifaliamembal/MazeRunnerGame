@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 
@@ -11,6 +12,8 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Player {
     private int x;
@@ -20,12 +23,14 @@ public class Player {
     private int speed;
     private Texture texture;
     private List<Animation<TextureRegion>> characterAnimation;
+    //private List<VFX> vfx;
     private Maze maze;
     private List<Item> inventory;
     private int health;
     private int stamina;
     private boolean running_cooldown;
     private boolean exitOpen;
+    private float frameCounter;
     private final int[] DX = {0, 1, 0, -1};
     private final int[] DY = {-1, 0, 1, 0};
     private final int MAX_STAMINA = 400;
@@ -48,6 +53,7 @@ public class Player {
     public Player(Maze maze) {
         characterAnimation = new ArrayList<>();
         inventory = new ArrayList<>();
+        //vfx = new CopyOnWriteArrayList<>();
         loadCharacterAnimation();
         this.maze = maze;
         for (var entry : maze.getMazeMap().entrySet()) {
@@ -59,6 +65,27 @@ public class Player {
         baseSpeed = GameScreen.tileSize * 9;
         stamina = MAX_STAMINA;
         health = MAX_HEALTH;
+    }
+
+    public void draw(SpriteBatch batch, float delta) {
+        frameCounter += delta;
+
+        batch.draw(
+                getCurrentAnimation().getKeyFrame(frameCounter, takeInput(delta)),
+                x - (float) GameScreen.tileSize / 2,
+                y - (float) GameScreen.tileSize / 2,
+                GameScreen.tileSize,
+                GameScreen.tileSize * 2
+        );
+
+//        for (VFX v : vfx) {
+//            v.draw(batch, delta, x, y);
+//            if (v.finished()) {
+//                v.dispose();
+//                vfx.remove(v);
+//            }
+//        }
+
     }
 
     public boolean takeInput(float delta) {
@@ -128,14 +155,16 @@ public class Player {
         int frameHeight = 32;
         int animationFrames = 4;
 
+        Array<TextureRegion> frames;
+
         for (int i = 0; i < 4; i++) {
-            Array<TextureRegion> walkFrames = new Array<>(TextureRegion.class);
+            frames = new Array<>(TextureRegion.class);
 
             for (int col = 0; col < animationFrames; col++) {
-                walkFrames.add(new TextureRegion(texture, col * frameWidth, i * frameHeight, frameWidth, frameHeight));
+                frames.add(new TextureRegion(texture, col * frameWidth, i * frameHeight, frameWidth, frameHeight));
             }
 
-            characterAnimation.add(new Animation<>(0.1f, walkFrames));
+            characterAnimation.add(new Animation<>(0.1f, frames));
         }
     }
 
@@ -148,6 +177,10 @@ public class Player {
             health = 0;
             onPlayerDeath();
         }
+
+//        if (amount < 0) {
+//            vfx.add(new VFX(VFX.types.BLOOD));
+//        }
     }
 
     public void onPlayerDeath() {

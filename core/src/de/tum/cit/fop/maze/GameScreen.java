@@ -34,6 +34,7 @@ public class GameScreen implements Screen {
     public static final int tileSize = 64;
     private OrthographicCamera hudCamera;
     private SpriteBatch hudBatch;
+    private ExitPointer pointer;
 
     /**
      * Constructor for GameScreen. Sets up the camera and font.
@@ -80,6 +81,9 @@ public class GameScreen implements Screen {
                 entities.add(new ExitBarrier(entry.getKey().x, entry.getKey().y, player, vertical));
                 maze.getMazeMap().put(new Point(a.x + (vertical ? 0 : 1), a.y - (vertical ? 0 : 1)), 2);
                 maze.getMazeMap().put(entry.getKey(), 2);
+                pointer = new ExitPointer(
+                        (int) (entry.getKey().x * (tileSize + 1) + (vertical ? 0 : tileSize)),
+                        (int) (entry.getKey().y * (tileSize + 1) + (vertical ? tileSize: 0)));
             } else if (entry.getValue() == 13) {
                 entities.add(new LaserTrap(entry.getKey().x, entry.getKey().y, player, vertical));
             } else if (entry.getValue() == 14) {
@@ -125,15 +129,15 @@ public class GameScreen implements Screen {
         for (Entity e : entities) {
             e.draw(game.getSpriteBatch(), delta);
         }
-        //System.out.println(player.getSpeed() + " " + delta);
+
         player.draw(game.getSpriteBatch(), delta);
 
-
-        game.getSpriteBatch().end(); // Important to call this after drawing everything
+        game.getSpriteBatch().end();
 
         viewport.setCamera(hudCamera);
         viewport.apply();
         hudBatch.begin();
+        pointer.draw(hudBatch, camera, viewport);
         font.draw(hudBatch, "Timer: " + String.format("%.1f", sinusInput) + " s", 5, Gdx.graphics.getHeight() - 5);
         font.draw(hudBatch, "Health: " + String.format("%d", player.getHealth()), 5, Gdx.graphics.getHeight() - 35);
         hudBatch.end();
@@ -162,7 +166,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
-        player.getTexture().dispose();
+        player.dispose();
         maze.getTexture().dispose();
         for (Entity e : entities) {
             e.dispose();

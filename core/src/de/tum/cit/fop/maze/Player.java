@@ -23,7 +23,6 @@ public class Player {
     private int speed;
     private Texture texture;
     private List<Animation<TextureRegion>> characterAnimation;
-    //private List<VFX> vfx;
     private Maze maze;
     private List<Item> inventory;
     private int health;
@@ -53,7 +52,6 @@ public class Player {
     public Player(Maze maze) {
         characterAnimation = new ArrayList<>();
         inventory = new ArrayList<>();
-        //vfx = new CopyOnWriteArrayList<>();
         loadCharacterAnimation();
         this.maze = maze;
         for (var entry : maze.getMazeMap().entrySet()) {
@@ -77,15 +75,6 @@ public class Player {
                 GameScreen.tileSize,
                 GameScreen.tileSize * 2
         );
-
-//        for (VFX v : vfx) {
-//            v.draw(batch, delta, x, y);
-//            if (v.finished()) {
-//                v.dispose();
-//                vfx.remove(v);
-//            }
-//        }
-
     }
 
     public boolean takeInput(float delta) {
@@ -177,10 +166,6 @@ public class Player {
             health = 0;
             onPlayerDeath();
         }
-
-//        if (amount < 0) {
-//            vfx.add(new VFX(VFX.types.BLOOD));
-//        }
     }
 
     public void onPlayerDeath() {
@@ -206,16 +191,16 @@ public class Player {
         return y;
     }
 
-    public Texture getTexture() {
-        return texture;
-    }
-
     public void allowExit() {
         exitOpen = true;
     }
 
     public int getHealth(){
         return health;
+    }
+
+    public void dispose() {
+        texture.dispose();
     }
 
 }

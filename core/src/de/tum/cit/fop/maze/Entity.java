@@ -17,7 +17,6 @@ public abstract class Entity {
     protected List<Animation<TextureRegion>> animations;
     protected List<Texture> spriteSheets;
     protected List<TextureRegion> textures;
-    protected List<VFX> vfx;
     protected Player player;
     protected float frameCounter = 0;
 
@@ -28,7 +27,6 @@ public abstract class Entity {
         animations = new ArrayList<>();
         spriteSheets = new ArrayList<>();
         textures = new ArrayList<>();
-        vfx = new ArrayList<>();
         loadAssets();
     }
 
@@ -47,9 +45,6 @@ public abstract class Entity {
     public void dispose() {
         for (Texture t : spriteSheets) {
             t.dispose();
-        }
-        for (VFX v : vfx) {
-            v.dispose();
         }
     }
 }

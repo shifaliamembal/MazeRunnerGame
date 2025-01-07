@@ -30,72 +30,8 @@ public class PauseMenu {
         table = new Table();
         table.setFillParent(true);
 
-        createButtons();
+        //createButtons();
         Gdx.input.setInputProcessor(stage);
-    }
-
-    private void createButtons() {
-        FontManager fontManager = game.getFontManager();
-
-        TextButton resumeButton = new TextButton("Resume", fontManager.getTextButtonStyle());
-        TextButton mainMenuButton = new TextButton("Return to Main Menu", fontManager.getTextButtonStyle());
-        TextButton quitButton = new TextButton("Quit Game", fontManager.getTextButtonStyle());
-        TextButton muteButton = new TextButton("Mute: OFF", fontManager.getTextButtonStyle());
-
-        resumeButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-                resumeGame();
-            }
-        });
-
-        mainMenuButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-                game.setScreen(new MenuScreen(game));
-            }
-        });
-
-        quitButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-                Gdx.app.exit();
-            }
-        });
-
-        muteButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-                toggleMute(muteButton);
-            }
-        });
-
-        table.add(resumeButton).pad(10).row();
-        table.add(mainMenuButton).pad(10).row();
-        table.add(quitButton).pad(10).row();
-        table.add(muteButton).pad(10);
-
-        stage.addActor(table);
-    }
-
-    private void resumeGame() {
-        gameScreen.setPaused(false);
-        Gdx.input.setInputProcessor(gameScreen.getInputProcessor());
-    }
-
-    private void toggleMute(TextButton muteButton) {
-        isMuted = !isMuted;
-        muteButton.setText(isMuted ? "Mute: ON" : "Mute: OFF");
-
-        if (isMuted) {
-            game.getAudioManager().muteAllSounds();
-        } else {
-            game.getAudioManager().unmuteAllSounds();
-        }
-    }
-
-    public Stage getStage() {
-        return stage;
     }
 }
 

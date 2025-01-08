@@ -2,6 +2,7 @@ package de.tum.cit.fop.maze;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -34,6 +35,8 @@ public class Player {
     private final int[] DY = {-1, 0, 1, 0};
     private final int MAX_STAMINA = 400;
     private final int MAX_HEALTH = 100;
+    private Sound movementSound;
+    private boolean isSoundPlaying;
 //    public static class Effect {
 //        public int x;
 //        public int y;
@@ -79,6 +82,7 @@ public class Player {
 
     public boolean takeInput(float delta) {
 
+
         if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) && stamina > 0 && !running_cooldown) {
             stamina -= 2;
             speed = (int) (baseSpeed * delta * 1.5);
@@ -92,34 +96,47 @@ public class Player {
             getCurrentAnimation().setFrameDuration(0.15f);
         };
 
+        boolean isMoving = true;
+
         if (Gdx.input.isKeyPressed(Input.Keys.S)) {
             dir = 0;
             if (!wallCollision(x, y - speed))
                 y -= speed;
-            return true;
         } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             dir = 1;
             if (!wallCollision(x + speed, y))
                 x += speed;
-            return true;
         } else if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             dir = 2;
             if (!wallCollision(x, y + speed))
                 y += speed;
-            return true;
         } else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             dir = 3;
             if (!wallCollision(x - speed, y))
                 x -= speed;
-            return true;
+        } else {
+            isMoving = false;
         }
+
+        if (isMoving) {
+            if (!isSoundPlaying) {
+                movementSound.loop();
+                isSoundPlaying = true;
+            }
+        } else {
+            if (isSoundPlaying) {
+                movementSound.stop();
+                isSoundPlaying = false;
+            }
+        }
+
         if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
             maze.getMazeMap().put(new Point(x / GameScreen.tileSize + DX[dir], y / GameScreen.tileSize + DY[dir]), 1);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.ALT_LEFT)) {
             maze.getMazeMap().put(new Point(x / GameScreen.tileSize + DX[dir], y / GameScreen.tileSize + DY[dir]), 0);
         }
-        return false;
+        return isMoving;
     }
 
     private boolean wallCollision(int x, int y) {
@@ -139,7 +156,7 @@ public class Player {
 
     private void loadCharacterAnimation() {
         texture = new Texture(Gdx.files.internal("character.png"));
-
+        movementSound = Gdx.audio.newSound(Gdx.files.internal("Walk.mp3"));
         int frameWidth = 16;
         int frameHeight = 32;
         int animationFrames = 4;

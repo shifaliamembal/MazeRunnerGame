@@ -27,6 +27,10 @@ public class MazeRunnerGame extends Game {
     // UI Skin
     private Skin skin;
 
+    private FontManager fontManager;
+
+    private PauseMenu pauseMenu;
+
 
     /**
      * Constructor for MazeRunnerGame.
@@ -53,7 +57,10 @@ public class MazeRunnerGame extends Game {
         //backgroundMusic.play();
         Maze.saveMaze(Maze.generateMaze(51,51), "maps/test.properties");
 
-        goToMenu(); // Navigate to the menu screen
+        goToMenu();// Navigate to the menu screen
+
+        fontManager = new FontManager();
+        menuScreen = new MenuScreen(this);
     }
 
     /**
@@ -78,6 +85,10 @@ public class MazeRunnerGame extends Game {
         }
     }
 
+    public FontManager getFontManager() {
+        return fontManager;
+    }
+
     /**
      * Loads the character animation from the character.png file.
      */
@@ -94,6 +105,9 @@ public class MazeRunnerGame extends Game {
         getScreen().dispose(); // Dispose the current screen
         spriteBatch.dispose(); // Dispose the spriteBatch
         skin.dispose(); // Dispose the skin
+        if (fontManager != null) {
+            fontManager.dispose();
+        }
     }
 
     // Getter methods

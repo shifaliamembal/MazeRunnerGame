@@ -24,7 +24,7 @@ public class FontManager {
     public static BitmapFont getOrbitronFont(int size, Color color) {
         // Check if the font is already loaded, otherwise load it
         if (orbitronFont == null) {
-            FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Orbitron-VariableFont_wght.ttf"));
+            FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("craft/Orbitron-VariableFont_wght.ttf"));
             FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
             parameter.size = size;      // Set the font size
             parameter.color = color;    // Set the font color

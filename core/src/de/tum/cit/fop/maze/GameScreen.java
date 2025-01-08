@@ -35,6 +35,9 @@ public class GameScreen implements Screen {
     private OrthographicCamera hudCamera;
     private SpriteBatch hudBatch;
     private ExitPointer pointer;
+    private PauseMenu pauseMenu;
+    private FontManager fontManager;
+    private boolean isPaused;
 
     /**
      * Constructor for GameScreen. Sets up the camera and font.
@@ -60,6 +63,8 @@ public class GameScreen implements Screen {
 
         // Get the font from the game's skin
         font = game.getSkin().getFont("font");
+
+        pauseMenu = new PauseMenu(game, this, viewport);
 
         spawnEntities();
     }
@@ -98,49 +103,59 @@ public class GameScreen implements Screen {
     public void render(float delta) {
         // Check for escape key press to go back to the menu
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-            game.goToMenu();
+            if (isPaused) {
+                game.setScreen(this);
+                isPaused = false;
+            }
+            else {
+                game.setScreen(pauseMenu);
+                isPaused = true;
+            }
         }
 
-        ScreenUtils.clear(0, 0, 0, 1); // Clear the screen
+        if (!isPaused) {
+            ScreenUtils.clear(0, 0, 0, 1); // Clear the screen
 
-        camera.position.set(player.getX(), player.getY(), 0);
-        zoom();
-        camera.update(); // Update the camera
+            camera.position.set(player.getX(), player.getY(), 0);
+            zoom();
+            camera.update(); // Update the camera
 
-        // Move text in a circular path to have an example of a moving object
-        sinusInput += delta;
-        float textX = (float) camera.position.x;
-        float textY = (float) camera.position.y;
+            // Move text in a circular path to have an example of a moving object
+            sinusInput += delta;
+            float textX = (float) camera.position.x;
+            float textY = (float) camera.position.y;
 
-        // Set up and begin drawing with the sprite batch
-        game.getSpriteBatch().setProjectionMatrix(camera.combined);
+            // Set up and begin drawing with the sprite batch
+            game.getSpriteBatch().setProjectionMatrix(camera.combined);
 
-        viewport.setCamera(camera);
-        viewport.apply();
-        game.getSpriteBatch().begin(); // Important to call this before drawing anything
+            viewport.setCamera(camera);
+            viewport.apply();
+            game.getSpriteBatch().begin(); // Important to call this before drawing anything
 
-        // Render the text
-        //font.draw(game.getSpriteBatch(), "Press ESC to go to menu", textX, textY);
+            // Render the text
+            //font.draw(game.getSpriteBatch(), "Press ESC to go to menu", textX, textY);
 
-        // Draw the character next to the text :) / We can reuse sinusInput here
-        maze.draw(game.getSpriteBatch());
+            // Draw the character next to the text :) / We can reuse sinusInput here
+            maze.draw(game.getSpriteBatch());
 
 
-        for (Entity e : entities) {
-            e.draw(game.getSpriteBatch(), delta);
+            for (Entity e : entities) {
+                e.draw(game.getSpriteBatch(), delta);
+            }
+
+            player.draw(game.getSpriteBatch(), delta);
+
+            game.getSpriteBatch().end();
+
+            viewport.setCamera(hudCamera);
+            viewport.apply();
+            hudBatch.begin();
+            pointer.draw(hudBatch, camera, viewport);
+            font.draw(hudBatch, "Timer: " + String.format("%.1f", sinusInput) + " s", 5, Gdx.graphics.getHeight() - 5);
+            font.draw(hudBatch, "Health: " + String.format("%d", player.getHealth()), 5, Gdx.graphics.getHeight() - 35);
+            hudBatch.end();
         }
 
-        player.draw(game.getSpriteBatch(), delta);
-
-        game.getSpriteBatch().end();
-
-        viewport.setCamera(hudCamera);
-        viewport.apply();
-        hudBatch.begin();
-        pointer.draw(hudBatch, camera, viewport);
-        font.draw(hudBatch, "Timer: " + String.format("%.1f", sinusInput) + " s", 5, Gdx.graphics.getHeight() - 5);
-        font.draw(hudBatch, "Health: " + String.format("%d", player.getHealth()), 5, Gdx.graphics.getHeight() - 35);
-        hudBatch.end();
     }
 
     @Override

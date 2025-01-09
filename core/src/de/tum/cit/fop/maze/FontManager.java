@@ -4,56 +4,45 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
+/**
+ * A utility class to manage fonts in the game.
+ */
 public class FontManager {
-    private BitmapFont orbitronFont;
-    private Skin skin;
 
-    public FontManager() {
-        loadOrbitronFont();
-        createSkin();
-    }
+    // Static reference to store the Orbitron font
+    private static BitmapFont orbitronFont;
 
-    private void loadOrbitronFont() {
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("Orbitron-VariableFont_wght.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+    /**
+     * Loads and returns the Orbitron font with the specified size and color.
+     * If the font is already loaded, it returns the existing instance.
+     *
+     * @param size  The size of the font.
+     * @param color The color of the font.
+     * @return The generated BitmapFont.
+     */
+    public static BitmapFont getOrbitronFont(int size, Color color) {
+        // Check if the font is already loaded, otherwise load it
+        if (orbitronFont == null) {
+            FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("craft/Orbitron-VariableFont_wght.ttf"));
+            FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+            parameter.size = size;      // Set the font size
+            parameter.color = color;    // Set the font color
 
-        parameter.size = 32;
-        parameter.color = Color.WHITE;
-        parameter.borderWidth = 1;
-        parameter.borderColor = Color.BLACK;
-
-        orbitronFont = generator.generateFont(parameter);
-        generator.dispose();
-    }
-
-    private void createSkin(){
-        skin = new Skin();
-        skin.add("default-font", orbitronFont);
-
-        Label.LabelStyle labelStyle = new Label.LabelStyle();
-        labelStyle.font = orbitronFont;
-        skin.add("default-label", labelStyle);
-
-        TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
-        textButtonStyle.font = orbitronFont;
-        textButtonStyle.fontColor = Color.WHITE;
-        skin.add("default-button", textButtonStyle);
-    }
-
-    public BitmapFont getOrbitronFont() {
+            orbitronFont = generator.generateFont(parameter); // Generate the font
+            generator.dispose(); // Clean up resources after generating the font
+        }
         return orbitronFont;
     }
 
-    public Skin getSkin() {
-        return skin;
-    }
-
-    public void dispose() {
-        orbitronFont.dispose();
-        skin.dispose();
+    /**
+     * Frees up the resources used by the font.
+     * Call this method during application shutdown.
+     */
+    public static void dispose() {
+        if (orbitronFont != null) {
+            orbitronFont.dispose();
+            orbitronFont = null;
+        }
     }
 }

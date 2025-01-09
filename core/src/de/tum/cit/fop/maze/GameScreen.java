@@ -171,7 +171,6 @@ public class GameScreen implements Screen {
         for (Entity e : entities) {
             e.dispose();
         }
-        game.getSpriteBatch().dispose();
         font.dispose();
     }
 

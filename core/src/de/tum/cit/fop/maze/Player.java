@@ -52,7 +52,7 @@ public class Player {
     public Player(Maze maze) {
         characterAnimation = new ArrayList<>();
         inventory = new ArrayList<>();
-        loadCharacterAnimation();
+        loadAssets();
         this.maze = maze;
         for (var entry : maze.getMazeMap().entrySet()) {
             if (entry.getValue().equals(3)) {
@@ -137,7 +137,7 @@ public class Player {
     }
 
 
-    private void loadCharacterAnimation() {
+    private void loadAssets() {
         texture = new Texture(Gdx.files.internal("character.png"));
 
         int frameWidth = 16;
@@ -155,6 +155,8 @@ public class Player {
 
             characterAnimation.add(new Animation<>(0.1f, frames));
         }
+
+
     }
 
     public void updateHealth(int amount) {
@@ -189,6 +191,11 @@ public class Player {
     }
     public int getY() {
         return y;
+    }
+
+    public void setPosition(int x, int y) {
+        this.x = x;
+        this.y = y;
     }
 
     public void allowExit() {

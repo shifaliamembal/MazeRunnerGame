@@ -31,7 +31,9 @@ public class Enemy extends Entity {
     private TextureRegion currentFrame;
     private boolean dir;
     private float damageCooldown;
+    private float pathCooldown;
     private float waitTime;
+    private float attackTime;
 
 
     public Enemy(int x, int y, Maze maze, Player player) {
@@ -43,39 +45,49 @@ public class Enemy extends Entity {
                 new Point(player.getX() / GameScreen.tileSize, player.getY() / GameScreen.tileSize));
         patrolPath = new ArrayList<>();
         waitTime = 1;
+        pathCooldown = 1;
+        attackTime = 0;
     }
 
     protected void loadAssets() {
-        spriteSheets.add(new Texture(Gdx.files.internal("walk_bot(walk).png")));
-        spriteSheets.add(new Texture(Gdx.files.internal("walk_bot(idle).png")));
+        spriteSheets.add(new Texture(Gdx.files.internal("Spider.png")));
 
-        int frameWidth = 16;
-        int frameHeight = 16;
-
-        int animationFrames = 7;
+        int frameWidth = 96;
+        int frameHeight = 96;
 
         Array<TextureRegion> walkFrames = new Array<>(TextureRegion.class);
         Array<TextureRegion> idleFrames = new Array<>(TextureRegion.class);
+        Array<TextureRegion> attackFrames = new Array<>(TextureRegion.class);
 
-        for (int col = 0; col < animationFrames; col++) {
-            walkFrames.add(new TextureRegion(spriteSheets.get(0), col * frameWidth + col * 2, 0, frameWidth, frameHeight));
+        for (int col = 0; col < 10; col++) {
+            walkFrames.add(new TextureRegion(spriteSheets.get(0), col * frameWidth, 3 * frameHeight, frameWidth, frameHeight));
         }
-        idleFrames.add(new TextureRegion(spriteSheets.get(1), 0, 0, frameWidth, frameHeight));
-        idleFrames.add(new TextureRegion(spriteSheets.get(1), frameWidth + 2, 0, frameWidth, frameHeight));
+        for (int col = 0; col < 4; col++) {
+            idleFrames.add(new TextureRegion(spriteSheets.get(0), col * frameWidth, 4 * frameHeight, frameWidth, frameHeight));
+        }
+        for (int col = 0; col < 11; col++) {
+            attackFrames.add(new TextureRegion(spriteSheets.get(0), col * frameWidth, 0, frameWidth, frameHeight));
+        }
 
-        animations.add(new Animation<>(0.1f, walkFrames));
-        animations.add(new Animation<>(0.5f, idleFrames));
+        animations.add(new Animation<>(0.02f, walkFrames));
+        animations.add(new Animation<>(0.1f, idleFrames));
+        animations.add(new Animation<>(0.035f, attackFrames));
+        currentFrame = walkFrames.get(0);
     }
 
     public void draw(SpriteBatch batch, float delta) {
         frameCounter += delta;
+
+        attackTime -= delta;
         damageCooldown -= delta;
 
-        handleMovement(delta);
+        if (attackTime <= 0) {
+            handleMovement(delta);
+        }
 
         handleProximity();
 
-        batch.draw(currentFrame, x - (float) GameScreen.tileSize / 2, y - (float) GameScreen.tileSize / 2, GameScreen.tileSize, GameScreen.tileSize);
+        batch.draw(currentFrame, x - GameScreen.tileSize, y - GameScreen.tileSize / 2, GameScreen.tileSize * 2, GameScreen.tileSize * 2);
     }
 
     private void handleMovement(float delta) {
@@ -85,11 +97,12 @@ public class Enemy extends Entity {
         List<Point> currentPath = new ArrayList<>();
 
         waitTime -= delta;
+        pathCooldown -= delta;
 
         boolean chasePlayer = playerPath.size() <= 10;
-        if (playerPath.size() <= 10) {
+        if (!playerPath.isEmpty() && playerPath.size() <= 10) {
             currentPath = playerPath;
-            speed = (int) (6 * GameScreen.tileSize * delta);
+            speed = (int) (7 * GameScreen.tileSize * delta);
             patrolPath = Collections.emptyList();
         } else {
             if (patrolPath.isEmpty()) {
@@ -151,31 +164,25 @@ public class Enemy extends Entity {
 
         } else {
             currentFrame = animations.get(1).getKeyFrame(frameCounter, true);
-            playerPath = bfs(new Point(x / GameScreen.tileSize, y / GameScreen.tileSize),
-                    new Point(player.getX() / GameScreen.tileSize, player.getY() / GameScreen.tileSize));
+            if (pathCooldown <= 0) {
+                playerPath = bfs(new Point(x / GameScreen.tileSize, y / GameScreen.tileSize),
+                        new Point(player.getX() / GameScreen.tileSize, player.getY() / GameScreen.tileSize));
+                pathCooldown = 0.05f;
+            }
         }
     }
 
     private void handleProximity(){
-//        int enemyTileX = x / GameScreen.tileSize;
-//        int enemyTileY = y / GameScreen.tileSize;
-//
-//        int playerTileX = player.getX() / GameScreen.tileSize;
-//        int playerTileY = player.getY() / GameScreen.tileSize;
-
-//        int distanceX = Math.abs(x - player.getX());
-//        int distanceY = Math.abs(y - player.getY());
-//
-//        if (distanceX + distanceY == 1){
-//            player.updateHealth(-ADJACENT_DAMAGE);
-//        }
-//        else if (distanceX + distanceY <= 2){
-//            player.updateHealth(-CLOSE_PROXIMITY_DAMAGE);
-//        }
-
-        if (playerDistance() < GameScreen.tileSize && damageCooldown <= 0) {
-            player.updateHealth(-ADJACENT_DAMAGE);
-            damageCooldown = 0.5f;
+        if (playerDistance() < GameScreen.tileSize && attackTime <= 0) {
+            frameCounter = 0;
+            currentFrame = animations.get(2).getKeyFrame(frameCounter, true);
+            attackTime = animations.get(2).getAnimationDuration();
+        } else if (attackTime >= 0) {
+            currentFrame = animations.get(2).getKeyFrame(frameCounter, true);
+            if (damageCooldown <= 0 && frameCounter > animations.get(2).getFrameDuration() * 6 && playerDistance() < GameScreen.tileSize * 1.5) {
+                player.updateHealth(-10);
+                damageCooldown = 0.5f;
+            }
         }
     }
 
@@ -210,6 +217,9 @@ public class Enemy extends Entity {
                     visited.add(neighbor);
                     parent.put(neighbor, current);
                 }
+            }
+            if (visited.size() > 400) {
+                return Collections.emptyList();
             }
         }
         return Collections.emptyList();

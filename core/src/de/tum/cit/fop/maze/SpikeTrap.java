@@ -10,16 +10,13 @@ import com.badlogic.gdx.utils.Array;
 import java.util.Random;
 
 public class SpikeTrap extends Entity {
-    boolean active;
-    private static final int ACTIVATE_INTERVAL = 3;
     private float timeOffset;
     private float damageCooldown;
 
     public SpikeTrap(int x, int y, Player player) {
         super(x, y, player);
-        this.active = true;
         damageCooldown = 0;
-        timeOffset = new Random().nextFloat(ACTIVATE_INTERVAL);
+        timeOffset = new Random().nextFloat(3);
     }
 
     public void loadAssets() {
@@ -38,22 +35,19 @@ public class SpikeTrap extends Entity {
     }
 
     public void draw(SpriteBatch batch, float delta) {
-        frameCounter += delta;
         damageCooldown -= delta;
 
-        if (frameCounter < timeOffset) {
-            active = false;
-        } else if (timeOffset > 0) {
-            timeOffset = 0;
+        if (timeOffset <= 0) {
+            frameCounter += delta;
+        } else {
+            timeOffset -= delta;
+        }
+
+        if (frameCounter > 1.4) {
             frameCounter = 0;
         }
 
-        if (frameCounter > ACTIVATE_INTERVAL) {
-            active = !active;
-            frameCounter = 0;
-        }
-
-        batch.draw(animations.get(0).getKeyFrame(active ? frameCounter : 0, false),
+        batch.draw(animations.get(0).getKeyFrame(frameCounter, true),
                 x - (float) GameScreen.tileSize / 2,
                 y - (float) GameScreen.tileSize / 2,
                 0, 0,
@@ -64,7 +58,7 @@ public class SpikeTrap extends Entity {
     }
 
     public void handlePlayer() {
-        if (active && frameCounter > 0.8 && frameCounter < 1.2 && damageCooldown <= 0
+        if (frameCounter > 0.8 && frameCounter < 1.2 && damageCooldown <= 0
                 &&  player.getX() / GameScreen.tileSize == x / GameScreen.tileSize
                 && player.getY() / GameScreen.tileSize == y / GameScreen.tileSize) {
             player.updateHealth(-20);

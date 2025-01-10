@@ -156,7 +156,7 @@ public class Player {
 
     private void loadAssets() {
         texture = new Texture(Gdx.files.internal("character.png"));
-        movementSound = Gdx.audio.newSound(Gdx.files.internal("Walk.mp3"));
+        movementSound = Gdx.audio.newSound(Gdx.files.internal("MovementSound.mp3"));
         int frameWidth = 16;
         int frameHeight = 32;
         int animationFrames = 4;

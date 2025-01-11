@@ -29,6 +29,7 @@ public class MazeRunnerGame extends Game {
     private PauseMenu pauseMenu;
 
     private float difficulty = 1f;
+    private int mazeSize;
 
 
     /**
@@ -55,7 +56,8 @@ public class MazeRunnerGame extends Game {
 
         backgroundMusic.setLooping(true);
         backgroundMusic.play();
-        Maze.saveMaze(Maze.generateMaze(51,51, difficulty), "maps/maze.properties");
+        mazeSize = 51;
+        Maze.saveMaze(Maze.generateMaze(mazeSize,mazeSize, difficulty), "maps/maze.properties");
 
         goToMenu();// Navigate to the menu screen
 
@@ -128,5 +130,9 @@ public class MazeRunnerGame extends Game {
 
     public float getDifficulty() {
         return difficulty;
+    }
+
+    public int getMazeSize() {
+        return mazeSize;
     }
 }

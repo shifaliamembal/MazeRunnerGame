@@ -16,17 +16,17 @@ public class Maze {
     private Map<Point, Integer> entityMap;
     private Texture texture;
     private Array<TextureRegion> textures;
-//    private int rows;
-//    private int cols;
     private static final int WALL = 0;
     private static final int PATH = 1;
     private static final int[] DX = {-1, 1, 0, 0};
     private static final int[] DY = {0, 0, -1, 1};
+    private int size;
 
-    public Maze(String filename) {
+    public Maze(String filename, int size) {
         mazeProperties = new Properties();
         mazeMap = new HashMap<>();
         entityMap = new HashMap<>();
+        this.size = size;
         try {
             mazeProperties.load(new FileInputStream(filename));
         } catch (IOException e) {
@@ -90,7 +90,6 @@ public class Maze {
         for (int i = 1; i < rows - 1; i++) {
             for (int j = 1; j < cols - 1; j++) {
                 if (maze[i][j] == WALL && random.nextInt(8) == 0) {
-//                    setArea(maze, j, i, random.nextInt(1, 6), PATH);
                     setArea(maze, j, i, 3, PATH);
                 }
             }
@@ -265,5 +264,9 @@ public class Maze {
 
     public Texture getTexture() {
         return texture;
+    }
+
+    public int getSize() {
+        return size;
     }
 }

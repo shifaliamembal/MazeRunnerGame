@@ -31,9 +31,8 @@ public class TreasureChest extends Entity {
     }
 
     public void draw(SpriteBatch batch, float delta) {
-        if (Gdx.input.isKeyPressed(Input.Keys.E) && Math.abs(x - player.getX()) < GameScreen.tileSize && Math.abs(y - player.getY()) < GameScreen.tileSize) {
+        if (!open && Gdx.input.isKeyPressed(Input.Keys.E) && Math.abs(x - player.getX()) < GameScreen.tileSize && Math.abs(y - player.getY()) < GameScreen.tileSize) {
             open();
-            open = true;
         }
 
         batch.draw(currentTexture, x - (float) GameScreen.tileSize / 2 + 4, y - (float) GameScreen.tileSize / 2, GameScreen.tileSize, GameScreen.tileSize);
@@ -46,5 +45,7 @@ public class TreasureChest extends Entity {
     public void open() {
         currentTexture = textures.get(1);
         player.receiveItem(content);
+        player.addPoints(100);
+        open = true;
     }
 }

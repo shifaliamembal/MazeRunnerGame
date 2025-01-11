@@ -40,16 +40,7 @@ public class Player {
     private boolean isSoundPlaying;
     private int damageEffectFrames;
     private boolean dead;
-//    public static class Effect {
-//        public int x;
-//        public int y;
-//        public int speed;
-//        public Effect(int x, int y, int speed) {
-//            this.x = x;
-//            this.y = y;
-//            this.speed = speed;
-//        }
-//    }
+    private int score;
 
     private enum action {
         DOWN, RIGHT, UP, LEFT
@@ -70,6 +61,7 @@ public class Player {
         stamina = MAX_STAMINA;
         health = MAX_HEALTH;
         damageEffectFrames = 0;
+        score = 0;
     }
 
     public void draw(SpriteBatch batch, float delta) {
@@ -146,6 +138,10 @@ public class Player {
         if (Gdx.input.isKeyPressed(Input.Keys.ALT_LEFT)) {
             maze.getMazeMap().put(new Point(x / GameScreen.tileSize + DX[dir], y / GameScreen.tileSize + DY[dir]), 0);
         }
+
+        if (isMoving && x < 0 || y < 0 || x > maze.getSize() * GameScreen.tileSize || y > maze.getSize() * GameScreen.tileSize) {
+            dead = true;
+        }
         return isMoving;
     }
 
@@ -193,6 +189,7 @@ public class Player {
         }
         else if (health <= 0){
             health = 0;
+            movementSound.stop();
             dead = true;
         }
         if (amount < 0) {
@@ -250,6 +247,14 @@ public class Player {
 
     public boolean isDead() {
         return dead;
+    }
+
+    public void addPoints(int points) {
+        score += points;
+    }
+
+    public int getScore() {
+        return score;
     }
 
 }

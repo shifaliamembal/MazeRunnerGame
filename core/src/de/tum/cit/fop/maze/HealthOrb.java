@@ -25,6 +25,7 @@ public class HealthOrb extends Entity {
         }
         if (playerDistance() < GameScreen.tileSize / 2) {
             player.updateHealth(20);
+            player.addPoints(25);
             collected = true;
         }
         batch.draw(textures.get(0), x, y, GameScreen.tileSize / 2, GameScreen.tileSize / 2);

@@ -51,7 +51,7 @@ public class GameScreen implements Screen {
      */
     public GameScreen(MazeRunnerGame game) {
         this.game = game;
-        maze = new Maze("maps/maze.properties");
+        maze = new Maze("maps/maze.properties", game.getMazeSize());
         player = new Player(maze);
         entities = new ArrayList<Entity>();
 
@@ -160,29 +160,37 @@ public class GameScreen implements Screen {
 
             viewport.setCamera(hudCamera);
             viewport.apply();
-            if (!player.isDead()) {
-                hudBatch.begin();
-                pointer.draw(hudBatch, camera, viewport);
-                hudBatch.end();
-                shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-                shapeRenderer.setColor(Color.GRAY);
-                shapeRenderer.rect(10, Gdx.graphics.getHeight() - 30, 200, 20);
-                shapeRenderer.rect(10, Gdx.graphics.getHeight() - 60, 200, 20);
-                shapeRenderer.setColor(Color.GREEN);
-                float width = ((float) player.getHealth() / player.getMaxHealth() * 200);
-                shapeRenderer.rect(10, Gdx.graphics.getHeight() - 30, width, 20);
-                shapeRenderer.setColor(Color.YELLOW);
-                width = ((float) player.getStamina() / player.getMaxStamina() * 200);
-                shapeRenderer.rect(10, Gdx.graphics.getHeight() - 60, width, 20);
-                shapeRenderer.end();
-            } else {
-                gameOverTime -= delta;
-                if (gameOverTime < 0) {
-                    game.goToMenu();
-                }
-            }
+
+            drawHud(delta);
         }
 
+    }
+
+    public void drawHud(float delta) {
+        if (!player.isDead()) {
+            hudBatch.begin();
+            pointer.draw(hudBatch, camera, viewport);
+            font.draw(hudBatch, "Score: " + player.getScore(), 10, Gdx.graphics.getHeight() - 80);
+            font.draw(hudBatch, "Time: " + String.format("%.1f", sinusInput), 10, Gdx.graphics.getHeight() - 120);
+            hudBatch.end();
+
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+            shapeRenderer.setColor(Color.GRAY);
+            shapeRenderer.rect(10, Gdx.graphics.getHeight() - 30, 200, 20);
+            shapeRenderer.rect(10, Gdx.graphics.getHeight() - 60, 200, 20);
+            shapeRenderer.setColor(Color.GREEN);
+            float width = ((float) player.getHealth() / player.getMaxHealth() * 200);
+            shapeRenderer.rect(10, Gdx.graphics.getHeight() - 30, width, 20);
+            shapeRenderer.setColor(Color.YELLOW);
+            width = ((float) player.getStamina() / player.getMaxStamina() * 200);
+            shapeRenderer.rect(10, Gdx.graphics.getHeight() - 60, width, 20);
+            shapeRenderer.end();
+        } else {
+            gameOverTime -= delta;
+            if (gameOverTime < 0) {
+                game.goToMenu();
+            }
+        }
     }
 
     @Override

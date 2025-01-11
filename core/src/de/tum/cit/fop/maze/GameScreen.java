@@ -3,10 +3,13 @@ package de.tum.cit.fop.maze;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -38,6 +41,8 @@ public class GameScreen implements Screen {
     private PauseMenu pauseMenu;
     private FontManager fontManager;
     private boolean isPaused;
+    private float gameOverTime = 3;
+    private ShapeRenderer shapeRenderer;
 
     /**
      * Constructor for GameScreen. Sets up the camera and font.
@@ -46,7 +51,7 @@ public class GameScreen implements Screen {
      */
     public GameScreen(MazeRunnerGame game) {
         this.game = game;
-        maze = new Maze("maps/test.properties");
+        maze = new Maze("maps/maze.properties");
         player = new Player(maze);
         entities = new ArrayList<Entity>();
 
@@ -67,6 +72,7 @@ public class GameScreen implements Screen {
         pauseMenu = new PauseMenu(game, this, viewport);
 
         spawnEntities();
+        shapeRenderer = new ShapeRenderer();
     }
 
     public void spawnEntities() {
@@ -81,7 +87,7 @@ public class GameScreen implements Screen {
                 entities.add(new TreasureChest(entry.getKey().x, entry.getKey().y, player));
             }
             else if (entry.getValue() == 11) {
-                entities.add(new Enemy(entry.getKey().x, entry.getKey().y, maze, player));
+                entities.add(new Enemy(entry.getKey().x, entry.getKey().y, maze, player, game.getDifficulty()));
             } else if (entry.getValue() == 12) {
                 entities.add(new ExitBarrier(entry.getKey().x, entry.getKey().y, player, vertical));
                 maze.getMazeMap().put(new Point(a.x + (vertical ? 0 : 1), a.y - (vertical ? 0 : 1)), 2);
@@ -90,9 +96,9 @@ public class GameScreen implements Screen {
                         (int) (entry.getKey().x * (tileSize + 1) + (vertical ? 0 : tileSize)),
                         (int) (entry.getKey().y * (tileSize + 1) + (vertical ? tileSize: 0)));
             } else if (entry.getValue() == 13) {
-                entities.add(new LaserTrap(entry.getKey().x, entry.getKey().y, player, vertical));
+                entities.add(new LaserTrap(entry.getKey().x, entry.getKey().y, player, vertical, game.getDifficulty()));
             } else if (entry.getValue() == 14) {
-                entities.add(new SpikeTrap(entry.getKey().x, entry.getKey().y, player));
+                entities.add(new SpikeTrap(entry.getKey().x, entry.getKey().y, player, game.getDifficulty()));
             }
         }
     }
@@ -136,11 +142,14 @@ public class GameScreen implements Screen {
             //font.draw(game.getSpriteBatch(), "Press ESC to go to menu", textX, textY);
 
             // Draw the character next to the text :) / We can reuse sinusInput here
-            maze.draw(game.getSpriteBatch());
 
-
-            for (Entity e : entities) {
-                e.draw(game.getSpriteBatch(), delta);
+            if (!player.isDead()) {
+                maze.draw(game.getSpriteBatch());
+                for (Entity e : entities) {
+                    e.draw(game.getSpriteBatch(), delta);
+                }
+            } else {
+                game.getSpriteBatch().setColor(Color.RED);
             }
 
             player.draw(game.getSpriteBatch(), delta);
@@ -149,11 +158,27 @@ public class GameScreen implements Screen {
 
             viewport.setCamera(hudCamera);
             viewport.apply();
-            hudBatch.begin();
-            pointer.draw(hudBatch, camera, viewport);
-            font.draw(hudBatch, "Timer: " + String.format("%.1f", sinusInput) + " s", 5, Gdx.graphics.getHeight() - 5);
-            font.draw(hudBatch, "Health: " + String.format("%d", player.getHealth()), 5, Gdx.graphics.getHeight() - 35);
-            hudBatch.end();
+            if (!player.isDead()) {
+                hudBatch.begin();
+                pointer.draw(hudBatch, camera, viewport);
+                hudBatch.end();
+                shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+                shapeRenderer.setColor(Color.GRAY);
+                shapeRenderer.rect(10, Gdx.graphics.getHeight() - 30, 200, 20);
+                shapeRenderer.rect(10, Gdx.graphics.getHeight() - 60, 200, 20);
+                shapeRenderer.setColor(Color.GREEN);
+                float width = ((float) player.getHealth() / player.getMaxHealth() * 200);
+                shapeRenderer.rect(10, Gdx.graphics.getHeight() - 30, width, 20);
+                shapeRenderer.setColor(Color.YELLOW);
+                width = ((float) player.getStamina() / player.getMaxStamina() * 200);
+                shapeRenderer.rect(10, Gdx.graphics.getHeight() - 60, width, 20);
+                shapeRenderer.end();
+            } else {
+                gameOverTime -= delta;
+                if (gameOverTime < 0) {
+                    game.goToMenu();
+                }
+            }
         }
 
     }
@@ -190,11 +215,11 @@ public class GameScreen implements Screen {
     }
 
     public void zoom() {
-        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.PLUS) || Gdx.input.isKeyPressed(Input.Keys.NUMPAD_ADD)) {
             if (camera.zoom > 0.25) {
                 camera.zoom -= 0.01f;
             }
-        } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+        } else if (Gdx.input.isKeyPressed(Input.Keys.MINUS) || Gdx.input.isKeyPressed(Input.Keys.NUMPAD_SUBTRACT)) {
             if (camera.zoom < 2) {
                 camera.zoom += 0.01f;
             }

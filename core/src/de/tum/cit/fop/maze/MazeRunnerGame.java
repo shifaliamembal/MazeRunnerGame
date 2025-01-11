@@ -4,11 +4,8 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.utils.Array;
 import games.spooky.gdx.nativefilechooser.NativeFileChooser;
 
 /**
@@ -30,6 +27,8 @@ public class MazeRunnerGame extends Game {
     private FontManager fontManager;
 
     private PauseMenu pauseMenu;
+
+    private float difficulty = 1.3f;
 
 
     /**
@@ -56,7 +55,7 @@ public class MazeRunnerGame extends Game {
 
         backgroundMusic.setLooping(true);
         backgroundMusic.play();
-        Maze.saveMaze(Maze.generateMaze(101,101), "maps/test.properties");
+        Maze.saveMaze(Maze.generateMaze(51,51, difficulty), "maps/maze.properties");
 
         goToMenu();// Navigate to the menu screen
 
@@ -125,5 +124,9 @@ public class MazeRunnerGame extends Game {
 
     public SpriteBatch getSpriteBatch() {
         return spriteBatch;
+    }
+
+    public float getDifficulty() {
+        return difficulty;
     }
 }

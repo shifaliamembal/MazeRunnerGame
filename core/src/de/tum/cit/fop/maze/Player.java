@@ -3,6 +3,7 @@ package de.tum.cit.fop.maze;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -37,6 +38,8 @@ public class Player {
     private final int MAX_HEALTH = 100;
     private Sound movementSound;
     private boolean isSoundPlaying;
+    private int damageEffectFrames;
+    private boolean dead;
 //    public static class Effect {
 //        public int x;
 //        public int y;
@@ -66,24 +69,31 @@ public class Player {
         baseSpeed = GameScreen.tileSize * 9;
         stamina = MAX_STAMINA;
         health = MAX_HEALTH;
+        damageEffectFrames = 0;
     }
 
     public void draw(SpriteBatch batch, float delta) {
         frameCounter += delta;
 
+        if (damageEffectFrames > 0) {
+            batch.setColor(Color.RED);
+            damageEffectFrames--;
+        }
         batch.draw(
-                getCurrentAnimation().getKeyFrame(frameCounter, takeInput(delta)),
+                getCurrentAnimation().getKeyFrame(frameCounter, !dead && takeInput(delta)),
                 x - (float) GameScreen.tileSize / 2,
                 y - (float) GameScreen.tileSize / 2,
                 GameScreen.tileSize,
                 GameScreen.tileSize * 2
         );
+        batch.setColor(Color.WHITE);
     }
 
     public boolean takeInput(float delta) {
 
 
-        if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) && stamina > 0 && !running_cooldown) {
+        if ((Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT))
+                && stamina > 0 && !running_cooldown) {
             stamina -= 2;
             speed = (int) (baseSpeed * delta * 1.5);
             getCurrentAnimation().setFrameDuration(0.1f);
@@ -98,19 +108,19 @@ public class Player {
 
         boolean isMoving = true;
 
-        if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.S) || Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
             dir = 0;
             if (!wallCollision(x, y - speed))
                 y -= speed;
-        } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+        } else if (Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
             dir = 1;
             if (!wallCollision(x + speed, y))
                 x += speed;
-        } else if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+        } else if (Gdx.input.isKeyPressed(Input.Keys.W) || Gdx.input.isKeyPressed(Input.Keys.UP)) {
             dir = 2;
             if (!wallCollision(x, y + speed))
                 y += speed;
-        } else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+        } else if (Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             dir = 3;
             if (!wallCollision(x - speed, y))
                 x -= speed;
@@ -156,7 +166,7 @@ public class Player {
 
     private void loadAssets() {
         texture = new Texture(Gdx.files.internal("character.png"));
-        movementSound = Gdx.audio.newSound(Gdx.files.internal("Walk.mp3"));
+        movementSound = Gdx.audio.newSound(Gdx.files.internal("background.mp3"));
         int frameWidth = 16;
         int frameHeight = 32;
         int animationFrames = 4;
@@ -183,12 +193,11 @@ public class Player {
         }
         else if (health <= 0){
             health = 0;
-            onPlayerDeath();
+            dead = true;
         }
-    }
-
-    public void onPlayerDeath() {
-        System.out.println("Player has died!");
+        if (amount < 0) {
+            damageEffectFrames = 10;
+        }
     }
 
     public void receiveItem(Item item) {
@@ -223,8 +232,24 @@ public class Player {
         return health;
     }
 
+    public int getMaxHealth() {
+        return MAX_HEALTH;
+    }
+
+    public int getStamina() {
+        return stamina;
+    }
+
+    public int getMaxStamina() {
+        return MAX_STAMINA;
+    }
+
     public void dispose() {
         texture.dispose();
+    }
+
+    public boolean isDead() {
+        return dead;
     }
 
 }

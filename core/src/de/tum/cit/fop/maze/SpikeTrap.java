@@ -12,9 +12,11 @@ import java.util.Random;
 public class SpikeTrap extends Entity {
     private float timeOffset;
     private float damageCooldown;
+    private float difficulty;
 
-    public SpikeTrap(int x, int y, Player player) {
+    public SpikeTrap(int x, int y, Player player, float difficulty) {
         super(x, y, player);
+        this.difficulty = difficulty;
         damageCooldown = 0;
         timeOffset = new Random().nextFloat(3);
     }
@@ -61,7 +63,7 @@ public class SpikeTrap extends Entity {
         if (frameCounter > 0.8 && frameCounter < 1.2 && damageCooldown <= 0
                 &&  player.getX() / GameScreen.tileSize == x / GameScreen.tileSize
                 && player.getY() / GameScreen.tileSize == y / GameScreen.tileSize) {
-            player.updateHealth(-20);
+            player.updateHealth((int) (-20 * difficulty));
             damageCooldown = 1f;
         }
     }

@@ -34,17 +34,20 @@ public class Enemy extends Entity {
     private float pathCooldown;
     private float waitTime;
     private float attackTime;
+    private float difficulty;
 
 
-    public Enemy(int x, int y, Maze maze, Player player) {
+    public Enemy(int x, int y, Maze maze, Player player, float difficulty) {
         super(x, y, player);
         this.maze = maze;
+        this.difficulty = difficulty;
 
         this.player = player;
         playerPath = bfs(new Point(super.x / GameScreen.tileSize, super.y / GameScreen.tileSize),
                 new Point(player.getX() / GameScreen.tileSize, player.getY() / GameScreen.tileSize));
         patrolPath = new ArrayList<>();
-        waitTime = 1;
+        waitTime = 3;
+        damageCooldown = 3;
         pathCooldown = 1;
         attackTime = 0;
     }
@@ -180,7 +183,7 @@ public class Enemy extends Entity {
         } else if (attackTime >= 0) {
             currentFrame = animations.get(2).getKeyFrame(frameCounter, true);
             if (damageCooldown <= 0 && frameCounter > animations.get(2).getFrameDuration() * 6 && playerDistance() < GameScreen.tileSize * 1.5) {
-                player.updateHealth(-10);
+                player.updateHealth((int) (-10 * difficulty));
                 damageCooldown = 0.5f;
             }
         }

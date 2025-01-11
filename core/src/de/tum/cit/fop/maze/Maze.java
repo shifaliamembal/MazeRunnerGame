@@ -145,7 +145,10 @@ public class Maze {
                     maze[i][j] = 13; // LaserTrap
                 }
                 if (maze[i][j] == PATH && random.nextInt((int) (150 / difficulty)) == 0) {
-                    maze[i][j] = 14;
+                    maze[i][j] = 14; // spike trap
+                }
+                if (maze[i][j] == PATH && random.nextInt((int) (150 * difficulty)) == 0) {
+                    maze[i][j] = 15; // orb
                 }
             }
         }

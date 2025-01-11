@@ -28,7 +28,7 @@ public class MazeRunnerGame extends Game {
 
     private PauseMenu pauseMenu;
 
-    private float difficulty = 1.3f;
+    private float difficulty = 1f;
 
 
     /**

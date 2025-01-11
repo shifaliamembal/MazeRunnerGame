@@ -99,6 +99,8 @@ public class GameScreen implements Screen {
                 entities.add(new LaserTrap(entry.getKey().x, entry.getKey().y, player, vertical, game.getDifficulty()));
             } else if (entry.getValue() == 14) {
                 entities.add(new SpikeTrap(entry.getKey().x, entry.getKey().y, player, game.getDifficulty()));
+            } else if (entry.getValue() == 15) {
+                entities.add(new HealthOrb(entry.getKey().x, entry.getKey().y, player));
             }
         }
     }

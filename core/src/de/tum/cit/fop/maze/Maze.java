@@ -16,17 +16,17 @@ public class Maze {
     private Map<Point, Integer> entityMap;
     private Texture texture;
     private Array<TextureRegion> textures;
-//    private int rows;
-//    private int cols;
     private static final int WALL = 0;
     private static final int PATH = 1;
     private static final int[] DX = {-1, 1, 0, 0};
     private static final int[] DY = {0, 0, -1, 1};
+    private int size;
 
-    public Maze(String filename) {
+    public Maze(String filename, int size) {
         mazeProperties = new Properties();
         mazeMap = new HashMap<>();
         entityMap = new HashMap<>();
+        this.size = size;
         try {
             mazeProperties.load(new FileInputStream(filename));
         } catch (IOException e) {
@@ -50,26 +50,18 @@ public class Maze {
                 entityMap.put(new Point(x, y), Integer.parseInt(mazeProperties.getProperty(key)));
             }
         }
-
-//        rows = (int) mazeMap.keySet().stream()
-//                .mapToDouble(Point::getY)
-//                .max().orElse(-1) + 1;
-//        cols = (int) mazeMap.keySet().stream()
-//                .mapToDouble(Point::getX)
-//                .max().orElse(-1) + 1;
     }
 
     private void loadTextures() {
         textures = new Array<>(TextureRegion.class);
-        texture = new Texture(Gdx.files.internal("basictiles.png"));
+        texture = new Texture(Gdx.files.internal("wall.png"));
         Texture floor = new Texture(Gdx.files.internal("floor.png"));
 
         int tileSize = 16;
 
-        textures.add(new TextureRegion(texture, 0, 0, tileSize, tileSize));
+        textures.add(new TextureRegion(texture, 0, 0, tileSize * 2, tileSize * 2));
         textures.add(new TextureRegion(floor, tileSize, 0, 0, 0));
         textures.add(new TextureRegion(floor, tileSize, 0, 0, 0));
-        textures.add(new TextureRegion(texture, tileSize, tileSize, tileSize, tileSize));
     }
 
     public void draw(SpriteBatch batch) {
@@ -82,7 +74,7 @@ public class Maze {
         }
     }
 
-    public static int[][] generateMaze(int rows, int cols) {
+    public static int[][] generateMaze(int rows, int cols, float difficulty) {
         int[][] maze = new int[rows][cols];
 
         for (int[] row : maze) {
@@ -98,7 +90,6 @@ public class Maze {
         for (int i = 1; i < rows - 1; i++) {
             for (int j = 1; j < cols - 1; j++) {
                 if (maze[i][j] == WALL && random.nextInt(8) == 0) {
-//                    setArea(maze, j, i, random.nextInt(1, 6), PATH);
                     setArea(maze, j, i, 3, PATH);
                 }
             }
@@ -131,29 +122,32 @@ public class Maze {
 
         createEntrance(maze, random);
         createExit(maze, random);
-        createEntities(maze, random);
+        createEntities(maze, random, difficulty);
 
         return maze;
     }
 
-    public static void createEntities(int[][] maze, Random random) {
+    public static void createEntities(int[][] maze, Random random, float difficulty) {
         for (int i = 0; i < maze.length; i++) {
             for (int j = 0; j < maze[i].length; j++) {
                 if (maze[i][j] == PATH && countSurroundingTiles(maze, j, i, WALL) >= 7 && random.nextInt(4) == 0) {
                     maze[i][j] = 10; //TreasureChest
                 }
-                if (maze[i][j] == PATH && random.nextInt(200) == 0) {
+                if (maze[i][j] == PATH && random.nextInt((int) (200 / difficulty)) == 0) {
                     maze[i][j] = 11; //Enemy
                 }
                 if (maze[i][j] == PATH && ((inBounds(maze, j - 1, i) && maze[i][j - 1] == WALL
                         && inBounds(maze, j + 1, i) && maze[i][j + 1] == WALL)
                         || (inBounds(maze, j, i - 1) && maze[i - 1][j] == WALL
                         && inBounds(maze, j, i + 1) && maze[i + 1][j] == WALL))
-                        && random.nextInt(10) == 0) {
+                        && random.nextInt((int) (10 / difficulty)) == 0) {
                     maze[i][j] = 13; // LaserTrap
                 }
-                if (maze[i][j] == PATH && random.nextInt(150) == 0) {
-                    maze[i][j] = 14;
+                if (maze[i][j] == PATH && random.nextInt((int) (150 / difficulty)) == 0) {
+                    maze[i][j] = 14; // spike trap
+                }
+                if (maze[i][j] == PATH && random.nextInt((int) (150 * difficulty)) == 0) {
+                    maze[i][j] = 15; // orb
                 }
             }
         }
@@ -270,5 +264,9 @@ public class Maze {
 
     public Texture getTexture() {
         return texture;
+    }
+
+    public int getSize() {
+        return size;
     }
 }

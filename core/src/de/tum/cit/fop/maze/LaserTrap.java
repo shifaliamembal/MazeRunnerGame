@@ -15,11 +15,13 @@ public class LaserTrap extends Entity {
     private static final int ACTIVATE_INTERVAL = 3;
     private float timeOffset;
     private float damageCooldown;
+    private float difficulty;
 
-    public LaserTrap(int x, int y, Player player, boolean vertical) {
+    public LaserTrap(int x, int y, Player player, boolean vertical, float difficulty) {
         super(x, y, player);
         this.vertical = vertical;
         this.active = true;
+        this.difficulty = difficulty;
         damageCooldown = 0;
         timeOffset = new Random().nextFloat(ACTIVATE_INTERVAL);
     }
@@ -75,7 +77,7 @@ public class LaserTrap extends Entity {
         if (((active && frameCounter > 1) || (!active && frameCounter < 0.5)) && damageCooldown <= 0
                 &&  player.getX() / GameScreen.tileSize == x / GameScreen.tileSize
                 && player.getY() / GameScreen.tileSize == y / GameScreen.tileSize) {
-            player.updateHealth(-2);
+            player.updateHealth((int) (-5 * difficulty));
             damageCooldown = 0.1f;
         }
     }

@@ -54,19 +54,19 @@ public class Maze {
 
     private void loadTextures() {
         textures = new Array<>(TextureRegion.class);
-        texture = new Texture(Gdx.files.internal("wall.png"));
-        Texture floor = new Texture(Gdx.files.internal("floor.png"));
+        texture = new Texture(Gdx.files.internal("tiles.png"));
 
         int tileSize = 16;
 
         textures.add(new TextureRegion(texture, 0, 0, tileSize * 2, tileSize * 2));
-        textures.add(new TextureRegion(floor, tileSize, 0, 0, 0));
-        textures.add(new TextureRegion(floor, tileSize, 0, 0, 0));
+        textures.add(new TextureRegion(texture, tileSize * 3, tileSize, 0, 0));
+        textures.add(new TextureRegion(texture, tileSize * 3, tileSize, 0, 0));
+        textures.add(new TextureRegion(texture, tileSize * 2, tileSize, 0, 0));
     }
 
     public void draw(SpriteBatch batch) {
         for (Point point : mazeMap.keySet()) {
-            if (mazeMap.get(point) <= 2) {
+            if (mazeMap.get(point) <= 3) {
                 batch.draw(textures.get(mazeMap.get(point)), point.x * GameScreen.tileSize, point.y * GameScreen.tileSize, GameScreen.tileSize, GameScreen.tileSize);
             } else {
                 batch.draw(textures.get(textures.size - 1), point.x * GameScreen.tileSize, point.y * GameScreen.tileSize, GameScreen.tileSize, GameScreen.tileSize);

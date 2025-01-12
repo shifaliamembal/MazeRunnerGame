@@ -37,6 +37,7 @@ public class Player {
     private final int MAX_STAMINA = 400;
     private final int MAX_HEALTH = 100;
     private Sound movementSound;
+    private long soundId;
     private boolean isSoundPlaying;
     private int damageEffectFrames;
     private boolean dead;
@@ -83,11 +84,12 @@ public class Player {
 
     public boolean takeInput(float delta) {
 
-
+        boolean running = false;
         if ((Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT))
                 && stamina > 0 && !running_cooldown) {
             stamina -= 2;
             speed = (int) (baseSpeed * delta * 1.5);
+            running = true;
             getCurrentAnimation().setFrameDuration(0.1f);
         } else {
             if (stamina < MAX_STAMINA) {
@@ -122,8 +124,8 @@ public class Player {
 
         if (isMoving) {
             if (!isSoundPlaying) {
-                movementSound.loop();
                 isSoundPlaying = true;
+                soundId = movementSound.loop();
             }
         } else {
             if (isSoundPlaying) {
@@ -131,6 +133,7 @@ public class Player {
                 isSoundPlaying = false;
             }
         }
+        movementSound.setPitch(soundId, running ? 1.8f : 1.2f);
 
         if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
             maze.getMazeMap().put(new Point(x / GameScreen.tileSize + DX[dir], y / GameScreen.tileSize + DY[dir]), 1);
@@ -178,8 +181,6 @@ public class Player {
 
             characterAnimation.add(new Animation<>(0.1f, frames));
         }
-
-
     }
 
     public void updateHealth(int amount) {

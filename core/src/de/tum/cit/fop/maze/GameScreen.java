@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -59,12 +60,19 @@ public class GameScreen implements Screen {
         camera = new OrthographicCamera();
         camera.setToOrtho(false);
         camera.zoom = 1f;
-        hudCamera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        //hudCamera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         hudBatch = new SpriteBatch();
-        hudBatch.setProjectionMatrix(camera.combined);
-        hudCamera.position.set(hudCamera.viewportWidth / 2, hudCamera.viewportHeight / 2, 0);
-        viewport = new FitViewport(1920, 1080, camera);
+        //hudBatch.setProjectionMatrix(camera.combined);
+        //hudCamera.position.set(hudCamera.viewportWidth / 2, hudCamera.viewportHeight / 2, 0);
+        viewport = new ExtendViewport(1920, 1080, camera);
         viewport.apply();
+
+        hudCamera = new OrthographicCamera();
+        hudCamera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        hudCamera.up.set(0, 1, 0);
+        hudCamera.position.set(hudCamera.viewportWidth / 2, -hudCamera.viewportHeight / 2, 0);
+        hudCamera.update();
+        hudBatch.setProjectionMatrix(hudCamera.combined);
 
         // Get the font from the game's skin
         font = game.getSkin().getFont("font");
@@ -73,6 +81,7 @@ public class GameScreen implements Screen {
 
         spawnEntities();
         shapeRenderer = new ShapeRenderer();
+        shapeRenderer.setProjectionMatrix(hudCamera.combined);
     }
 
     public void spawnEntities() {
@@ -168,22 +177,23 @@ public class GameScreen implements Screen {
 
     public void drawHud(float delta) {
         if (!player.isDead()) {
+            int space = Gdx.graphics.getHeight() / 80;
             hudBatch.begin();
             pointer.draw(hudBatch, camera, viewport);
-            font.draw(hudBatch, "Score: " + player.getScore(), 10, Gdx.graphics.getHeight() - 80);
-            font.draw(hudBatch, "Time: " + String.format("%.1f", sinusInput), 10, Gdx.graphics.getHeight() - 120);
+            font.draw(hudBatch, "Score: " + player.getScore(), space, - space * 8);
+            font.draw(hudBatch, "Time: " + String.format("%.1f", sinusInput), space, - space * 12);
             hudBatch.end();
 
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
             shapeRenderer.setColor(Color.GRAY);
-            shapeRenderer.rect(10, Gdx.graphics.getHeight() - 30, 200, 20);
-            shapeRenderer.rect(10, Gdx.graphics.getHeight() - 60, 200, 20);
+            shapeRenderer.rect(space, - space * 3, space * 30, space * 2);
+            shapeRenderer.rect(space, - space * 6, space * 30, space * 2);
             shapeRenderer.setColor(Color.GREEN);
-            float width = ((float) player.getHealth() / player.getMaxHealth() * 200);
-            shapeRenderer.rect(10, Gdx.graphics.getHeight() - 30, width, 20);
+            float width = ((float) player.getHealth() / player.getMaxHealth() * space * 30);
+            shapeRenderer.rect(space, - space * 3, width, space * 2);
             shapeRenderer.setColor(Color.YELLOW);
-            width = ((float) player.getStamina() / player.getMaxStamina() * 200);
-            shapeRenderer.rect(10, Gdx.graphics.getHeight() - 60, width, 20);
+            width = ((float) player.getStamina() / player.getMaxStamina() * space * 30);
+            shapeRenderer.rect(space, - space * 6, width, space * 2);
             shapeRenderer.end();
         } else {
             gameOverTime -= delta;
@@ -196,6 +206,9 @@ public class GameScreen implements Screen {
     @Override
     public void resize(int width, int height) {
         viewport.update(width, height);
+        hudCamera.setToOrtho(false, width, height);
+        hudCamera.position.set(hudCamera.viewportWidth / 2, -hudCamera.viewportHeight / 2, 0);
+        hudCamera.update();
     }
 
     @Override
@@ -236,5 +249,4 @@ public class GameScreen implements Screen {
         }
     }
 
-    // Additional methods and logic can be added as needed for the game screen
 }

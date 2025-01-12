@@ -25,7 +25,7 @@ public class ExitPointer {
         float renderX;
         float renderY;
 
-        Vector3 worldPos = new Vector3(x, y, 0); // Position in world coordinates
+        Vector3 worldPos = new Vector3(x, y, 0);
         Vector3 screenPos = new Vector3();
 
 
@@ -33,17 +33,37 @@ public class ExitPointer {
         camera.project(screenPos, viewport.getScreenX(), viewport.getScreenY(), viewport.getScreenWidth(), viewport.getScreenHeight());
 
         renderX = screenPos.x;
-        renderX = Math.max(renderX, texture.getHeight() / 2 * 3);
-        renderX = Math.min(renderX, Gdx.graphics.getWidth() - texture.getWidth() / 2 * 3);
+        renderX = Math.max(renderX, texture.getHeight());
+        renderX = Math.min(renderX, Gdx.graphics.getWidth() - texture.getWidth());
         renderY = screenPos.y;
-        renderY = Math.max(renderY, texture.getHeight() / 2 * 3);
-        renderY = Math.min(renderY, Gdx.graphics.getHeight() - texture.getHeight() / 2 * 3);
+//        renderY = Math.max(renderY, texture.getHeight() / 2 * 3);
+//        renderY = Math.min(renderY, Gdx.graphics.getHeight() - texture.getHeight() / 2 * 3);
+        renderY = Math.max(renderY, texture.getHeight());
+        renderY = Math.min(renderY, Gdx.graphics.getHeight() - texture.getHeight());
         rotation = (renderX < screenPos.x ? 90 : 0) + (renderX > screenPos.x ? -90 : 0) + (renderY < screenPos.y ? 180 : 0);
+        int xOffset = 0;
+        int yOffset = 0;
+
+        switch (rotation) {
+            case 0:
+                yOffset = texture.getHeight() / 2;
+                break;
+            case 90:
+                xOffset = texture.getWidth() / 2;
+                break;
+            case 180:
+                yOffset = -texture.getHeight() / 2;
+                break;
+
+            case 270:
+                xOffset = -texture.getWidth() / 2;
+        }
+
 
         if (renderX != screenPos.x || renderY != screenPos.y) {
             batch.draw(textureRegion,
-                    renderX,
-                    renderY,
+                    renderX + xOffset,
+                    -Gdx.graphics.getHeight() + renderY + yOffset,
                     texture.getWidth() / 2, texture.getHeight() / 2,
                     texture.getWidth(), texture.getHeight(),
                     3, 3, rotation);

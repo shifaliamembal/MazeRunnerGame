@@ -188,7 +188,7 @@ public class GameScreen implements Screen {
         } else {
             gameOverTime -= delta;
             if (gameOverTime < 0) {
-                game.goToMenu();
+                game.setScreen(new GameOverScreen(game));
             }
         }
     }
@@ -207,7 +207,7 @@ public class GameScreen implements Screen {
     }
 
     @Override
-    public void show() {;
+    public void show() {
     }
 
     @Override

@@ -40,25 +40,52 @@ public class ExitPointer {
 //        renderY = Math.min(renderY, Gdx.graphics.getHeight() - texture.getHeight() / 2 * 3);
         renderY = Math.max(renderY, texture.getHeight());
         renderY = Math.min(renderY, Gdx.graphics.getHeight() - texture.getHeight());
-        rotation = (renderX < screenPos.x ? 90 : 0) + (renderX > screenPos.x ? -90 : 0) + (renderY < screenPos.y ? 180 : 0);
+        rotation = (renderX < screenPos.x ? 90 : 0) + (renderX > screenPos.x ? -90 : 0)
+                + (renderY < screenPos.y ? 180 : 0);
+        if (rotation < 0) {
+
+        }
         int xOffset = 0;
         int yOffset = 0;
 
         switch (rotation) {
+            case -90:
+                xOffset = texture.getWidth();
+                if (renderY > screenPos.y) {
+                    rotation = -45;
+                }
+                if (renderY == Gdx.graphics.getHeight() - texture.getHeight()) {
+                    rotation = 135;
+                    yOffset -= texture.getHeight();
+                }
+                break;
             case 0:
-                yOffset = texture.getHeight() / 2;
+                yOffset = texture.getHeight();
                 break;
             case 90:
-                xOffset = texture.getWidth() / 2;
+                xOffset = -texture.getWidth();
+                if (renderY > screenPos.y) {
+                    rotation = 45;
+                }
+                if (renderY >= Gdx.graphics.getHeight() - texture.getHeight() - 1) {
+                    rotation = -135;
+                    yOffset -= texture.getHeight();
+                }
                 break;
             case 180:
-                yOffset = -texture.getHeight() / 2;
+                yOffset = -texture.getHeight();
                 break;
-
             case 270:
-                xOffset = -texture.getWidth() / 2;
+                xOffset = -texture.getWidth();
+                if (renderY > screenPos.y) {
+                    rotation = 45;
+                }
+                if (renderY >= Gdx.graphics.getHeight() - texture.getHeight() - 1) {
+                    rotation = 135;
+                    yOffset -= texture.getHeight();
+                }
+                break;
         }
-
 
         if (renderX != screenPos.x || renderY != screenPos.y) {
             batch.draw(textureRegion,
@@ -66,7 +93,7 @@ public class ExitPointer {
                     -Gdx.graphics.getHeight() + renderY + yOffset,
                     texture.getWidth() / 2, texture.getHeight() / 2,
                     texture.getWidth(), texture.getHeight(),
-                    3, 3, rotation);
+                    4, 4, rotation);
         }
 
     }

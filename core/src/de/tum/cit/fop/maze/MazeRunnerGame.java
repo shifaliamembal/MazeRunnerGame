@@ -56,8 +56,7 @@ public class MazeRunnerGame extends Game {
 
         backgroundMusic.setLooping(true);
         backgroundMusic.play();
-        mazeSize = 51;
-        Maze.saveMaze(Maze.generateMaze(mazeSize,mazeSize, difficulty), "maps/maze.properties");
+        mazeSize = 71;
 
         goToMenu();// Navigate to the menu screen
 
@@ -116,13 +115,6 @@ public class MazeRunnerGame extends Game {
     public Skin getSkin() {
         return skin;
     }
-
-    //public Animation<TextureRegion> getCharacterDownAnimation() {
-    //    return characterDownAnimation;
-    //}
-//    public Player getPlayer() {
-//        return player;
-//    }
 
     public SpriteBatch getSpriteBatch() {
         return spriteBatch;

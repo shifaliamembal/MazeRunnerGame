@@ -5,14 +5,11 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import java.awt.*;
@@ -31,11 +28,11 @@ public class GameScreen implements Screen {
 
     private float sinusInput = 0f;
 
+    public static final int tileSize = 64;
     private Maze maze;
     private Player player;
     private Viewport viewport;
     private List<Entity> entities;
-    public static final int tileSize = 64;
     private OrthographicCamera hudCamera;
     private SpriteBatch hudBatch;
     private ExitPointer pointer;
@@ -44,6 +41,7 @@ public class GameScreen implements Screen {
     private boolean isPaused;
     private float gameOverTime = 3;
     private ShapeRenderer shapeRenderer;
+    private int timeLimit = 300;
 
     /**
      * Constructor for GameScreen. Sets up the camera and font.
@@ -126,6 +124,7 @@ public class GameScreen implements Screen {
             }
             else {
                 game.setScreen(pauseMenu);
+                player.stopSound();
                 isPaused = true;
             }
         }
@@ -153,6 +152,9 @@ public class GameScreen implements Screen {
             //font.draw(game.getSpriteBatch(), "Press ESC to go to menu", textX, textY);
 
             // Draw the character next to the text :) / We can reuse sinusInput here
+            if (sinusInput > timeLimit) {
+                player.die();
+            }
 
             if (!player.isDead()) {
                 maze.draw(game.getSpriteBatch());
@@ -181,7 +183,7 @@ public class GameScreen implements Screen {
             hudBatch.begin();
             pointer.draw(hudBatch, camera, viewport);
             font.draw(hudBatch, "Score: " + player.getScore(), space, - space * 8);
-            font.draw(hudBatch, "Time: " + String.format("%.1f", sinusInput), space, - space * 12);
+            font.draw(hudBatch, "Time: " + String.format("%d:%d", (int) (timeLimit - sinusInput) / 60, (int) (timeLimit - sinusInput) % 60), space, - space * 12);
             hudBatch.end();
 
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
@@ -213,10 +215,12 @@ public class GameScreen implements Screen {
 
     @Override
     public void pause() {
+        isPaused = true;
     }
 
     @Override
     public void resume() {
+        isPaused = false;
     }
 
     @Override

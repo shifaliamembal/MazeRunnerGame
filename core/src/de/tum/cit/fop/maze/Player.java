@@ -123,7 +123,7 @@ public class Player {
         }
 
         if (isMoving) {
-            if (!isSoundPlaying) {
+            if (!isSoundPlaying && !dead) {
                 isSoundPlaying = true;
                 soundId = movementSound.loop();
             }
@@ -143,6 +143,7 @@ public class Player {
         }
 
         if (isMoving && x < 0 || y < 0 || x > maze.getSize() * GameScreen.tileSize || y > maze.getSize() * GameScreen.tileSize) {
+            movementSound.stop();
             dead = true;
         }
         return isMoving;
@@ -250,12 +251,20 @@ public class Player {
         return dead;
     }
 
+    public void die() {
+        dead = true;
+    }
+
     public void addPoints(int points) {
         score += points;
     }
 
     public int getScore() {
         return score;
+    }
+
+    public void stopSound() {
+        movementSound.stop();
     }
 
 }

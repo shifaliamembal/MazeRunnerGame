@@ -56,6 +56,7 @@ public class MenuScreen implements Screen {
         goToGameButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                Maze.saveMaze(Maze.generateMaze(game.getMazeSize(), game.getMazeSize(), game.getDifficulty()), "maps/maze.properties");
                 game.goToGame(); // Change to the game screen when button is pressed
             }
         });

@@ -32,6 +32,7 @@ public class PauseMenu extends ScreenAdapter {
         this.stage = new Stage(viewport);
         this.skin = new Skin(Gdx.files.internal("craft/craftacular-ui.json"));
         this.font = FontManager.getOrbitronFont(24, Color.WHITE);
+        skin.add("default-font", font);
         this.backgroundMusic = game.getBackgroundMusic();
 
         createButtons();
@@ -40,6 +41,7 @@ public class PauseMenu extends ScreenAdapter {
 
     private void createButtons() {
         TextButton resumeButton = new TextButton("Resume", skin);
+        resumeButton.getLabel().setFontScale(1.2f);
         resumeButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -48,6 +50,7 @@ public class PauseMenu extends ScreenAdapter {
         });
 
         TextButton mainMenuButton = new TextButton("Return to main menu", skin);
+        mainMenuButton.getLabel().setFontScale(1.2f);
         mainMenuButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -56,6 +59,7 @@ public class PauseMenu extends ScreenAdapter {
         });
 
         TextButton muteButton = new TextButton("Mute", skin);
+        muteButton.getLabel().setFontScale(1.2f);
         muteButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -70,6 +74,15 @@ public class PauseMenu extends ScreenAdapter {
             }
         });
 
+        TextButton quitButton = new TextButton("Quit game", skin);
+        quitButton.getLabel().setFontScale(1.2f);
+        quitButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Gdx.app.exit();
+            }
+        });
+
         table = new Table(skin);
         table.setFillParent(true);
         table.add(resumeButton).pad(10);
@@ -77,6 +90,8 @@ public class PauseMenu extends ScreenAdapter {
         table.add(muteButton).pad(10);
         table.row();
         table.add(mainMenuButton).pad(10);
+        table.row();
+        table.add(quitButton).pad(10);
         stage.addActor(table);
     }
 
@@ -89,7 +104,7 @@ public class PauseMenu extends ScreenAdapter {
     public void render(float delta) {
         ScreenUtils.clear(0, 0, 0, 1); // Ensure screen is cleared
         if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
-            game.setScreen(gameScreen);
+            resume();
         }
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
@@ -110,5 +125,3 @@ public class PauseMenu extends ScreenAdapter {
         stage.dispose();
     }
 }
-
-

@@ -65,7 +65,9 @@ public class PauseMenu extends ScreenAdapter {
     public void show() {
         Gdx.input.setInputProcessor(stage);
     }
-    @Override public void render(float delta) {
+
+    @Override
+    public void render(float delta) {
         if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
             game.setScreen(gameScreen);
         }

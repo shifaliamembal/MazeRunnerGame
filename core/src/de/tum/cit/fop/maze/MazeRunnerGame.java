@@ -31,6 +31,8 @@ public class MazeRunnerGame extends Game {
     private float difficulty = 1f;
     private int mazeSize;
 
+    private Music backgroundMusic;
+
 
     /**
      * Constructor for MazeRunnerGame.
@@ -52,8 +54,7 @@ public class MazeRunnerGame extends Game {
 
         // Play some background music
         // Background sound
-        Music backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("MenuSound.mp3"));
-
+        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("MenuSound.mp3"));
         backgroundMusic.setLooping(true);
         backgroundMusic.play();
         mazeSize = 51;
@@ -63,6 +64,10 @@ public class MazeRunnerGame extends Game {
 
         fontManager = new FontManager();
         menuScreen = new MenuScreen(this);
+    }
+
+    public Music getBackgroundMusic() {
+        return backgroundMusic;
     }
 
     /**

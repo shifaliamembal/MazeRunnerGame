@@ -215,11 +215,13 @@ public class Enemy extends Entity {
                         current.y + direction[1]
                 );
 
-                if (maze.getMazeMap().containsKey(neighbor) && maze.getMazeMap().get(neighbor) != 0 && !visited.contains(neighbor)) {
-                    queue.add(neighbor);
-                    visited.add(neighbor);
-                    parent.put(neighbor, current);
-                }
+                try {
+                    if (maze.getMazeMap().get(neighbor) != 0 && !visited.contains(neighbor)) {
+                        queue.add(neighbor);
+                        visited.add(neighbor);
+                        parent.put(neighbor, current);
+                    }
+                } catch (NullPointerException e) {}
             }
             if (visited.size() > 400) {
                 return Collections.emptyList();

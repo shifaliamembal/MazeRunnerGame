@@ -42,6 +42,7 @@ public class Player {
     private int damageEffectFrames;
     private boolean dead;
     private int score;
+    private Sound deathSound;
 
     private enum action {
         DOWN, RIGHT, UP, LEFT
@@ -167,6 +168,8 @@ public class Player {
     private void loadAssets() {
         texture = new Texture(Gdx.files.internal("character.png"));
         movementSound = Gdx.audio.newSound(Gdx.files.internal("walk.mp3"));
+        deathSound = Gdx.audio.newSound(Gdx.files.internal("gameover.mp3"));
+
         int frameWidth = 16;
         int frameHeight = 32;
         int animationFrames = 4;
@@ -193,6 +196,11 @@ public class Player {
             health = 0;
             movementSound.stop();
             dead = true;
+
+            //play the death sound when player dies
+            if (deathSound != null){
+                deathSound.play();
+            }
         }
         if (amount < 0) {
             damageEffectFrames = 10;
@@ -245,6 +253,10 @@ public class Player {
 
     public void dispose() {
         texture.dispose();
+        movementSound.dispose();
+        if (deathSound != null){
+            deathSound.dispose();
+        }
     }
 
     public boolean isDead() {

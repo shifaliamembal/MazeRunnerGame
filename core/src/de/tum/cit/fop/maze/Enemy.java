@@ -43,8 +43,7 @@ public class Enemy extends Entity {
         this.difficulty = difficulty;
 
         this.player = player;
-        playerPath = bfs(new Point(super.x / GameScreen.tileSize, super.y / GameScreen.tileSize),
-                new Point(player.getX() / GameScreen.tileSize, player.getY() / GameScreen.tileSize));
+        playerPath = new ArrayList<>();
         patrolPath = new ArrayList<>();
         waitTime = 3;
         damageCooldown = 3;
@@ -102,7 +101,8 @@ public class Enemy extends Entity {
         waitTime -= delta;
         pathCooldown -= delta;
 
-        boolean chasePlayer = playerPath.size() <= 10;
+        boolean chasePlayer = !playerPath.isEmpty() && playerPath.size() <= 10;
+
         if (!playerPath.isEmpty() && playerPath.size() <= 10) {
             currentPath = playerPath;
             speed = (int) (7 * GameScreen.tileSize * delta);

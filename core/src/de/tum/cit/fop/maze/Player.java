@@ -63,6 +63,7 @@ public class Player {
         health = MAX_HEALTH;
         damageEffectFrames = 0;
         score = 0;
+
     }
 
     public void draw(SpriteBatch batch, float delta) {
@@ -201,6 +202,8 @@ public class Player {
 
     public void receiveItem(Item item) {
         inventory.add(item);
+        if (item.getType() == Item.types.KEY)
+            System.out.println("GOT KEY");
     }
 
     public List<Item> getInventory() {

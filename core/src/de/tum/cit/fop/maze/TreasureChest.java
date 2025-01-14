@@ -14,9 +14,9 @@ public class TreasureChest extends Entity {
     private boolean open;
     private float itemDisplayTime = 3;
 
-    public TreasureChest(int x, int y, Player player) {
+    public TreasureChest(int x, int y, Player player, Item.types item) {
         super(x, y, player);
-        content = new Item(Item.types.KEY);
+        content = new Item(item);
     }
 
     public void loadAssets() {
@@ -47,5 +47,9 @@ public class TreasureChest extends Entity {
         player.receiveItem(content);
         player.addPoints(100);
         open = true;
+    }
+
+    public void setContent(Item item) {
+        content = item;
     }
 }

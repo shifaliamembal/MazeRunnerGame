@@ -5,8 +5,10 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
@@ -15,6 +17,8 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
 
 /**
  * The GameScreen class is responsible for rendering the gameplay screen.
@@ -57,11 +61,8 @@ public class GameScreen implements Screen {
         // Create and configure the camera for the game view
         camera = new OrthographicCamera();
         camera.setToOrtho(false);
-        camera.zoom = 1f;
-        //hudCamera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        camera.zoom = 1f;;
         hudBatch = new SpriteBatch();
-        //hudBatch.setProjectionMatrix(camera.combined);
-        //hudCamera.position.set(hudCamera.viewportWidth / 2, hudCamera.viewportHeight / 2, 0);
         viewport = new ExtendViewport(1920, 1080, camera);
         viewport.apply();
 
@@ -91,7 +92,7 @@ public class GameScreen implements Screen {
                 vertical = false;
             }
             if (entry.getValue() == 10) {
-                entities.add(new TreasureChest(entry.getKey().x, entry.getKey().y, player));
+                entities.add(new TreasureChest(entry.getKey().x, entry.getKey().y, player, Item.types.BOOST));
             }
             else if (entry.getValue() == 11) {
                 entities.add(new Enemy(entry.getKey().x, entry.getKey().y, maze, player, game.getDifficulty()));
@@ -100,8 +101,8 @@ public class GameScreen implements Screen {
                 maze.getMazeMap().put(new Point(a.x + (vertical ? 0 : 1), a.y - (vertical ? 0 : 1)), 2);
                 maze.getMazeMap().put(entry.getKey(), 2);
                 pointer = new ExitPointer(
-                        (int) (entry.getKey().x * (tileSize + 1) + (vertical ? 0 : tileSize)),
-                        (int) (entry.getKey().y * (tileSize + 1) + (vertical ? tileSize: 0)));
+                        (int) (entry.getKey().x * tileSize + (vertical ? 0 : tileSize)),
+                        (int) (entry.getKey().y * tileSize + (vertical ? tileSize: 0)));
             } else if (entry.getValue() == 13) {
                 entities.add(new LaserTrap(entry.getKey().x, entry.getKey().y, player, vertical, game.getDifficulty()));
             } else if (entry.getValue() == 14) {
@@ -109,6 +110,11 @@ public class GameScreen implements Screen {
             } else if (entry.getValue() == 15) {
                 entities.add(new HealthOrb(entry.getKey().x, entry.getKey().y, player));
             }
+
+        }
+        List<TreasureChest> chests = entities.stream().filter(TreasureChest.class::isInstance).map(TreasureChest.class::cast).toList();
+        if (!chests.isEmpty()) {
+            chests.get(new Random().nextInt(chests.size())).setContent(new Item(Item.types.KEY));
         }
     }
 
@@ -181,9 +187,13 @@ public class GameScreen implements Screen {
         if (!player.isDead()) {
             int space = Gdx.graphics.getHeight() / 80;
             hudBatch.begin();
-            pointer.draw(hudBatch, camera, viewport);
             font.draw(hudBatch, "Score: " + player.getScore(), space, - space * 8);
             font.draw(hudBatch, "Time: " + String.format("%d:%d", (int) (timeLimit - sinusInput) / 60, (int) (timeLimit - sinusInput) % 60), space, - space * 12);
+            for (int i = 0; i < player.getInventory().size(); i++) {
+                Texture tex = player.getInventory().get(i).getTexture();
+                hudBatch.draw(tex, space * (i + 1) + space * 3 * i, - space * 18,
+                        tex.getWidth() * 3, tex.getHeight() * 3);
+            }
             hudBatch.end();
 
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
@@ -197,6 +207,9 @@ public class GameScreen implements Screen {
             width = ((float) player.getStamina() / player.getMaxStamina() * space * 30);
             shapeRenderer.rect(space, - space * 6, width, space * 2);
             shapeRenderer.end();
+            hudBatch.begin();
+            pointer.draw(hudBatch, camera, viewport);
+            hudBatch.end();
         } else {
             gameOverTime -= delta;
             if (gameOverTime < 0) {
@@ -244,11 +257,11 @@ public class GameScreen implements Screen {
     public void zoom() {
         if (Gdx.input.isKeyPressed(Input.Keys.PLUS) || Gdx.input.isKeyPressed(Input.Keys.NUMPAD_ADD)) {
             if (camera.zoom > 0.25) {
-                camera.zoom -= 0.01f;
+                camera.zoom -= 0.02f;
             }
         } else if (Gdx.input.isKeyPressed(Input.Keys.MINUS) || Gdx.input.isKeyPressed(Input.Keys.NUMPAD_SUBTRACT)) {
             if (camera.zoom < 2) {
-                camera.zoom += 0.01f;
+                camera.zoom += 0.02f;
             }
         }
     }

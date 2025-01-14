@@ -56,6 +56,7 @@ public class ExitPointer {
                 }
                 if (renderY == Gdx.graphics.getHeight() - texture.getHeight()) {
                     rotation = 135;
+                    xOffset += texture.getWidth() / 2;
                     yOffset -= texture.getHeight();
                 }
                 break;
@@ -69,6 +70,7 @@ public class ExitPointer {
                 }
                 if (renderY >= Gdx.graphics.getHeight() - texture.getHeight() - 1) {
                     rotation = -135;
+                    xOffset -= texture.getWidth() / 2;
                     yOffset -= texture.getHeight();
                 }
                 break;

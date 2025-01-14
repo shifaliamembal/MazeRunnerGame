@@ -7,12 +7,19 @@ public class Item {
     private types type;
 
     public enum types {
-        KEY
+        KEY, BOOST
     }
 
     Item(types type) {
         this.type = type;
-        texture = new Texture("key-card.png");
+
+        switch (type) {
+            case KEY:
+                texture = new Texture("key-card.png");
+                break;
+            case BOOST:
+                texture = new Texture("arrow.png");
+        }
     }
 
     public types getType() {

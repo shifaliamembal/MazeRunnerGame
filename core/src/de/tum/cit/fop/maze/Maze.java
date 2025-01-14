@@ -215,21 +215,56 @@ public class Maze {
         }
     }
 
-    private static void dfs(int[][] maze, int x, int y, Random random) {
-        maze[y][x] = PATH;
+//    private static void dfs(int[][] maze, int x, int y, Random random) {
+//        maze[y][x] = PATH;
+//
+//        List<Integer> directions = Arrays.asList(0, 1, 2, 3);
+//        Collections.shuffle(directions, random);
+//
+//        for (int dir : directions) {
+//            int nx = x + DX[dir] * 2;
+//            int ny = y + DY[dir] * 2;
+//
+//            if (inBounds(maze, nx, ny)) {
+//                if (maze[ny][nx] == WALL) {
+//                    maze[y + DY[dir]][x + DX[dir]] = PATH;
+//                    dfs(maze, nx, ny, random);
+//                }
+//            }
+//        }
+//    }
 
-        List<Integer> directions = Arrays.asList(0, 1, 2, 3);
-        Collections.shuffle(directions, random);
+    private static void dfs(int[][] maze, int startX, int startY, Random random) {
+        Stack<int[]> stack = new Stack<>();
+        stack.push(new int[]{startX, startY});
+        maze[startY][startX] = PATH;
 
-        for (int dir : directions) {
-            int nx = x + DX[dir] * 2;
-            int ny = y + DY[dir] * 2;
+        while (!stack.isEmpty()) {
+            int[] current = stack.peek();
+            int x = current[0];
+            int y = current[1];
 
-            if (inBounds(maze, nx, ny)) {
-                if (maze[ny][nx] == WALL) {
+            List<Integer> directions = Arrays.asList(0, 1, 2, 3);
+            Collections.shuffle(directions, random);
+
+            boolean foundNextCell = false;
+
+            for (int dir : directions) {
+                int nx = x + DX[dir] * 2;
+                int ny = y + DY[dir] * 2;
+
+                if (inBounds(maze, nx, ny) && maze[ny][nx] == WALL) {
                     maze[y + DY[dir]][x + DX[dir]] = PATH;
-                    dfs(maze, nx, ny, random);
+                    maze[ny][nx] = PATH;
+
+                    stack.push(new int[]{nx, ny});
+                    foundNextCell = true;
+                    break;
                 }
+            }
+
+            if (!foundNextCell) {
+                stack.pop();
             }
         }
     }

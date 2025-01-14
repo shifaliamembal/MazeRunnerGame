@@ -5,6 +5,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -20,6 +21,7 @@ public class InfoScreen implements Screen {
     private final Stage stage;
     private final MazeRunnerGame game;
     private Skin skin;
+    private final Texture background;
 
     public InfoScreen(MazeRunnerGame game) {
         this.game = game;
@@ -27,6 +29,8 @@ public class InfoScreen implements Screen {
         Viewport viewport = new ScreenViewport(camera);
         stage = new Stage(viewport, game.getSpriteBatch());
         skin = game.getSkin();
+
+        background = new Texture(Gdx.files.internal("InfoScreenBG.jpg"));
 
         createInfo();
     }
@@ -42,7 +46,7 @@ public class InfoScreen implements Screen {
                 "To escape, you must collect override codes (keys) to unlock the exit and avoid becoming a victim of your own creation.";
 
         Label.LabelStyle labelStyle = new Label.LabelStyle();
-        labelStyle.font = FontManager.getOrbitronFont(16, Color.WHITE);
+        labelStyle.font = FontManager.getOrbitronFont(24, Color.WHITE);
 
         Label storyLabel = new Label(storyDescription, labelStyle);
         storyLabel.setWrap(true);
@@ -62,6 +66,11 @@ public class InfoScreen implements Screen {
     @Override
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        game.getSpriteBatch().begin();
+        game.getSpriteBatch().draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        game.getSpriteBatch().end();
+
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
     }
@@ -92,5 +101,6 @@ public class InfoScreen implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
+        background.dispose();
     }
 }

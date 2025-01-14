@@ -6,6 +6,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -21,6 +22,7 @@ public class MenuScreen implements Screen {
     private final Stage stage;
     private final MazeRunnerGame game;
     private boolean isMuted = false; // Track mute state
+    private final Texture background;
     private Table table;
     private Skin skin;
 
@@ -30,6 +32,8 @@ public class MenuScreen implements Screen {
         Viewport viewport = new ScreenViewport(camera);
         stage = new Stage(viewport, game.getSpriteBatch());
         skin = game.getSkin();
+
+        background = new Texture("themed_background.jpg");
 
         createMenu();
     }
@@ -94,6 +98,11 @@ public class MenuScreen implements Screen {
     @Override
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        game.getSpriteBatch().begin();
+        game.getSpriteBatch().draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        game.getSpriteBatch().end();
+
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
     }

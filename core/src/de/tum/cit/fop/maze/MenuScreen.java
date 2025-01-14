@@ -1,7 +1,6 @@
 package de.tum.cit.fop.maze;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -11,20 +10,24 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 
 public class MenuScreen implements Screen {
 
     private final Stage stage;
     private final MazeRunnerGame game;
-    private boolean isMuted = false; // Track mute state
     private final Texture background;
+    private boolean isMuted = false;
     private Table table;
     private Skin skin;
+    private final BitmapFont orbitronFont;
 
     public MenuScreen(MazeRunnerGame game) {
         this.game = game;
@@ -33,18 +36,29 @@ public class MenuScreen implements Screen {
         stage = new Stage(viewport, game.getSpriteBatch());
         skin = game.getSkin();
 
-        background = new Texture("themed_background.jpg");
+        // Load the background texture
+        background = new Texture(Gdx.files.internal("themed_background.jpg"));
 
-        createMenu();
+        orbitronFont = FontManager.getOrbitronFont(24, Color.WHITE); // Load Orbitron font
+        skin.add("default-font", orbitronFont); // Set the font in the skin
+
+        // Adjust title and button styles to use Orbitron
+        Label.LabelStyle titleStyle = new Label.LabelStyle();
+        titleStyle.font = FontManager.getOrbitronFont(36, Color.WHITE);
+
+        TextButton.TextButtonStyle buttonStyle = new TextButton.TextButtonStyle();
+        buttonStyle.font = orbitronFont;
+
+        createMenu(titleStyle, buttonStyle);
     }
 
-    private void createMenu() {
+    private void createMenu(Label.LabelStyle titleStyle, TextButton.TextButtonStyle buttonStyle) {
         table = new Table();
         table.setFillParent(true);
         stage.addActor(table);
 
         // Add title
-        Label title = new Label("Lost in the Lab", skin, "title");
+        Label title = new Label("Lost in the Lab", titleStyle);
         table.add(title).padBottom(80).row();
 
         // Go to Game Button
@@ -79,7 +93,7 @@ public class MenuScreen implements Screen {
         infoButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new InfoScreen(game)); // Switch to InfoScreen
+                game.setScreen(new InfoScreen(game));
             }
         });
         table.add(infoButton).width(300).padBottom(20).row();
@@ -99,6 +113,7 @@ public class MenuScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        // Render the background image before the stage drawing
         game.getSpriteBatch().begin();
         game.getSpriteBatch().draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         game.getSpriteBatch().end();
@@ -131,5 +146,6 @@ public class MenuScreen implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
+        background.dispose(); // Dispose of the background texture
     }
 }

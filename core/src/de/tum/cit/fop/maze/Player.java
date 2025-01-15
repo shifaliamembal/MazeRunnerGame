@@ -43,6 +43,7 @@ public class Player {
     private boolean dead;
     private int score;
     private Sound deathSound;
+    private float boostDuration;
 
     private enum action {
         DOWN, RIGHT, UP, LEFT
@@ -64,7 +65,7 @@ public class Player {
         health = MAX_HEALTH;
         damageEffectFrames = 0;
         score = 0;
-
+        boostDuration = 0;
     }
 
     public void draw(SpriteBatch batch, float delta) {
@@ -86,10 +87,27 @@ public class Player {
 
     public boolean takeInput(float delta) {
 
+        int keyNum = getKeyNumber();
+        if (keyNum >= 0 && inventory.size() > keyNum) {
+            Item usedItem = inventory.remove(keyNum);
+            if (usedItem.getType().equals(Item.types.BOOST)) {
+                if (boostDuration < 0) {
+                    boostDuration = 0;
+                }
+                boostDuration += 7;
+            }
+        }
+        boostDuration -= delta;
+
         boolean running = false;
+
         if ((Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT))
                 && stamina > 0 && !running_cooldown) {
-            stamina -= 2;
+            if (boostDuration < 0) {
+                stamina -= 2;
+            } else {
+                stamina++;
+            }
             speed = (int) (baseSpeed * delta * 1.5);
             running = true;
             getCurrentAnimation().setFrameDuration(0.1f);
@@ -165,6 +183,14 @@ public class Player {
                         && (maze.getMazeMap().get(point) == 0 || (maze.getMazeMap().get(point) == 2 && !exitOpen)));
     }
 
+    private int getKeyNumber() {
+        for (int i = 0; i <= 8; i++) {
+            if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1 + i)) {
+                return i;
+            }
+        }
+        return -1;
+    }
 
     private void loadAssets() {
         texture = new Texture(Gdx.files.internal("character.png"));

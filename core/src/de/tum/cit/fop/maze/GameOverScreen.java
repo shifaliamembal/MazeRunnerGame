@@ -17,6 +17,7 @@ public class GameOverScreen implements Screen {
 
     private final MazeRunnerGame game;
     private final SpriteBatch batch;
+    private final BitmapFont titleFont;
     private final BitmapFont font;
     private final Music gameOverMusic;
     private final String message = "Game Over!";
@@ -29,6 +30,7 @@ public class GameOverScreen implements Screen {
         this.game = game;
         this.player = player;
         this.batch = new SpriteBatch();
+        this.titleFont = game.getSkin().getFont("font");
         this.font = game.getSkin().getFont("font");
         this.gameOverMusic = Gdx.audio.newMusic(Gdx.files.internal("g_overmusic.mp3")); // Replace with your actual file path
         this.gameOverMusic.setLooping(true); // Loop the music while on this screen
@@ -53,12 +55,15 @@ public class GameOverScreen implements Screen {
         float centerX = Gdx.graphics.getWidth() / 2f;
         float centerY = Gdx.graphics.getHeight() / 2f;
 
-        font.setColor(Color.RED);
-        font.draw(batch, message, centerX - font.getScaleX() * message.length() * 10, centerY + 200);
+        titleFont.getData().setScale(1.8f);
+        titleFont.setColor(Color.RED);
+        titleFont.draw(batch, message, centerX - font.getScaleX() * scoreMessage.length() * 10, centerY + 200);
 
+        font.getData().setScale(1.0f);
         font.setColor(Color.WHITE);
-        font.draw(batch, scoreMessage, centerX - font.getScaleX() * scoreMessage.length() * 10, centerY + 35);
+        font.draw(batch, scoreMessage, centerX - font.getScaleX() * scoreMessage.length() * 10, centerY + 80);
 
+        font.getData().setScale(1.0f);
         font.setColor(Color.WHITE);
         font.draw(batch, retryMessage, centerX - font.getScaleX() * retryMessage.length() * 10, centerY - 90);
         font.draw(batch, menuMessage, centerX - font.getScaleX() * menuMessage.length() * 10, centerY - 140);

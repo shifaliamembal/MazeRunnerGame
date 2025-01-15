@@ -40,7 +40,7 @@ public class InfoScreen implements Screen {
         table.setFillParent(true);
         stage.addActor(table);
 
-        String storyDescription = "You are Dr. Nova (main character), a scientist working in a cutting-edge research facility. " +
+        String storyDescription = "You are Dr. Nova, a scientist working in a cutting-edge research facility. " +
                 "While testing an experimental AI system, an error triggers the self-destruct protocol, sealing you inside a labyrinth " +
                 "of corridors and locked doors. The facility's rogue security drones and traps have turned against you. " +
                 "To escape, you must collect override codes (keys) to unlock the exit and avoid becoming a victim of your own creation.";

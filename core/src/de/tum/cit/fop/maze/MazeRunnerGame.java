@@ -134,6 +134,14 @@ public class MazeRunnerGame extends Game {
         return mazeSize;
     }
 
+    public void setDifficulty(float difficulty) {
+        this.difficulty = difficulty;
+    }
+
+    public void setMazeSize(int mazeSize) {
+        this.mazeSize = mazeSize;
+    }
+
 //    public GameScreen getGameScreen() {
 //        return gameScreen;
 //    }

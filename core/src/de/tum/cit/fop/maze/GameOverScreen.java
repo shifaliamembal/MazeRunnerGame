@@ -3,6 +3,7 @@ package de.tum.cit.fop.maze;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -17,7 +18,9 @@ public class GameOverScreen implements Screen {
     private final MazeRunnerGame game;
     private final SpriteBatch batch;
     private final BitmapFont font;
+    private final Music gameOverMusic;
     private final String message = "Game Over!";
+    //    private final String scoreMessage;
     private final String retryMessage = "Press R to Retry";
     private final String menuMessage = "Press M to return to Menu";
 
@@ -25,6 +28,11 @@ public class GameOverScreen implements Screen {
         this.game = game;
         this.batch = new SpriteBatch();
         this.font = game.getSkin().getFont("font");
+        this.gameOverMusic = Gdx.audio.newMusic(Gdx.files.internal("g_o_music.mp3")); // Replace with your actual file path
+        this.gameOverMusic.setLooping(true); // Loop the music while on this screen
+        this.gameOverMusic.setVolume(0.7f);  // Set the desired volume
+        this.gameOverMusic.play();
+//        this.scoreMessage = "Your Score: " + game.getPlayer().getScore();
     }
 
     @Override
@@ -34,8 +42,8 @@ public class GameOverScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        // Clear the screen with a dark red background.
-        ScreenUtils.clear(Color.DARK_GRAY);
+        // Clear the screen with a white background.
+        ScreenUtils.clear(Color.BLACK);
 
         batch.begin();
 
@@ -54,9 +62,11 @@ public class GameOverScreen implements Screen {
 
         // Handle input for retrying or returning to the menu.
         if (Gdx.input.isKeyJustPressed(Input.Keys.R)) {
+            gameOverMusic.stop(); //stop the music
             game.goToGame(); // this would restart directly on the new game and not main menu
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
+            gameOverMusic.stop(); //stop the music
             game.goToMenu(); // Method to return to the main menu.
         }
     }
@@ -85,5 +95,8 @@ public class GameOverScreen implements Screen {
     public void dispose() {
         // Dispose of the sprite batch to free resources.
         batch.dispose();
+        if (gameOverMusic != null){
+            gameOverMusic.dispose(); //dispose of the music to free resources
+        }
     }
 }

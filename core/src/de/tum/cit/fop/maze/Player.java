@@ -195,7 +195,7 @@ public class Player {
     private void loadAssets() {
         texture = new Texture(Gdx.files.internal("character.png"));
         movementSound = Gdx.audio.newSound(Gdx.files.internal("walk.mp3"));
-        deathSound = Gdx.audio.newSound(Gdx.files.internal("gameover.mp3"));
+        deathSound = Gdx.audio.newSound(Gdx.files.internal("defeat.mp3"));
 
         int frameWidth = 16;
         int frameHeight = 32;

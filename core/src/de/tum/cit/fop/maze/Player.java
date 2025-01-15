@@ -64,7 +64,6 @@ public class Player {
         health = MAX_HEALTH;
         damageEffectFrames = 0;
         score = 0;
-
     }
 
     public void draw(SpriteBatch batch, float delta) {
@@ -169,7 +168,7 @@ public class Player {
     private void loadAssets() {
         texture = new Texture(Gdx.files.internal("character.png"));
         movementSound = Gdx.audio.newSound(Gdx.files.internal("walk.mp3"));
-        deathSound = Gdx.audio.newSound(Gdx.files.internal("gameover.mp3"));
+        deathSound = Gdx.audio.newSound(Gdx.files.internal("defeat.mp3"));
 
         int frameWidth = 16;
         int frameHeight = 32;
@@ -210,8 +209,6 @@ public class Player {
 
     public void receiveItem(Item item) {
         inventory.add(item);
-        if (item.getType() == Item.types.KEY)
-            System.out.println("GOT KEY");
     }
 
     public List<Item> getInventory() {

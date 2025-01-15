@@ -30,7 +30,7 @@ public class GameOverScreen implements Screen {
         this.player = player;
         this.batch = new SpriteBatch();
         this.font = game.getSkin().getFont("font");
-        this.gameOverMusic = Gdx.audio.newMusic(Gdx.files.internal("gameovermusic.mp3")); // Replace with your actual file path
+        this.gameOverMusic = Gdx.audio.newMusic(Gdx.files.internal("g_overmusic.mp3")); // Replace with your actual file path
         this.gameOverMusic.setLooping(true); // Loop the music while on this screen
         this.gameOverMusic.setVolume(0.7f);  // Set the desired volume
         this.gameOverMusic.play();
@@ -54,14 +54,14 @@ public class GameOverScreen implements Screen {
         float centerY = Gdx.graphics.getHeight() / 2f;
 
         font.setColor(Color.RED);
-        font.draw(batch, message, centerX - font.getScaleX() * message.length() * 10, centerY + 50);
+        font.draw(batch, message, centerX - font.getScaleX() * message.length() * 10, centerY + 200);
 
         font.setColor(Color.WHITE);
-        font.draw(batch, scoreMessage, centerX - font.getScaleX() * scoreMessage.length() * 10, centerY - 10);
+        font.draw(batch, scoreMessage, centerX - font.getScaleX() * scoreMessage.length() * 10, centerY + 35);
 
         font.setColor(Color.WHITE);
-        font.draw(batch, retryMessage, centerX - font.getScaleX() * retryMessage.length() * 10, centerY - 50);
-        font.draw(batch, menuMessage, centerX - font.getScaleX() * menuMessage.length() * 10, centerY - 90);
+        font.draw(batch, retryMessage, centerX - font.getScaleX() * retryMessage.length() * 10, centerY - 90);
+        font.draw(batch, menuMessage, centerX - font.getScaleX() * menuMessage.length() * 10, centerY - 140);
 
         batch.end();
 

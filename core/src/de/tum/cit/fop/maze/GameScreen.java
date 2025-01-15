@@ -208,12 +208,12 @@ public class GameScreen implements Screen {
             shapeRenderer.rect(space, - space * 6, width, space * 2);
             shapeRenderer.end();
             hudBatch.begin();
-            pointer.draw(hudBatch, camera, viewport);
+            //pointer.draw(hudBatch, camera, viewport);
             hudBatch.end();
         } else {
             gameOverTime -= delta;
             if (gameOverTime < 0) {
-                game.setScreen(new GameOverScreen(game));
+                game.setScreen(new GameOverScreen(game, player));
             }
         }
     }
@@ -266,4 +266,7 @@ public class GameScreen implements Screen {
         }
     }
 
+    public Player getPlayer(){
+        return player;
+    }
 }

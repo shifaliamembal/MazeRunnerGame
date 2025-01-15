@@ -20,19 +20,21 @@ public class GameOverScreen implements Screen {
     private final BitmapFont font;
     private final Music gameOverMusic;
     private final String message = "Game Over!";
-    //    private final String scoreMessage;
+    private final String scoreMessage;
     private final String retryMessage = "Press R to Retry";
     private final String menuMessage = "Press M to return to Menu";
+    private Player player;
 
-    public GameOverScreen(MazeRunnerGame game) {
+    public GameOverScreen(MazeRunnerGame game, Player player) {
         this.game = game;
+        this.player = player;
         this.batch = new SpriteBatch();
         this.font = game.getSkin().getFont("font");
-        this.gameOverMusic = Gdx.audio.newMusic(Gdx.files.internal("g_o_music.mp3")); // Replace with your actual file path
+        this.gameOverMusic = Gdx.audio.newMusic(Gdx.files.internal("gameovermusic.mp3")); // Replace with your actual file path
         this.gameOverMusic.setLooping(true); // Loop the music while on this screen
         this.gameOverMusic.setVolume(0.7f);  // Set the desired volume
         this.gameOverMusic.play();
-//        this.scoreMessage = "Your Score: " + game.getPlayer().getScore();
+        this.scoreMessage = "Your Score: " + player.getScore();
     }
 
     @Override
@@ -55,8 +57,11 @@ public class GameOverScreen implements Screen {
         font.draw(batch, message, centerX - font.getScaleX() * message.length() * 10, centerY + 50);
 
         font.setColor(Color.WHITE);
-        font.draw(batch, retryMessage, centerX - font.getScaleX() * retryMessage.length() * 10, centerY - 10);
-        font.draw(batch, menuMessage, centerX - font.getScaleX() * menuMessage.length() * 10, centerY - 50);
+        font.draw(batch, scoreMessage, centerX - font.getScaleX() * scoreMessage.length() * 10, centerY - 10);
+
+        font.setColor(Color.WHITE);
+        font.draw(batch, retryMessage, centerX - font.getScaleX() * retryMessage.length() * 10, centerY - 50);
+        font.draw(batch, menuMessage, centerX - font.getScaleX() * menuMessage.length() * 10, centerY - 90);
 
         batch.end();
 

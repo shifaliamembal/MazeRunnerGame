@@ -8,11 +8,16 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 
+import java.awt.*;
+import java.util.Random;
+
 public class TreasureChest extends Entity {
     private TextureRegion currentTexture;
     private Item content;
     private boolean open;
     private float itemDisplayTime = 3;
+    private Point keyLocation;
+    private float keyDirection;
 
     public TreasureChest(int x, int y, Player player, Item.types item) {
         super(x, y, player);
@@ -38,18 +43,39 @@ public class TreasureChest extends Entity {
         batch.draw(currentTexture, x - (float) GameScreen.tileSize / 2 + 4, y - (float) GameScreen.tileSize / 2, GameScreen.tileSize, GameScreen.tileSize);
         if (open && itemDisplayTime > 0) {
             itemDisplayTime -= delta;
-            batch.draw(content.getTexture(), x - (float) GameScreen.tileSize / 2, y + GameScreen.tileSize, GameScreen.tileSize, (float) GameScreen.tileSize / 2);
+            if (content.getType().equals(Item.types.ARROW)) {
+                batch.draw(content.getTextureRegion(), x - (float) GameScreen.tileSize / 3f, y + GameScreen.tileSize,
+                        0, 0,
+                        GameScreen.tileSize, GameScreen.tileSize, 1, 1, keyDirection);
+            } else {
+                batch.draw(content.getTexture(), x - (float) GameScreen.tileSize / 3f, y + GameScreen.tileSize, GameScreen.tileSize * 0.7f, GameScreen.tileSize * 0.7f);
+            }
         }
+    }
+
+    private float getKeyDirection() {
+        double deltaX = keyLocation.x - x;
+        double deltaY = keyLocation.y - y;
+
+        return (float) Math.toDegrees(Math.atan2(deltaX, -deltaY)) + new Random().nextFloat(-45f, 45f);
     }
 
     public void open() {
         currentTexture = textures.get(1);
-        player.receiveItem(content);
+        if (!content.getType().equals(Item.types.ARROW)) {
+            player.receiveItem(content);
+        } else {
+            keyDirection = getKeyDirection();
+        }
         player.addPoints(100);
         open = true;
     }
 
     public void setContent(Item item) {
         content = item;
+    }
+
+    public void setKeyLocation(Point keyLocation) {
+        this.keyLocation = keyLocation;
     }
 }

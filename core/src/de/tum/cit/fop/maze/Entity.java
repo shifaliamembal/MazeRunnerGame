@@ -39,7 +39,7 @@ public abstract class Entity {
     }
 
     protected int playerDistance() {
-        return Math.abs(x - player.getX()) + Math.abs(y - player.getY());
+        return Math.abs(x - player.getX() + GameScreen.tileSize / 2) + Math.abs(y - player.getY() + GameScreen.tileSize / 2);
     }
 
     public void dispose() {

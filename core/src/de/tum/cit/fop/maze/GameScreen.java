@@ -45,7 +45,7 @@ public class GameScreen implements Screen {
     private boolean isPaused;
     private float gameOverTime = 3;
     private ShapeRenderer shapeRenderer;
-    private int timeLimit = 300;
+    private int timeLimit;
 
     /**
      * Constructor for GameScreen. Sets up the camera and font.
@@ -81,6 +81,12 @@ public class GameScreen implements Screen {
         spawnEntities();
         shapeRenderer = new ShapeRenderer();
         shapeRenderer.setProjectionMatrix(hudCamera.combined);
+
+        switch (maze.getSize()) {
+            case 75 -> timeLimit = 120;
+            case 100 -> timeLimit = 180;
+            default -> timeLimit = 240;
+        }
     }
 
     public void spawnEntities() {
@@ -92,12 +98,11 @@ public class GameScreen implements Screen {
                 vertical = false;
             }
             if (entry.getValue() == 10) {
-                Item.types randomItem;
-                if (new Random().nextInt(0, 2) == 0) {
-                    randomItem = Item.types.BOOST;
-                } else {
-                    randomItem = Item.types.BOMB;
-                }
+                Item.types randomItem = switch (new Random().nextInt(0, 3)) {
+                    case 0 -> Item.types.BOOST;
+                    case 1 -> Item.types.BOMB;
+                    default -> Item.types.ARROW;
+                };
                 entities.add(new TreasureChest(entry.getKey().x, entry.getKey().y, player, randomItem));
             }
             else if (entry.getValue() == 11) {
@@ -120,7 +125,12 @@ public class GameScreen implements Screen {
         }
         List<TreasureChest> chests = entities.stream().filter(TreasureChest.class::isInstance).map(TreasureChest.class::cast).toList();
         if (!chests.isEmpty()) {
-            chests.get(new Random().nextInt(chests.size())).setContent(new Item(Item.types.KEY));
+            int keyChest = new Random().nextInt(chests.size());
+            chests.get(keyChest).setContent(new Item(Item.types.KEY));
+            Point p = new Point(chests.get(keyChest).x, chests.get(keyChest).y);
+            for (TreasureChest chest : chests) {
+                chest.setKeyLocation(p);
+            }
         }
     }
 
@@ -284,4 +294,5 @@ public class GameScreen implements Screen {
     public Player getPlayer(){
         return player;
     }
+
 }

@@ -44,7 +44,7 @@ public class MenuScreen implements Screen {
 
         // Adjust title and button styles to use Orbitron
         Label.LabelStyle titleStyle = new Label.LabelStyle();
-        titleStyle.font = FontManager.getOrbitronFont(36, Color.WHITE);
+        titleStyle.font = FontManager.getOrbitronFont(50, Color.WHITE);
 
         TextButton.TextButtonStyle buttonStyle = new TextButton.TextButtonStyle();
         buttonStyle.font = orbitronFont;

@@ -11,10 +11,12 @@ import com.badlogic.gdx.utils.Array;
 public class ExitBarrier extends Entity {
     private boolean active;
     private boolean vertical;
+    private final MazeRunnerGame game;
 
-    public ExitBarrier(int x, int y, Player player, boolean vertical) {
+    public ExitBarrier(int x, int y, MazeRunnerGame game, Player player, boolean vertical) {
         super(x, y, player);
         this.vertical = vertical;
+        this.game = game;
         active = true;
     }
 
@@ -55,6 +57,7 @@ public class ExitBarrier extends Entity {
             if (player.getKey() != null) {
                 active = false;
                 player.allowExit();
+                game.setScreen(new VictoryScreen(game, player));
             }
         }
     }

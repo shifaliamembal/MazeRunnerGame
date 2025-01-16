@@ -103,7 +103,7 @@ public class GameScreen implements Screen {
             else if (entry.getValue() == 11) {
                 entities.add(new Enemy(entry.getKey().x, entry.getKey().y, maze, player, game.getDifficulty()));
             } else if (entry.getValue() == 12) {
-                entities.add(new ExitBarrier(entry.getKey().x, entry.getKey().y, player, vertical));
+                entities.add(new ExitBarrier(entry.getKey().x, entry.getKey().y, game, player, vertical));
                 maze.getMazeMap().put(new Point(a.x + (vertical ? 0 : 1), a.y - (vertical ? 0 : 1)), 2);
                 maze.getMazeMap().put(entry.getKey(), 2);
                 pointer = new ExitPointer(
@@ -139,6 +139,12 @@ public class GameScreen implements Screen {
                 player.stopSound();
                 isPaused = true;
             }
+        }
+
+        // Temporary: Press F10 to directly transition to VictoryScreen
+        if (Gdx.input.isKeyJustPressed(Input.Keys.F)) {
+            game.setScreen(new VictoryScreen(game, player));
+            return; // Exit rendering to avoid further updates
         }
 
         if (!isPaused) {

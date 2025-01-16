@@ -108,7 +108,7 @@ public class GameScreen implements Screen {
             else if (entry.getValue() == 11) {
                 entities.add(new Enemy(entry.getKey().x, entry.getKey().y, maze, player, game.getDifficulty()));
             } else if (entry.getValue() == 12) {
-                entities.add(new ExitBarrier(entry.getKey().x, entry.getKey().y, player, vertical));
+                entities.add(new ExitBarrier(entry.getKey().x, entry.getKey().y, game, player, vertical));
                 maze.getMazeMap().put(new Point(a.x + (vertical ? 0 : 1), a.y - (vertical ? 0 : 1)), 2);
                 maze.getMazeMap().put(entry.getKey(), 2);
                 pointer = new ExitPointer(
@@ -150,6 +150,7 @@ public class GameScreen implements Screen {
                 isPaused = true;
             }
         }
+
 
         if (!isPaused) {
             ScreenUtils.clear(0, 0, 0, 1); // Clear the screen

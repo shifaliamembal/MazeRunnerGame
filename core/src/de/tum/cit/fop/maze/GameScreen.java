@@ -92,7 +92,13 @@ public class GameScreen implements Screen {
                 vertical = false;
             }
             if (entry.getValue() == 10) {
-                entities.add(new TreasureChest(entry.getKey().x, entry.getKey().y, player, Item.types.BOOST));
+                Item.types randomItem;
+                if (new Random().nextInt(0, 2) == 0) {
+                    randomItem = Item.types.BOOST;
+                } else {
+                    randomItem = Item.types.BOMB;
+                }
+                entities.add(new TreasureChest(entry.getKey().x, entry.getKey().y, player, randomItem));
             }
             else if (entry.getValue() == 11) {
                 entities.add(new Enemy(entry.getKey().x, entry.getKey().y, maze, player, game.getDifficulty()));
@@ -189,10 +195,16 @@ public class GameScreen implements Screen {
             hudBatch.begin();
             font.draw(hudBatch, "Score: " + player.getScore(), space, - space * 8);
             font.draw(hudBatch, "Time: " + String.format("%d:%d", (int) (timeLimit - sinusInput) / 60, (int) (timeLimit - sinusInput) % 60), space, - space * 12);
+            font.draw(hudBatch, "Items: ", space, - space * 17);
+            font.draw(hudBatch, "Key: ", space, - space * 22);
             for (int i = 0; i < player.getInventory().size(); i++) {
                 Texture tex = player.getInventory().get(i).getTexture();
-                hudBatch.draw(tex, space * (i + 1) + space * 3 * i, - space * 18,
-                        tex.getWidth() * 3, tex.getHeight() * 3);
+                hudBatch.draw(tex, space * 11 + space * (i + 1) + space * 3 * i, - space * 19,
+                        space * 3, space * 3);
+            }
+            if (player.getKey() != null) {
+                hudBatch.draw(player.getKey().getTexture(), space * 9, - space * 25,
+                        space * 5, space * 3);
             }
             hudBatch.end();
 
@@ -208,7 +220,7 @@ public class GameScreen implements Screen {
             shapeRenderer.rect(space, - space * 6, width, space * 2);
             shapeRenderer.end();
             hudBatch.begin();
-            //pointer.draw(hudBatch, camera, viewport);
+            pointer.draw(hudBatch, camera, viewport);
             hudBatch.end();
         } else {
             gameOverTime -= delta;

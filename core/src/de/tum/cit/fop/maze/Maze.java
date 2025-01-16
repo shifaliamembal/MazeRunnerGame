@@ -215,25 +215,6 @@ public class Maze {
         }
     }
 
-//    private static void dfs(int[][] maze, int x, int y, Random random) {
-//        maze[y][x] = PATH;
-//
-//        List<Integer> directions = Arrays.asList(0, 1, 2, 3);
-//        Collections.shuffle(directions, random);
-//
-//        for (int dir : directions) {
-//            int nx = x + DX[dir] * 2;
-//            int ny = y + DY[dir] * 2;
-//
-//            if (inBounds(maze, nx, ny)) {
-//                if (maze[ny][nx] == WALL) {
-//                    maze[y + DY[dir]][x + DX[dir]] = PATH;
-//                    dfs(maze, nx, ny, random);
-//                }
-//            }
-//        }
-//    }
-
     private static void dfs(int[][] maze, int startX, int startY, Random random) {
         Stack<int[]> stack = new Stack<>();
         stack.push(new int[]{startX, startY});

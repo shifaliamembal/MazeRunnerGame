@@ -7,7 +7,7 @@ public class Item {
     private types type;
 
     public enum types {
-        KEY, BOOST
+        KEY, BOOST, BOMB
     }
 
     Item(types type) {
@@ -19,6 +19,9 @@ public class Item {
                 break;
             case BOOST:
                 texture = new Texture("arrow.png");
+                break;
+            case BOMB:
+                texture = new Texture("bomb.png");
         }
     }
 

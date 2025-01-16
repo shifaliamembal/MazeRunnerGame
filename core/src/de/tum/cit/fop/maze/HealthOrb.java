@@ -24,7 +24,7 @@ public class HealthOrb extends Entity {
             return;
         }
         if (playerDistance() < GameScreen.tileSize / 2) {
-            player.updateHealth(20);
+            player.updateHealth(15);
             player.addPoints(25);
             collected = true;
         }

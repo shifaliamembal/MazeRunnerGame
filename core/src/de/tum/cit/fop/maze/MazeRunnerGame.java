@@ -84,10 +84,18 @@ public class MazeRunnerGame extends Game {
      * Switches to the game screen.
      */
     public void goToGame() {
-        Maze.saveMaze(Maze.generateMaze(101, 101, 1f), "maps/maze.properties");
-        this.setScreen(new GameScreen(this)); // Set the current screen to GameScreen
+        Maze.saveMaze(Maze.generateMaze(mazeSize, mazeSize, difficulty), "maps/maze.properties");
+        this.setScreen(new GameScreen(this));
         if (menuScreen != null) {
-            menuScreen.dispose(); // Dispose the menu screen if it exists
+            menuScreen.dispose();
+            menuScreen = null;
+        }
+    }
+
+    public void restartGame() {
+        this.setScreen(new GameScreen(this));
+        if (menuScreen != null) {
+            menuScreen.dispose();
             menuScreen = null;
         }
     }

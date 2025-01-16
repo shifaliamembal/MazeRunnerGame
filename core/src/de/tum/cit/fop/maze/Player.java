@@ -25,6 +25,7 @@ public class Player {
     private int speed;
     private Texture texture;
     private List<Animation<TextureRegion>> characterAnimation;
+    private Animation<TextureRegion> explosionAnimation;
     private Maze maze;
     private List<Item> inventory;
     private int health;
@@ -44,6 +45,8 @@ public class Player {
     private int score;
     private Sound deathSound;
     private float boostDuration;
+    private Bomb bomb;
+    private Item key;
 
     private enum action {
         DOWN, RIGHT, UP, LEFT
@@ -83,6 +86,12 @@ public class Player {
                 GameScreen.tileSize * 2
         );
         batch.setColor(Color.WHITE);
+        if (bomb != null) {
+            bomb.draw(batch, delta);
+            if (bomb.isFinished()) {
+                bomb = null;
+            }
+        }
     }
 
     public boolean takeInput(float delta) {
@@ -95,6 +104,8 @@ public class Player {
                     boostDuration = 0;
                 }
                 boostDuration += 7;
+            } else if (usedItem.getType().equals(Item.types.BOMB)) {
+                bomb = new Bomb(x / GameScreen.tileSize + DX[dir], y / GameScreen.tileSize + DY[dir], maze);
             }
         }
         boostDuration -= delta;
@@ -224,7 +235,6 @@ public class Player {
             movementSound.stop();
             dead = true;
 
-            //play the death sound when player dies
             if (deathSound != null){
                 deathSound.play();
             }
@@ -235,9 +245,11 @@ public class Player {
     }
 
     public void receiveItem(Item item) {
-        inventory.add(item);
-        if (item.getType() == Item.types.KEY)
-            System.out.println("GOT KEY");
+        if (item.getType() == Item.types.KEY) {
+            key = item;
+        } else {
+            inventory.add(item);
+        }
     }
 
     public List<Item> getInventory() {
@@ -258,6 +270,10 @@ public class Player {
     public void setPosition(int x, int y) {
         this.x = x;
         this.y = y;
+    }
+
+    public Item getKey() {
+        return key;
     }
 
     public void allowExit() {

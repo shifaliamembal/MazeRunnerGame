@@ -13,16 +13,9 @@ import java.util.List;
 
 public class Enemy extends Entity {
 
-    //private static final int[] DX = {0, 0, -1, 1};
-    //private static final int[] DY = {-1, 1, 0, 0};
     private static final int[][] DIRECTIONS = {
             {-1, 0}, {1, 0}, {0, -1}, {0, 1}
     };
-
-    private static final int CLOSE_PROXIMITY_DAMAGE = 5;
-    private static final int ADJACENT_DAMAGE = 10;
-//    private static final float DAMAGE_COOLDOWN = 0.5f;
-//    private float
 
     private List<Point> playerPath;
     private List<Point> patrolPath;
@@ -35,6 +28,7 @@ public class Enemy extends Entity {
     private float waitTime;
     private float attackTime;
     private float difficulty;
+    private boolean dead;
 
 
     public Enemy(int x, int y, Maze maze, Player player, float difficulty) {
@@ -49,6 +43,7 @@ public class Enemy extends Entity {
         damageCooldown = 3;
         pathCooldown = 1;
         attackTime = 0;
+        dead = false;
     }
 
     protected void loadAssets() {
@@ -60,6 +55,7 @@ public class Enemy extends Entity {
         Array<TextureRegion> walkFrames = new Array<>(TextureRegion.class);
         Array<TextureRegion> idleFrames = new Array<>(TextureRegion.class);
         Array<TextureRegion> attackFrames = new Array<>(TextureRegion.class);
+        Array<TextureRegion> deathFrames = new Array<>(TextureRegion.class);
 
         for (int col = 0; col < 10; col++) {
             walkFrames.add(new TextureRegion(spriteSheets.get(0), col * frameWidth, 3 * frameHeight, frameWidth, frameHeight));
@@ -70,15 +66,29 @@ public class Enemy extends Entity {
         for (int col = 0; col < 11; col++) {
             attackFrames.add(new TextureRegion(spriteSheets.get(0), col * frameWidth, 0, frameWidth, frameHeight));
         }
+        for (int col = 0; col < 9; col++) {
+            deathFrames.add(new TextureRegion(spriteSheets.get(0), col * frameWidth, frameHeight, frameWidth, frameHeight));
+        }
 
         animations.add(new Animation<>(0.02f, walkFrames));
         animations.add(new Animation<>(0.1f, idleFrames));
         animations.add(new Animation<>(0.035f, attackFrames));
+        animations.add(new Animation<>(0.1f, deathFrames));
         currentFrame = walkFrames.get(0);
     }
 
     public void draw(SpriteBatch batch, float delta) {
         frameCounter += delta;
+
+        if (maze.getMazeMap().get(new Point(x / GameScreen.tileSize, y / GameScreen.tileSize)) == 2) {
+            die();
+        }
+
+        if (dead) {
+            batch.draw(animations.get(3).getKeyFrame(frameCounter, false), x - GameScreen.tileSize,
+                    y - GameScreen.tileSize / 2, GameScreen.tileSize * 2, GameScreen.tileSize * 2);
+            return;
+        }
 
         attackTime -= delta;
         damageCooldown -= delta;
@@ -89,7 +99,8 @@ public class Enemy extends Entity {
 
         handleProximity();
 
-        batch.draw(currentFrame, x - GameScreen.tileSize, y - GameScreen.tileSize / 2, GameScreen.tileSize * 2, GameScreen.tileSize * 2);
+        batch.draw(currentFrame, x - GameScreen.tileSize, y - GameScreen.tileSize / 2,
+                GameScreen.tileSize * 2, GameScreen.tileSize * 2);
     }
 
     private void handleMovement(float delta) {
@@ -252,6 +263,11 @@ public class Enemy extends Entity {
             }
         }
         return path;
+    }
+
+    public void die() {
+        dead = true;
+        frameCounter = 0;
     }
 
 }

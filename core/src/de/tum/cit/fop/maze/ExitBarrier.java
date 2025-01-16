@@ -50,19 +50,11 @@ public class ExitBarrier extends Entity {
                 0, 0,
                 GameScreen.tileSize, GameScreen.tileSize * 2,
                 1, 1, vertical ? 0 : 90);
-//                batch.draw(animations.get(active ? 0 : 1).getKeyFrame(frameCounter, active)
-//                x - (float) GameScreen.tileSize / 2,
-//                y - (float) GameScreen.tileSize / 2,
-//                GameScreen.tileSize, GameScreen.tileSize,
-//                1, 1, 90);
 
         if (Gdx.input.isKeyPressed(Input.Keys.E) && Math.abs(x - player.getX()) < GameScreen.tileSize && Math.abs(y - player.getY()) < GameScreen.tileSize) {
-            for (Item i : player.getInventory()) {
-                if (i.getType() == Item.types.KEY) {
-                    active = false;
-                    player.allowExit();
-                    break;
-                }
+            if (player.getKey() != null) {
+                active = false;
+                player.allowExit();
             }
         }
     }

@@ -32,26 +32,23 @@ public class GameOverScreen implements Screen {
         this.batch = new SpriteBatch();
         this.titleFont = game.getSkin().getFont("font");
         this.font = game.getSkin().getFont("font");
-        this.gameOverMusic = Gdx.audio.newMusic(Gdx.files.internal("g_overmusic.mp3")); // Replace with your actual file path
-        this.gameOverMusic.setLooping(true); // Loop the music while on this screen
-        this.gameOverMusic.setVolume(0.7f);  // Set the desired volume
+        this.gameOverMusic = Gdx.audio.newMusic(Gdx.files.internal("g_overmusic.mp3"));
+        this.gameOverMusic.setLooping(true);
+        this.gameOverMusic.setVolume(0.7f);
         this.gameOverMusic.play();
         this.scoreMessage = "Your Score: " + player.getScore();
     }
 
     @Override
     public void show() {
-        // No specific initialization required on show.
     }
 
     @Override
     public void render(float delta) {
-        // Clear the screen with a white background.
         ScreenUtils.clear(Color.BLACK);
 
         batch.begin();
 
-        // Draw the "Game Over" message centered on the screen.
         float centerX = Gdx.graphics.getWidth() / 2f;
         float centerY = Gdx.graphics.getHeight() / 2f;
 
@@ -70,43 +67,37 @@ public class GameOverScreen implements Screen {
 
         batch.end();
 
-        // Handle input for retrying or returning to the menu.
         if (Gdx.input.isKeyJustPressed(Input.Keys.R)) {
-            gameOverMusic.stop(); //stop the music
-            game.goToGame(); // this would restart directly on the new game and not main menu
+            gameOverMusic.stop();
+            game.restartGame();
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
-            gameOverMusic.stop(); //stop the music
-            game.goToMenu(); // Method to return to the main menu.
+            gameOverMusic.stop();
+            game.goToMenu();
         }
     }
 
     @Override
     public void resize(int width, int height) {
-        // Handle resizing if necessary.
     }
 
     @Override
     public void pause() {
-        // No actions needed on pause.
     }
 
     @Override
     public void resume() {
-        // No actions needed on resume.
     }
 
     @Override
     public void hide() {
-        // No actions needed on hide.
     }
 
     @Override
     public void dispose() {
-        // Dispose of the sprite batch to free resources.
         batch.dispose();
         if (gameOverMusic != null){
-            gameOverMusic.dispose(); //dispose of the music to free resources
+            gameOverMusic.dispose();
         }
     }
 }

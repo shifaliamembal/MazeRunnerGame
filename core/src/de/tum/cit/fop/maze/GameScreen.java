@@ -141,11 +141,6 @@ public class GameScreen implements Screen {
             }
         }
 
-        // Temporary: Press F10 to directly transition to VictoryScreen
-        if (Gdx.input.isKeyJustPressed(Input.Keys.F)) {
-            game.setScreen(new VictoryScreen(game, player));
-            return; // Exit rendering to avoid further updates
-        }
 
         if (!isPaused) {
             ScreenUtils.clear(0, 0, 0, 1); // Clear the screen

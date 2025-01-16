@@ -150,6 +150,10 @@ public class MazeRunnerGame extends Game {
         this.mazeSize = mazeSize;
     }
 
+    public void stopMusic() {
+        backgroundMusic.stop();
+    }
+
 //    public GameScreen getGameScreen() {
 //        return gameScreen;
 //    }

@@ -59,7 +59,7 @@ public class DifficultyScreen implements Screen {
         easyButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.setDifficulty(0.5f);
+                game.setDifficulty(0.8f);
                 game.setScreen(new MazeSizeScreen(game));
             }
         });
@@ -69,7 +69,7 @@ public class DifficultyScreen implements Screen {
         mediumButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.setDifficulty(0.6f);
+                game.setDifficulty(1f);
                 game.setScreen(new MazeSizeScreen(game));
             }
         });
@@ -79,7 +79,7 @@ public class DifficultyScreen implements Screen {
         hardButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.setDifficulty(0.7f);
+                game.setDifficulty(1.2f);
                 game.setScreen(new MazeSizeScreen(game));
             }
         });

@@ -74,6 +74,12 @@ public class Player {
     public void draw(SpriteBatch batch, float delta) {
         frameCounter += delta;
 
+        if (bomb != null) {
+            bomb.draw(batch, delta);
+            if (bomb.isFinished()) {
+                bomb = null;
+            }
+        }
         if (damageEffectFrames > 0) {
             batch.setColor(Color.RED);
             damageEffectFrames--;
@@ -86,12 +92,7 @@ public class Player {
                 GameScreen.tileSize * 2
         );
         batch.setColor(Color.WHITE);
-        if (bomb != null) {
-            bomb.draw(batch, delta);
-            if (bomb.isFinished()) {
-                bomb = null;
-            }
-        }
+
     }
 
     public boolean takeInput(float delta) {

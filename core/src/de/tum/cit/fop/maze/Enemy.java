@@ -80,7 +80,7 @@ public class Enemy extends Entity {
     public void draw(SpriteBatch batch, float delta) {
         frameCounter += delta;
 
-        if (maze.getMazeMap().get(new Point(x / GameScreen.tileSize, y / GameScreen.tileSize)) == 2) {
+        if (!dead && maze.getMazeMap().get(new Point(x / GameScreen.tileSize, y / GameScreen.tileSize)) == 2) {
             die();
         }
 
@@ -116,14 +116,14 @@ public class Enemy extends Entity {
 
         if (!playerPath.isEmpty() && playerPath.size() <= 10) {
             currentPath = playerPath;
-            speed = (int) (7 * GameScreen.tileSize * delta);
+            speed = (int) (9 * GameScreen.tileSize * delta);
             patrolPath = Collections.emptyList();
         } else {
             if (patrolPath.isEmpty()) {
                 patrolPath = randomPath();
             }
             currentPath = patrolPath;
-            speed = (int) (3 * GameScreen.tileSize * delta);
+            speed = (int) (4 * GameScreen.tileSize * delta);
         }
 
         if (!currentPath.isEmpty()) {
@@ -267,6 +267,7 @@ public class Enemy extends Entity {
 
     public void die() {
         dead = true;
+        player.addPoints(200);
         frameCounter = 0;
     }
 

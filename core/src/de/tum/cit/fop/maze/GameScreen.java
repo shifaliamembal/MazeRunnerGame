@@ -199,7 +199,7 @@ public class GameScreen implements Screen {
             font.draw(hudBatch, "Key: ", space, - space * 22);
             for (int i = 0; i < player.getInventory().size(); i++) {
                 Texture tex = player.getInventory().get(i).getTexture();
-                hudBatch.draw(tex, space * 11 + space * (i + 1) + space * 3 * i, - space * 19,
+                hudBatch.draw(tex, space * 11 + space * (i + 1) + space * 3 * i, - space * 20,
                         space * 3, space * 3);
             }
             if (player.getKey() != null) {
@@ -220,7 +220,9 @@ public class GameScreen implements Screen {
             shapeRenderer.rect(space, - space * 6, width, space * 2);
             shapeRenderer.end();
             hudBatch.begin();
-            pointer.draw(hudBatch, camera, viewport);
+            if (player.getKey() != null) {
+                pointer.draw(hudBatch, camera, viewport);
+            }
             hudBatch.end();
         } else {
             gameOverTime -= delta;

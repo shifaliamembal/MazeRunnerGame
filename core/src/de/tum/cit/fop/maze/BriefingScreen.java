@@ -1,6 +1,7 @@
 package de.tum.cit.fop.maze;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -75,7 +76,7 @@ public class BriefingScreen implements Screen {
         startButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new GameScreen(game));
+                game.goToGame();
             }
         });
         table.add(startButton).width(300).padBottom(20).row();
@@ -92,6 +93,10 @@ public class BriefingScreen implements Screen {
 
         stage.act(delta);
         stage.draw();
+
+        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+            game.goToGame();
+        }
     }
 
     @Override

@@ -1,6 +1,7 @@
 package de.tum.cit.fop.maze;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -8,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 
 import java.util.Random;
+import java.util.SortedMap;
 
 public class LaserTrap extends Entity {
     boolean active;
@@ -16,6 +18,7 @@ public class LaserTrap extends Entity {
     private float timeOffset;
     private float damageCooldown;
     private float difficulty;
+    private Sound laserAttack;
 
     public LaserTrap(int x, int y, Player player, boolean vertical, float difficulty) {
         super(x, y, player);
@@ -24,6 +27,8 @@ public class LaserTrap extends Entity {
         this.difficulty = difficulty;
         damageCooldown = 0;
         timeOffset = new Random().nextFloat(ACTIVATE_INTERVAL);
+        laserAttack = Gdx.audio.newSound(Gdx.files.internal("lasersound.mp3"));
+
     }
 
     public void loadAssets() {
@@ -79,6 +84,7 @@ public class LaserTrap extends Entity {
                 && player.getY() / GameScreen.tileSize == y / GameScreen.tileSize) {
             player.updateHealth((int) (-5 * difficulty));
             damageCooldown = 0.1f;
+            laserAttack.play();
         }
     }
 }

@@ -1,6 +1,7 @@
 package de.tum.cit.fop.maze;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -13,6 +14,7 @@ public class SpikeTrap extends Entity {
     private float timeOffset;
     private float damageCooldown;
     private float difficulty;
+    private Sound hitSound;
 
     public SpikeTrap(int x, int y, Player player, float difficulty) {
         super(x, y, player);
@@ -34,6 +36,9 @@ public class SpikeTrap extends Entity {
         }
 
         animations.add(new Animation<>(0.1f, animation));
+
+        hitSound = Gdx.audio.newSound(Gdx.files.internal("spiketrap.mp3"));
+
     }
 
     public void draw(SpriteBatch batch, float delta) {
@@ -65,6 +70,19 @@ public class SpikeTrap extends Entity {
                 && player.getY() / GameScreen.tileSize == y / GameScreen.tileSize) {
             player.updateHealth((int) (-20 * difficulty));
             damageCooldown = 1f;
+
+            hitSound.play();
         }
     }
+
+    @Override
+    public void dispose() {
+        super.dispose();
+
+        // Dispose of the sound to free resources
+        if (hitSound != null) {
+            hitSound.dispose();
+        }
+    }
+
 }

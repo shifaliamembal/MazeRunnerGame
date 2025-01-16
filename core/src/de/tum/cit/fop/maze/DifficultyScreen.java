@@ -5,6 +5,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -22,6 +23,7 @@ public class DifficultyScreen implements Screen {
     private final MazeRunnerGame game;
     private Skin skin;
     private final BitmapFont orbitronFont;
+    private final Texture background;
 
     public DifficultyScreen(MazeRunnerGame game) {
         this.game = game;
@@ -29,6 +31,8 @@ public class DifficultyScreen implements Screen {
         Viewport viewport = new ScreenViewport(camera);
         stage = new Stage(viewport, game.getSpriteBatch());
         skin = game.getSkin();
+
+        background = new Texture(Gdx.files.internal("themed_background.jpg"));
 
         orbitronFont = FontManager.getOrbitronFont(24, Color.WHITE); // Load Orbitron font
         skin.add("default-font", orbitronFont); // Set the font in the skin
@@ -94,6 +98,11 @@ public class DifficultyScreen implements Screen {
     @Override
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        game.getSpriteBatch().begin();
+        game.getSpriteBatch().draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        game.getSpriteBatch().end();
+
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
     }

@@ -6,6 +6,7 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -40,6 +41,10 @@ public class PauseMenu extends ScreenAdapter {
     }
 
     private void createButtons() {
+        BitmapFont titleFont = FontManager.getOrbitronFont(36, Color.WHITE);
+        Label.LabelStyle titleStyle = new Label.LabelStyle(titleFont, Color.WHITE);
+        Label titleLabel = new Label("Paused", titleStyle);
+
         TextButton resumeButton = new TextButton("Resume", skin);
         resumeButton.getLabel().setFontScale(1.2f);
         resumeButton.addListener(new ClickListener() {
@@ -85,13 +90,14 @@ public class PauseMenu extends ScreenAdapter {
 
         table = new Table(skin);
         table.setFillParent(true);
-        table.add(resumeButton).pad(10);
+        table.add(titleLabel).padBottom(40).row();
+        table.add(resumeButton).uniform().pad(10); // Make all buttons have the same size
         table.row();
-        table.add(muteButton).pad(10);
+        table.add(muteButton).uniform().pad(10);
         table.row();
-        table.add(mainMenuButton).pad(10);
+        table.add(mainMenuButton).uniform().pad(10);
         table.row();
-        table.add(quitButton).pad(10);
+        table.add(quitButton).uniform().pad(10);
         stage.addActor(table);
     }
 
@@ -102,10 +108,8 @@ public class PauseMenu extends ScreenAdapter {
 
     @Override
     public void render(float delta) {
-        ScreenUtils.clear(0, 0, 0, 1); // Ensure screen is cleared
-        if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
-            resume();
-        }
+        gameScreen.render(delta);
+
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
     }
@@ -125,4 +129,3 @@ public class PauseMenu extends ScreenAdapter {
         stage.dispose();
     }
 }
-

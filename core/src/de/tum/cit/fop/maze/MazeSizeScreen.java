@@ -17,13 +17,33 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+/**
+ * The MazeSizeScreen class allows the player to select the size of the maze for the game.
+ * It displays a UI with buttons for different maze size options (Small, Medium, Large) and
+ * a back button to return to the difficulty selection screen.
+ */
 public class MazeSizeScreen implements Screen {
+
+    /** The Stage used to render UI elements. */
     private final Stage stage;
+
+    /** Reference to the MazeRunnerGame instance. */
     private final MazeRunnerGame game;
+
+    /** The Skin used to style UI components. */
     private Skin skin;
+
+    /** The font used for text rendering. */
     private final BitmapFont orbitronFont;
+
+    /** The background texture for the screen. */
     private final Texture background;
 
+    /**
+     * Constructs a MazeSizeScreen.
+     *
+     * @param game The instance of MazeRunnerGame.
+     */
     public MazeSizeScreen(MazeRunnerGame game) {
         this.game = game;
         var camera = new OrthographicCamera();
@@ -46,6 +66,12 @@ public class MazeSizeScreen implements Screen {
         createMazeSizeSelection(titleStyle, buttonStyle);
     }
 
+    /**
+     * Creates the UI components for selecting the maze size.
+     *
+     * @param titleStyle   The style used for the title label.
+     * @param buttonStyle  The style used for the buttons.
+     */
     private void createMazeSizeSelection(Label.LabelStyle titleStyle, TextButton.TextButtonStyle buttonStyle) {
         Table table = new Table();
         table.setFillParent(true);
@@ -93,6 +119,12 @@ public class MazeSizeScreen implements Screen {
         });
         table.add(backButton).width(300).padBottom(20).row();
     }
+
+    /**
+     * Renders the screen.
+     *
+     * @param delta The time in seconds since the last render.
+     */
     @Override
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -105,29 +137,51 @@ public class MazeSizeScreen implements Screen {
         stage.draw();
     }
 
+    /**
+     * Adjusts the viewport size when the screen is resized.
+     *
+     * @param width  The new width of the screen.
+     * @param height The new height of the screen.
+     */
     @Override
     public void resize(int width, int height) {
         stage.getViewport().update(width, height, true);
     }
 
+    /**
+     * Called when this screen becomes the current screen for the game.
+     */
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
     }
 
+    /**
+     * Called when this screen is no longer the current screen for the game.
+     */
     @Override
     public void hide() {
         Gdx.input.setInputProcessor(null);
     }
 
+    /**
+     * Called when the game is paused.
+     */
     @Override
     public void pause() {}
 
+    /**
+     * Called when the game is resumed.
+     */
     @Override
     public void resume() {}
 
+    /**
+     * Disposes of resources used by this screen, including the stage and background texture.
+     */
     @Override
     public void dispose() {
         stage.dispose();
+        background.dispose();
     }
 }

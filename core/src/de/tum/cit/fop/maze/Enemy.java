@@ -1,6 +1,7 @@
 package de.tum.cit.fop.maze;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -32,6 +33,8 @@ public class Enemy extends Entity {
     private float attackTime;
     private float difficulty;
     private boolean dead;
+    private Sound attackSound;
+
 
 
     /**
@@ -56,6 +59,8 @@ public class Enemy extends Entity {
         pathCooldown = 1;
         attackTime = 0;
         dead = false;
+        attackSound = Gdx.audio.newSound(Gdx.files.internal("spiderattack.mp3"));
+
     }
 
     protected void loadAssets() {
@@ -215,6 +220,7 @@ public class Enemy extends Entity {
             if (damageCooldown <= 0 && frameCounter > animations.get(2).getFrameDuration() * 6 && playerDistance() < GameScreen.tileSize * 1.5) {
                 player.updateHealth((int) (-10 * difficulty));
                 damageCooldown = 0.5f;
+                attackSound.play();
             }
         }
     }
@@ -305,4 +311,9 @@ public class Enemy extends Entity {
         frameCounter = 0;
     }
 
+    public void dispose() {
+        if (attackSound != null) {
+            attackSound.dispose();
+        }
+    }
 }

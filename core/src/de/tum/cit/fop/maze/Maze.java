@@ -10,6 +10,9 @@ import com.badlogic.gdx.utils.Array;
 import java.io.*;
 import java.util.*;
 
+/**
+ * The Maze class used to generate, load and render the maze.
+ */
 public class Maze {
     private Properties mazeProperties;
     private Map<Point, Integer> mazeMap;
@@ -22,6 +25,11 @@ public class Maze {
     private static final int[] DY = {0, 0, -1, 1};
     private int size;
 
+    /**
+     * Constructor for Maze, with the name of the properties file from which to load the maze and its size.
+     * @param filename The name of the java properties file from which to load the maze.
+     * @param size The size of the maze.
+     */
     public Maze(String filename, int size) {
         mazeProperties = new Properties();
         mazeMap = new HashMap<>();
@@ -52,6 +60,9 @@ public class Maze {
         }
     }
 
+    /**
+     * Loads the textures for the maze tiles.
+     */
     private void loadTextures() {
         textures = new Array<>(TextureRegion.class);
         texture = new Texture(Gdx.files.internal("tiles.png"));
@@ -64,6 +75,10 @@ public class Maze {
         textures.add(new TextureRegion(texture, tileSize * 2, tileSize, 0, 0));
     }
 
+    /**
+     * Renders the maze.
+     * @param batch The SpriteBatch in which to render the maze.
+     */
     public void draw(SpriteBatch batch) {
         for (Point point : mazeMap.keySet()) {
             if (mazeMap.get(point) <= 3) {
@@ -74,6 +89,13 @@ public class Maze {
         }
     }
 
+    /**
+     * Generates a new maze.
+     * @param rows The number of rows of the maze.
+     * @param cols The number of columns of the maze.
+     * @param difficulty The difficulty modifier of the maze.
+     * @return The maze in integer array representation.
+     */
     public static int[][] generateMaze(int rows, int cols, float difficulty) {
         int[][] maze = new int[rows][cols];
 
@@ -127,6 +149,12 @@ public class Maze {
         return maze;
     }
 
+    /**
+     * Adds entities such as traps and enemies to the maze.
+     * @param maze The maze to modify.
+     * @param random A Random instance for randomness.
+     * @param difficulty The difficulty modifier which determines the number of traps and enemies.
+     */
     public static void createEntities(int[][] maze, Random random, float difficulty) {
         for (int i = 0; i < maze.length; i++) {
             for (int j = 0; j < maze[i].length; j++) {
@@ -153,6 +181,11 @@ public class Maze {
         }
     }
 
+    /**
+     * Randomly places the entrance where the player will start the game.
+     * @param maze The maze to modify.
+     * @param random A Random instance to determine the position of the entrance.
+     */
     private static void createEntrance(int[][] maze, Random random) {
         int x = random.nextInt(1,maze[0].length - 1);
         int y = random.nextInt(1, maze.length - 1);
@@ -160,6 +193,11 @@ public class Maze {
         maze[y][x] = 3;
     }
 
+    /**
+     * Randomly places the exit of the maze.
+     * @param maze The maze to modify.
+     * @param random A Random instance to determine the position of the exit.
+     */
     private static void createExit(int[][] maze, Random random) {
         int perimeter = 2 * (maze.length + maze[0].length) - 4;
         int exitPos = random.nextInt(perimeter);
@@ -187,6 +225,15 @@ public class Maze {
         }
     }
 
+    /**
+     * Counts the number of tiles of a certain type around a given point in the maze. Used to find patterns in the maze
+     * for appropriate entity placements.
+     * @param maze The maze to search.
+     * @param x The x position of the point.
+     * @param y The y position of the point.
+     * @param type The tile type to count.
+     * @return The number of tiles of the given type surrounding the given point.
+     */
     private static int countSurroundingTiles(int[][] maze, int x, int y, int type) {
         int count = 0;
 
@@ -205,6 +252,14 @@ public class Maze {
         return count;
     }
 
+    /**
+     * Sets all tiles of an area of the maze to a given type.
+     * @param maze The maze to modify.
+     * @param x The x position of the middle of the area.
+     * @param y The y position of the middle of the area.
+     * @param size The side length of the area.
+     * @param type The tile type to apply.
+     */
     private static void setArea(int[][] maze, int x, int y, int size, int type) {
         for (int i = -size / 2; i < size / 2 + size % 2; i++) {
             for (int j = -size / 2; j < size / 2 + size % 2; j++) {
@@ -215,6 +270,13 @@ public class Maze {
         }
     }
 
+    /**
+     * Depth-first search algorithm used to carve a path into the maze.
+     * @param maze An empty maze consisting only of walls.
+     * @param startX The x position to start the search from.
+     * @param startY The y position to start the search from.
+     * @param random A Random instance to randomly select a direction in the path search.
+     */
     private static void dfs(int[][] maze, int startX, int startY, Random random) {
         Stack<int[]> stack = new Stack<>();
         stack.push(new int[]{startX, startY});
@@ -250,10 +312,22 @@ public class Maze {
         }
     }
 
+    /**
+     * Checks if a given point is contained in the maze.
+     * @param maze The maze to examine.
+     * @param x The x position of the point.
+     * @param y The y position of the point.
+     * @return true if the x and y values don't exceed the dimensions of the maze, otherwise false.
+     */
     public static boolean inBounds(int[][] maze, int x, int y) {
         return y > 0 && y < maze.length && x > 0 && x < maze[0].length;
     }
 
+    /**
+     * Saves a maze in a file.
+     * @param maze The maze in integer array representation.
+     * @param filename The name of the file to save to maze in.
+     */
     public static void saveMaze(int[][] maze, String filename) {
         Properties prop = new Properties();
         try {
@@ -270,18 +344,34 @@ public class Maze {
 
     }
 
+    /**
+     * Returns the maze as a map with Points as keys and integers representing tile types as values.
+     * @return A map containing the walls and paths of the maze.
+     */
     public Map<Point, Integer> getMazeMap() {
         return mazeMap;
     }
 
+    /**
+     * Returns the maze as a map with Points as keys and integers representing entity types as values.
+     * @return A map containing the locations of entities in the maze.
+     */
     public Map<Point, Integer> getEntityMap() {
         return entityMap;
     }
 
+    /**
+     * Returns the texture used for the tiles.
+     * @return The texture used for the tiles
+     */
     public Texture getTexture() {
         return texture;
     }
 
+    /**
+     * Returns the size of the maze.
+     * @return The size of the maze.
+     */
     public int getSize() {
         return size;
     }

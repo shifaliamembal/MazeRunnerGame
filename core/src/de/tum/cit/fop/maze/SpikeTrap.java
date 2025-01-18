@@ -10,12 +10,22 @@ import com.badlogic.gdx.utils.Array;
 
 import java.util.Random;
 
+/**
+ * A spike trap that can damage the player if stepped on.
+ */
 public class SpikeTrap extends Entity {
     private float timeOffset;
     private float damageCooldown;
     private float difficulty;
     private Sound hitSound;
 
+    /**
+     * Constructor for SpikeTrap. Sets its position, reference to the player and difficulty modifier.
+     * @param x The x position of the spike trap.
+     * @param y The y position of the spike trap.
+     * @param player The player to interact with.
+     * @param difficulty The difficulty modifier of the level.
+     */
     public SpikeTrap(int x, int y, Player player, float difficulty) {
         super(x, y, player);
         this.difficulty = difficulty;
@@ -64,6 +74,9 @@ public class SpikeTrap extends Entity {
         handlePlayer();
     }
 
+    /**
+     * Damages the player character if he steps on the trap when the spikes are up.
+     */
     public void handlePlayer() {
         if (frameCounter > 0.8 && frameCounter < 1.2 && damageCooldown <= 0
                 &&  player.getX() / GameScreen.tileSize == x / GameScreen.tileSize
@@ -75,11 +88,13 @@ public class SpikeTrap extends Entity {
         }
     }
 
+    /**
+     * Disposes all used assets.
+     */
     @Override
     public void dispose() {
         super.dispose();
 
-        // Dispose of the sound to free resources
         if (hitSound != null) {
             hitSound.dispose();
         }

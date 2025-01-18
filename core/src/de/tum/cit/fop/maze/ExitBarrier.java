@@ -8,15 +8,24 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 
+/**
+ * The exit barrier that prevents the player from leaving the maze without the key.
+ */
 public class ExitBarrier extends Entity {
     private boolean active;
     private boolean vertical;
-    private final MazeRunnerGame game;
 
-    public ExitBarrier(int x, int y, MazeRunnerGame game, Player player, boolean vertical) {
+    /**
+     * Constructor for the ExitBarrier. Sets its position, references to the maze and player as well as whether it
+     * should be displayed vertically or horizontally.
+     * @param x The x position of the exit barrier.
+     * @param y The y position of the exit barrier.
+     * @param player The player with which to interact.
+     * @param vertical True if the barrier is vertical, false if it is horizontal.
+     */
+    public ExitBarrier(int x, int y, Player player, boolean vertical) {
         super(x, y, player);
         this.vertical = vertical;
-        this.game = game;
         active = true;
     }
 
@@ -57,7 +66,6 @@ public class ExitBarrier extends Entity {
             if (player.getKey() != null) {
                 active = false;
                 player.allowExit();
-                game.setScreen(new VictoryScreen(game, player));
             }
         }
     }

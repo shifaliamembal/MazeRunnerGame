@@ -11,6 +11,9 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
+/**
+ * Enemy robots that patrol the maze and chase and attack the player when he comes close.
+ */
 public class Enemy extends Entity {
 
     private static final int[][] DIRECTIONS = {
@@ -31,6 +34,15 @@ public class Enemy extends Entity {
     private boolean dead;
 
 
+    /**
+     * Constructor for the Enemy class. Sets its coordinates, references to the maze and player
+     * as well as the difficulty setting.
+     * @param x The x position of the enemy.
+     * @param y The y position of the enemy.
+     * @param maze The maze in which the game takes place.
+     * @param player The player with which to interact.
+     * @param difficulty The difficulty modifier of the current level.
+     */
     public Enemy(int x, int y, Maze maze, Player player, float difficulty) {
         super(x, y, player);
         this.maze = maze;
@@ -103,6 +115,10 @@ public class Enemy extends Entity {
                 GameScreen.tileSize * 2, GameScreen.tileSize * 2);
     }
 
+    /**
+     * Calculates where the enemy should walk.
+     * @param delta The time in seconds since the last render.
+     */
     private void handleMovement(float delta) {
         int xDiff = 0;
         int yDiff = 0;
@@ -186,6 +202,9 @@ public class Enemy extends Entity {
         }
     }
 
+    /**
+     * Handles behaviour when the player is close, initiating the attack animation and dealing damage.
+     */
     private void handleProximity(){
         if (playerDistance() < GameScreen.tileSize && attackTime <= 0) {
             frameCounter = 0;
@@ -200,6 +219,13 @@ public class Enemy extends Entity {
         }
     }
 
+    /**
+     * Breadth-first search algorithm used to find the shortest path to the player.
+     * @param start The current position of the enemy, used as the starting point for the search.
+     * @param target The current position of the player, used as thr target for the search.
+     * @return The shortest list of points the enemy needs to traverse to get to the player.
+     *         An empty list if the player can't be found in a certain number of iterations.
+     */
     private List<Point> bfs(Point start, Point target) {
         Queue<Point> queue = new LinkedList<>();
         Set<Point> visited = new HashSet<>();
@@ -241,6 +267,11 @@ public class Enemy extends Entity {
         return Collections.emptyList();
     }
 
+    /**
+     * A random path used for the patrolling behavior.
+     * @return A list of points which serves as an arbitrary path for patrolling. Points with coordinates (0,0)
+     *         indicate the enemy should wait for some time before going to the next point.
+     */
     private List<Point> randomPath() {
         List<Point> path = new ArrayList<>();
         Point current = new Point(x / GameScreen.tileSize, y / GameScreen.tileSize);
@@ -265,6 +296,9 @@ public class Enemy extends Entity {
         return path;
     }
 
+    /**
+     * Kills the enemy and rewards the player with points.
+     */
     public void die() {
         dead = true;
         player.addPoints(200);

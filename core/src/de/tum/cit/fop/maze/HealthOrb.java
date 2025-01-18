@@ -7,8 +7,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 
-import java.util.ArrayList;
-
+/**
+ * Health orbs that can be found in the maze and replenish some of the player's health.
+ */
 public class HealthOrb extends Entity {
     private boolean collected;
 

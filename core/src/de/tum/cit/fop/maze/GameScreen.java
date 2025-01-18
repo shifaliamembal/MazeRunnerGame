@@ -48,7 +48,7 @@ public class GameScreen implements Screen {
     private int timeLimit;
 
     /**
-     * Constructor for GameScreen. Sets up the camera and font.
+     * Constructor for GameScreen. Sets up the camera and font and initializes the maze.
      *
      * @param game The main game class, used to access global resources and methods.
      */
@@ -58,7 +58,6 @@ public class GameScreen implements Screen {
         player = new Player(maze);
         entities = new ArrayList<Entity>();
 
-        // Create and configure the camera for the game view
         camera = new OrthographicCamera();
         camera.setToOrtho(false);
         camera.zoom = 1f;;
@@ -73,7 +72,6 @@ public class GameScreen implements Screen {
         hudCamera.update();
         hudBatch.setProjectionMatrix(hudCamera.combined);
 
-        // Get the font from the game's skin
         font = game.getSkin().getFont("font");
 
         pauseMenu = new PauseMenu(game, this, viewport);
@@ -89,6 +87,9 @@ public class GameScreen implements Screen {
         }
     }
 
+    /**
+     * Populates the maze with entities.
+     */
     public void spawnEntities() {
         for (var entry : maze.getEntityMap().entrySet()) {
             Point a = new Point(entry.getKey().x, entry.getKey().y + 1);
@@ -108,7 +109,7 @@ public class GameScreen implements Screen {
             else if (entry.getValue() == 11) {
                 entities.add(new Enemy(entry.getKey().x, entry.getKey().y, maze, player, game.getDifficulty()));
             } else if (entry.getValue() == 12) {
-                entities.add(new ExitBarrier(entry.getKey().x, entry.getKey().y, game, player, vertical));
+                entities.add(new ExitBarrier(entry.getKey().x, entry.getKey().y, player, vertical));
                 maze.getMazeMap().put(new Point(a.x + (vertical ? 0 : 1), a.y - (vertical ? 0 : 1)), 2);
                 maze.getMazeMap().put(entry.getKey(), 2);
                 pointer = new ExitPointer(
@@ -135,10 +136,12 @@ public class GameScreen implements Screen {
     }
 
 
-    // Screen interface methods with necessary functionality
+    /**
+     * Renders the game. Also serves as the main loop for user input while the game is active.
+     * @param delta The time in seconds since the last render.
+     */
     @Override
     public void render(float delta) {
-        // Check for escape key press to go back to the menu
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             if (isPaused) {
                 game.setScreen(this);
@@ -153,28 +156,22 @@ public class GameScreen implements Screen {
 
 
         if (!isPaused) {
-            ScreenUtils.clear(0, 0, 0, 1); // Clear the screen
+            ScreenUtils.clear(0, 0, 0, 1);
 
             camera.position.set(player.getX(), player.getY(), 0);
             zoom();
-            camera.update(); // Update the camera
+            camera.update();
 
-            // Move text in a circular path to have an example of a moving object
             sinusInput += delta;
             float textX = (float) camera.position.x;
             float textY = (float) camera.position.y;
 
-            // Set up and begin drawing with the sprite batch
             game.getSpriteBatch().setProjectionMatrix(camera.combined);
 
             viewport.setCamera(camera);
             viewport.apply();
-            game.getSpriteBatch().begin(); // Important to call this before drawing anything
+            game.getSpriteBatch().begin();
 
-            // Render the text
-            //font.draw(game.getSpriteBatch(), "Press ESC to go to menu", textX, textY);
-
-            // Draw the character next to the text :) / We can reuse sinusInput here
             if (sinusInput > timeLimit) {
                 player.die();
             }
@@ -186,6 +183,11 @@ public class GameScreen implements Screen {
                 }
             } else {
                 game.getSpriteBatch().setColor(Color.RED);
+            }
+
+            if (player.victory()) {
+                player.addPoints((int) (((timeLimit - sinusInput) / timeLimit) * 2000));
+                game.setScreen(new VictoryScreen(game, player));
             }
 
             player.draw(game.getSpriteBatch(), delta);
@@ -200,6 +202,10 @@ public class GameScreen implements Screen {
 
     }
 
+    /**
+     * Renders the HUD.
+     * @param delta The time in seconds since the last render.
+     */
     public void drawHud(float delta) {
         if (!player.isDead()) {
             int space = Gdx.graphics.getHeight() / 80;
@@ -238,11 +244,17 @@ public class GameScreen implements Screen {
         } else {
             gameOverTime -= delta;
             if (gameOverTime < 0) {
+                dispose();
                 game.setScreen(new GameOverScreen(game, player));
             }
         }
     }
 
+    /**
+     * Resizes the game when the window is resized.
+     * @param width New screen width.
+     * @param height New screen height.
+     */
     @Override
     public void resize(int width, int height) {
         viewport.update(width, height);
@@ -251,11 +263,17 @@ public class GameScreen implements Screen {
         hudCamera.update();
     }
 
+    /**
+     * Pauses the game.
+     */
     @Override
     public void pause() {
         isPaused = true;
     }
 
+    /**
+     * Resumes the game.
+     */
     @Override
     public void resume() {
         isPaused = false;
@@ -269,6 +287,9 @@ public class GameScreen implements Screen {
     public void hide() {
     }
 
+    /**
+     * Disposes all disposable data.
+     */
     @Override
     public void dispose() {
         player.dispose();
@@ -279,6 +300,9 @@ public class GameScreen implements Screen {
         font.dispose();
     }
 
+    /**
+     * Adjusts camera zoom based on user input.
+     */
     public void zoom() {
         if (Gdx.input.isKeyPressed(Input.Keys.PLUS) || Gdx.input.isKeyPressed(Input.Keys.NUMPAD_ADD)) {
             if (camera.zoom > 0.25) {
@@ -291,8 +315,27 @@ public class GameScreen implements Screen {
         }
     }
 
+    /**
+     * Returns the Player attribute.
+     * @return The Player.
+     */
     public Player getPlayer(){
         return player;
+    }
+
+    /**
+     * Returns the time in minutes that was left at the end of the game.
+     * @return The time in string format.
+     */
+    public String timeLeft() {
+        return String.format("%d:%d", (int) (timeLimit - sinusInput) / 60, (int) (timeLimit - sinusInput) % 60);
+    }
+
+    /**
+     * Unpauses the game.
+     */
+    public void unpause() {
+        isPaused = false;
     }
 
 }

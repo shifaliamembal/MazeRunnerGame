@@ -13,15 +13,11 @@ import games.spooky.gdx.nativefilechooser.NativeFileChooser;
  * It manages the screens and global resources like SpriteBatch and Skin.
  */
 public class MazeRunnerGame extends Game {
-    // Screens
     private MenuScreen menuScreen;
     private GameScreen gameScreen;
-    //private Player player;
 
-    // Sprite Batch for rendering
     private SpriteBatch spriteBatch;
 
-    // UI Skin
     private Skin skin;
 
     private FontManager fontManager;
@@ -49,24 +45,18 @@ public class MazeRunnerGame extends Game {
     @Override
     public void create() {
         spriteBatch = new SpriteBatch(); // Create SpriteBatch
-        skin = new Skin(Gdx.files.internal("craft/craftacular-ui.json")); // Load UI skin
-        this.loadAssets(); // Load character animation
+        skin = new Skin(Gdx.files.internal("craft/craftacular-ui.json"));
+        this.loadAssets();
 
-        // Play some background music
-        // Background sound
         backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("MenuSound.mp3"));
         backgroundMusic.setLooping(true);
         backgroundMusic.play();
         mazeSize = 101;
 
-        goToMenu();// Navigate to the menu screen
+        goToMenu();
 
         fontManager = new FontManager();
         menuScreen = new MenuScreen(this);
-    }
-
-    public Music getBackgroundMusic() {
-        return backgroundMusic;
     }
 
     /**
@@ -81,7 +71,7 @@ public class MazeRunnerGame extends Game {
     }
 
     /**
-     * Switches to the game screen.
+     * Switches to the game screen and generates a new maze.
      */
     public void goToGame() {
         Maze.saveMaze(Maze.generateMaze(mazeSize, mazeSize, difficulty), "maps/maze.properties");
@@ -92,6 +82,9 @@ public class MazeRunnerGame extends Game {
         }
     }
 
+    /**
+     * Restarts the game using the same maze.
+     */
     public void restartGame() {
         this.setScreen(new GameScreen(this));
         if (menuScreen != null) {
@@ -116,16 +109,15 @@ public class MazeRunnerGame extends Game {
      */
     @Override
     public void dispose() {
-        getScreen().hide(); // Hide the current screen
-        getScreen().dispose(); // Dispose the current screen
-        spriteBatch.dispose(); // Dispose the spriteBatch
-        skin.dispose(); // Dispose the skin
+        getScreen().hide();
+        getScreen().dispose();
+        spriteBatch.dispose();
+        skin.dispose();
         if (fontManager != null) {
             fontManager.dispose();
         }
     }
 
-    // Getter methods
     public Skin getSkin() {
         return skin;
     }
@@ -154,7 +146,11 @@ public class MazeRunnerGame extends Game {
         backgroundMusic.stop();
     }
 
-//    public GameScreen getGameScreen() {
-//        return gameScreen;
-//    }
+    /**
+     * Returns the background music of the game.
+     * @return The background music of the game.
+     */
+    public Music getBackgroundMusic() {
+        return backgroundMusic;
+    }
 }

@@ -14,9 +14,10 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
-import java.util.concurrent.CopyOnWriteArrayList;
 
+/**
+ * The player character.
+ */
 public class Player {
     private int x;
     private int y;
@@ -47,11 +48,13 @@ public class Player {
     private float boostDuration;
     private Bomb bomb;
     private Item key;
+    private boolean victory;
 
-    private enum action {
-        DOWN, RIGHT, UP, LEFT
-    }
-
+    /**
+     * Constructor for Player. Default values are set and the starting position is determined by finding
+     * the entrance tile in the maze map.
+     * @param maze The maze in which the game takes place.
+     */
     public Player(Maze maze) {
         characterAnimation = new ArrayList<>();
         inventory = new ArrayList<>();
@@ -71,6 +74,11 @@ public class Player {
         boostDuration = 0;
     }
 
+    /**
+     * Renders the player.
+      * @param batch The SpriteBatch to render the player in.
+     * @param delta The time in seconds since the last render.
+     */
     public void draw(SpriteBatch batch, float delta) {
         frameCounter += delta;
 
@@ -95,6 +103,11 @@ public class Player {
 
     }
 
+    /**
+     * Processes user input for movement and using items.
+     * @param delta The time in seconds since the last render.
+     * @return true if the player is moving, otherwise false.
+     */
     public boolean takeInput(float delta) {
 
         int keyNum = getKeyNumber();
@@ -167,20 +180,26 @@ public class Player {
         }
         movementSound.setPitch(soundId, running ? 1.8f : 1.2f);
 
-        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
-            maze.getMazeMap().put(new Point(x / GameScreen.tileSize + DX[dir], y / GameScreen.tileSize + DY[dir]), 1);
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.ALT_LEFT)) {
-            maze.getMazeMap().put(new Point(x / GameScreen.tileSize + DX[dir], y / GameScreen.tileSize + DY[dir]), 0);
-        }
+//        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+//            maze.getMazeMap().put(new Point(x / GameScreen.tileSize + DX[dir], y / GameScreen.tileSize + DY[dir]), 1);
+//        }
+//        if (Gdx.input.isKeyPressed(Input.Keys.ALT_LEFT)) {
+//            maze.getMazeMap().put(new Point(x / GameScreen.tileSize + DX[dir], y / GameScreen.tileSize + DY[dir]), 0);
+//        }
 
         if (isMoving && x < 0 || y < 0 || x > maze.getSize() * GameScreen.tileSize || y > maze.getSize() * GameScreen.tileSize) {
             movementSound.stop();
-            dead = true;
+            victory = true;
         }
         return isMoving;
     }
 
+    /**
+     * Detects whether a player movement would result in a wall collision.
+     * @param x The x position to check for collision.
+     * @param y The y position to check for collision.
+     * @return true if the given coordinates are in a wall or closed gate, otherwise false
+     */
     private boolean wallCollision(int x, int y) {
         int tileSize = GameScreen.tileSize;
         Point[] points = {
@@ -192,9 +211,13 @@ public class Player {
         };
         return Arrays.stream(points)
                 .anyMatch(point -> maze.getMazeMap().containsKey(point)
-                        && (maze.getMazeMap().get(point) == 0 || (maze.getMazeMap().get(point) == 2 && !exitOpen)));
+                && (maze.getMazeMap().get(point) == 0 || (maze.getMazeMap().get(point) == 2 && !exitOpen)));
     }
 
+    /**
+     * Checks if any of the number keys 1-9 is pressed and returns the corresponding number.
+     * @return The key number.
+     */
     private int getKeyNumber() {
         for (int i = 0; i <= 8; i++) {
             if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1 + i)) {
@@ -204,6 +227,9 @@ public class Player {
         return -1;
     }
 
+    /**
+     * Loads all required textures and sounds.
+     */
     private void loadAssets() {
         texture = new Texture(Gdx.files.internal("character.png"));
         movementSound = Gdx.audio.newSound(Gdx.files.internal("walk.mp3"));
@@ -226,6 +252,10 @@ public class Player {
         }
     }
 
+    /**
+     * Changes the player's health by the given amount. If the health drops to 0, the player dies.
+     * @param amount The amount of HP to add.
+     */
     public void updateHealth(int amount) {
         health += amount;
         if (health > MAX_HEALTH){
@@ -245,6 +275,10 @@ public class Player {
         }
     }
 
+    /**
+     * Adds an item to the player's inventory.
+     * @param item The item received by the player.
+     */
     public void receiveItem(Item item) {
         if (item.getType() == Item.types.KEY) {
             key = item;
@@ -253,50 +287,88 @@ public class Player {
         }
     }
 
+    /**
+     * Returns the inventory list.
+     * @return The list of items in the inventory.
+     */
     public List<Item> getInventory() {
         return inventory;
     }
 
+    /**
+     * Returns the animation to be played depending on the direction the player is facing.
+     * @return The current player animation.
+     */
     Animation<TextureRegion> getCurrentAnimation() {
         return characterAnimation.get(dir);
     }
 
+    /**
+     * Returns the x position of the player.
+     * @return The x position of the player.
+     */
     public int getX() {
         return x;
     }
+
+    /**
+     * Returns the y position of the player.
+     * @return The y position of the player.
+     */
     public int getY() {
         return y;
     }
 
-    public void setPosition(int x, int y) {
-        this.x = x;
-        this.y = y;
-    }
-
+    /**
+     * Returns the key.
+     * @return The key Item, null if the player does not have a key.
+     */
     public Item getKey() {
         return key;
     }
 
+    /**
+     * Allows the player to traverse the exit gate and leave the maze.
+     */
     public void allowExit() {
         exitOpen = true;
     }
 
+    /**
+     * Returns the health points of the player.
+     * @return The health points of the layer.
+     */
     public int getHealth(){
         return health;
     }
 
+    /**
+     * Returns the maximum amount of health the player can have.
+     * @return The maximum amount of health the player can have.
+     */
     public int getMaxHealth() {
         return MAX_HEALTH;
     }
 
+    /**
+     * Returns the stamina points of the player.
+     * @return The stamina points of the layer.
+     */
     public int getStamina() {
         return stamina;
     }
 
+    /**
+     * Returns the maximum amount of stamina the player can have.
+     * @return The maximum amount of stamina the player can have.
+     */
     public int getMaxStamina() {
         return MAX_STAMINA;
     }
 
+    /**
+     * Disposes all assets used by the player.
+     */
     public void dispose() {
         texture.dispose();
         movementSound.dispose();
@@ -305,24 +377,50 @@ public class Player {
         }
     }
 
+    /**
+     * Returns whether the player is dead.
+     * @return true if the player is dead, otherwise false.
+     */
     public boolean isDead() {
         return dead;
     }
 
+    /**
+     * Kills the player.
+     */
     public void die() {
         dead = true;
     }
 
+    /**
+     * Gives points to the player.
+     * @param points The amount of points to give to the player.
+     */
     public void addPoints(int points) {
         score += points;
     }
 
+    /**
+     * Returns the current score of the player.
+     * @return The amount of points the player has.
+     */
     public int getScore() {
         return score;
     }
 
+    /**
+     * Stops the player sound.
+     */
     public void stopSound() {
         movementSound.stop();
+    }
+
+    /**
+     * Returns whether the player has won the game.
+     * @return true if the player has won the game, otherwise false.
+     */
+    public boolean victory() {
+        return victory;
     }
 
 }

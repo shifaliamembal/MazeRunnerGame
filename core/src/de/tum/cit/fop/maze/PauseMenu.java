@@ -37,7 +37,7 @@ public class PauseMenu extends ScreenAdapter {
         this.backgroundMusic = game.getBackgroundMusic();
 
         createButtons();
-        Gdx.input.setInputProcessor(stage); // Ensure input processor is set
+        Gdx.input.setInputProcessor(stage);
     }
 
     private void createButtons() {
@@ -51,6 +51,7 @@ public class PauseMenu extends ScreenAdapter {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 game.setScreen(gameScreen);
+                gameScreen.unpause();
             }
         });
 
@@ -91,7 +92,7 @@ public class PauseMenu extends ScreenAdapter {
         table = new Table(skin);
         table.setFillParent(true);
         table.add(titleLabel).padBottom(40).row();
-        table.add(resumeButton).uniform().pad(10); // Make all buttons have the same size
+        table.add(resumeButton).uniform().pad(10);
         table.row();
         table.add(muteButton).uniform().pad(10);
         table.row();
@@ -116,7 +117,7 @@ public class PauseMenu extends ScreenAdapter {
 
     @Override
     public void resize(int width, int height) {
-        stage.getViewport().update(width, height, true); // Update viewport on resize
+        stage.getViewport().update(width, height, true);
     }
 
     @Override

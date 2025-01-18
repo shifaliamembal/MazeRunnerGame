@@ -9,11 +9,19 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+/**
+ * An arrow that points to the exit if it is not on the screen.
+ */
 public class ExitPointer {
     private int x, y, rotation;
     private TextureRegion textureRegion;
     private Texture texture;
 
+    /**
+     * Constructor for ExitPointer. Loads its texture and sets the position of the exit it should point towards.
+     * @param x The x position of the exit.
+     * @param y The y position of the exit.
+     */
     public ExitPointer(int x, int y) {
         texture = new Texture(Gdx.files.internal("arrow.png"));
         textureRegion = new TextureRegion(texture);
@@ -21,6 +29,12 @@ public class ExitPointer {
         this.y = y;
     }
 
+    /**
+     * Renders the ExitPointer, with its position and rotation corresponding to the location of the exit.
+     * @param batch The SpriteBatch on which to render the ExitPointer.
+     * @param camera The game camera.
+     * @param viewport The game viewport.
+     */
     public void draw(SpriteBatch batch, OrthographicCamera camera, Viewport viewport) {
         float renderX;
         float renderY;
@@ -36,8 +50,6 @@ public class ExitPointer {
         renderX = Math.max(renderX, texture.getHeight());
         renderX = Math.min(renderX, Gdx.graphics.getWidth() - texture.getWidth());
         renderY = screenPos.y;
-//        renderY = Math.max(renderY, texture.getHeight() / 2 * 3);
-//        renderY = Math.min(renderY, Gdx.graphics.getHeight() - texture.getHeight() / 2 * 3);
         renderY = Math.max(renderY, texture.getHeight());
         renderY = Math.min(renderY, Gdx.graphics.getHeight() - texture.getHeight());
         rotation = (renderX < screenPos.x ? 90 : 0) + (renderX > screenPos.x ? -90 : 0)
@@ -100,6 +112,9 @@ public class ExitPointer {
 
     }
 
+    /**
+     * Disposes the texture of the ExitPointer.
+     */
     public void dispose() {
         texture.dispose();
     }

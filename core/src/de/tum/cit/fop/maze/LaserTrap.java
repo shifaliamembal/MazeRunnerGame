@@ -9,6 +9,9 @@ import com.badlogic.gdx.utils.Array;
 
 import java.util.Random;
 
+/**
+ * A laser trap what appears in narrow corridors of the maze and damages the player when active.
+ */
 public class LaserTrap extends Entity {
     boolean active;
     boolean vertical;
@@ -17,6 +20,15 @@ public class LaserTrap extends Entity {
     private float damageCooldown;
     private float difficulty;
 
+    /**
+     * Constructor for the LaserTrap class. Sets its coordinates, a reference to the player
+     * as well as its orientation and the difficulty setting.
+     * @param x The x position of the laser trap.
+     * @param y The y position of the laser trap.
+     * @param player The player with which to interact.
+     * @param vertical Whether the laser is vertical or horizontal.
+     * @param difficulty The difficulty modifier of the current level.
+     */
     public LaserTrap(int x, int y, Player player, boolean vertical, float difficulty) {
         super(x, y, player);
         this.vertical = vertical;
@@ -73,6 +85,9 @@ public class LaserTrap extends Entity {
         handlePlayer();
     }
 
+    /**
+     * Damages the player character when he touches the laser.
+     */
     public void handlePlayer() {
         if (((active && frameCounter > 1) || (!active && frameCounter < 0.5)) && damageCooldown <= 0
                 &&  player.getX() / GameScreen.tileSize == x / GameScreen.tileSize

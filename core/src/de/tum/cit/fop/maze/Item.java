@@ -3,6 +3,9 @@ package de.tum.cit.fop.maze;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
+/**
+ * An item that can be found in treasure chests.
+ */
 public class Item {
     private Texture texture;
     private TextureRegion textureRegion;
@@ -12,6 +15,10 @@ public class Item {
         KEY, BOOST, BOMB, ARROW
     }
 
+    /**
+     * Constructor for Item. Sets its type.
+     * @param type The item type.
+     */
     Item(types type) {
         this.type = type;
 
@@ -31,14 +38,26 @@ public class Item {
         textureRegion = new TextureRegion(texture);
     }
 
+    /**
+     * Returns the type of the item from the types enum.
+     * @return The item type.
+     */
     public types getType() {
         return type;
     }
 
+    /**
+     * Returns the texture of the item for disposal.
+     * @return The texture of the item.
+     */
     public Texture getTexture() {
         return texture;
     }
 
+    /**
+     * Returns the entire texture of the item in the form of a TextureRegion used for rendering.
+     * @return The TextureRegion of the item texture.
+     */
     public TextureRegion getTextureRegion() {
         return textureRegion;
     }

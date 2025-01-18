@@ -11,6 +11,9 @@ import com.badlogic.gdx.utils.Array;
 import java.awt.*;
 import java.util.Random;
 
+/**
+ * A treasure chest that can be opened by the player to receive an item.
+ */
 public class TreasureChest extends Entity {
     private TextureRegion currentTexture;
     private Item content;
@@ -19,6 +22,13 @@ public class TreasureChest extends Entity {
     private Point keyLocation;
     private float keyDirection;
 
+    /**
+     * Constructor for TreasureChest. Sets the position, reference to the player and the item contained in the chest.
+     * @param x The x position of the treasure chest.
+     * @param y The y position of the treasure chest.
+     * @param player The player character to interact with.
+     * @param item The item to be contained in the chest.
+     */
     public TreasureChest(int x, int y, Player player, Item.types item) {
         super(x, y, player);
         content = new Item(item);
@@ -53,6 +63,10 @@ public class TreasureChest extends Entity {
         }
     }
 
+    /**
+     * Calculates the direction of the arrow item which points to the chest containing the key.
+     * @return The rotation value for the arrow item.
+     */
     private float getKeyDirection() {
         double deltaX = keyLocation.x - x;
         double deltaY = keyLocation.y - y;
@@ -60,6 +74,9 @@ public class TreasureChest extends Entity {
         return (float) Math.toDegrees(Math.atan2(deltaX, -deltaY)) + new Random().nextFloat(-45f, 45f);
     }
 
+    /**
+     * Called when the player opens the chest. Given the item contained in the chest and points to the player.
+     */
     public void open() {
         currentTexture = textures.get(1);
         if (!content.getType().equals(Item.types.ARROW)) {
@@ -71,10 +88,18 @@ public class TreasureChest extends Entity {
         open = true;
     }
 
+    /**
+     * Sets the item contained in the chest.
+     * @param item The item to put in the chest.
+     */
     public void setContent(Item item) {
         content = item;
     }
 
+    /**
+     * Sets the location of the chest that contains the key, used by the arrow item.
+     * @param keyLocation The location of the key.
+     */
     public void setKeyLocation(Point keyLocation) {
         this.keyLocation = keyLocation;
     }

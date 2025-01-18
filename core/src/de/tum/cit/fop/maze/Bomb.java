@@ -9,6 +9,9 @@ import com.badlogic.gdx.utils.Array;
 
 import java.awt.*;
 
+/**
+ * The bomb item which can be found in treasure chests and used by the player to destroy walls and kill enemies.
+ */
 public class Bomb {
     private int x;
     private int y;
@@ -18,6 +21,12 @@ public class Bomb {
     private boolean finished;
     private Maze maze;
 
+    /**
+     * Constructor for Bomb. Sets the x and y position where the bomb is places and passes the maze for modification.
+     * @param x The x position of the bomb.
+     * @param y The y position of the bomb.
+     * @param maze The maze in which the game takes place.
+     */
     public Bomb(int x, int y, Maze maze) {
         this.x = x;
         this.y = y;
@@ -27,6 +36,9 @@ public class Bomb {
         loadAssets();
     }
 
+    /**
+     * Renders the bomb.
+     */
     public void draw(SpriteBatch batch, float delta) {
         if (frameCounter > animation.getAnimationDuration()) {
             finished = true;
@@ -39,6 +51,9 @@ public class Bomb {
         GameScreen.tileSize * 3, GameScreen.tileSize * 3);
     }
 
+    /**
+     * Loads all assets required for the Bomb class.
+     */
     private void loadAssets() {
         texture = new Texture(Gdx.files.internal("explosion.png"));
         Array<TextureRegion> frames = new Array<>(TextureRegion.class);
@@ -48,6 +63,10 @@ public class Bomb {
         animation = new Animation<>(0.1f, frames);
     }
 
+    /**
+     * Removes all walls near the bomb when it explodes.
+     * @param type The tile type to replace the walls with.
+     */
     private void removeWalls(int type) {
         for (int i = -1; i < 2; i++) {
             for (int j = -1; j < 2; j++) {
@@ -62,10 +81,17 @@ public class Bomb {
         }
     }
 
+    /**
+     * Disposes all assets.
+     */
     private void dispose() {
         texture.dispose();
     }
 
+    /**
+     * Returns whether the bomb animation has ended.
+     * @return finished A boolean value which indicates whether the bomb has terminated.
+     */
     public boolean isFinished() {
         return finished;
     }

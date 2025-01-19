@@ -53,10 +53,10 @@ public class MazeRunnerGame extends Game {
         backgroundMusic.play();
         mazeSize = 101;
 
-        goToMenu();
-
         fontManager = new FontManager();
         menuScreen = new MenuScreen(this);
+
+        goToMenu();
     }
 
     /**

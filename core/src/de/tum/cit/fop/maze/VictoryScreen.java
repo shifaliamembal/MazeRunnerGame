@@ -5,13 +5,16 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 /**
- * The GameOverScreen class is displayed when the player dies.
- * It provides options to restart the game or return to the main menu.
+ * VictoryScreen class is displayed when the player finds the key-card
+ * to unlock the exit and wins the game.
+ * It shows a congratulatory message along with the player's score
+ * and provides options to restart the game or return to the main menu.
  */
 public class VictoryScreen implements Screen {
 
@@ -20,12 +23,19 @@ public class VictoryScreen implements Screen {
     private final BitmapFont titleFont;
     private final BitmapFont font;
     private final Music gameOverMusic;
-    private final String message = "Congratulations! You have WON!!";
+    private final String message = "You have survived the Lab!!" + "\nThe world is safe... for now.";
     private final String scoreMessage;
     private final String retryMessage = "Press R to Retry";
     private final String menuMessage = "Press M to return to Menu";
     private Player player;
+    private final Texture background;
 
+    /**
+     * Constructs a new VictoryScreen.
+     *
+     * @param game   It is an instance of MazeRunner game.
+     * @param player The player whose score will be displayed on the screen when won.
+     */
     public VictoryScreen(MazeRunnerGame game, Player player) {
         this.game = game;
         this.player = player;
@@ -37,24 +47,39 @@ public class VictoryScreen implements Screen {
         this.gameOverMusic.setVolume(0.7f);
         this.gameOverMusic.play();
         this.scoreMessage = "Your Score: " + player.getScore();
+        background = new Texture("victorybg.jpeg");
     }
 
+    /**
+     * Called when the screen is set to be visible
+     */
     @Override
     public void show() {
     }
 
+    /**
+     * Renders this Victory screen, displaying the congratulatory message,
+     * player's score, and the options to restart the game or return to the menu.
+     *
+     * @param delta Time in seconds since the last frame.
+     */
     @Override
     public void render(float delta) {
-        ScreenUtils.clear(Color.BLACK);
+        ScreenUtils.clear(Color.WHITE);
 
         batch.begin();
+        batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         float centerX = Gdx.graphics.getWidth() / 2f;
         float centerY = Gdx.graphics.getHeight() / 2f;
 
-        titleFont.getData().setScale(1.8f);
-        titleFont.setColor(Color.RED);
-        titleFont.draw(batch, message, centerX - font.getScaleX() * scoreMessage.length() * 10, centerY + 200);
+        com.badlogic.gdx.graphics.g2d.GlyphLayout layout = new com.badlogic.gdx.graphics.g2d.GlyphLayout();
+
+        titleFont.getData().setScale(1.3f);
+        titleFont.setColor(Color.YELLOW);
+        layout.setText(titleFont, message);
+        float messageWidth = layout.width;
+        titleFont.draw(batch, message, centerX - messageWidth / 2, centerY + 220);
 
         font.getData().setScale(1.0f);
         font.setColor(Color.WHITE);
@@ -77,27 +102,47 @@ public class VictoryScreen implements Screen {
         }
     }
 
+    /**
+     * Resizes the screen. This method is empty in the VictoryScreen implementation.
+     *
+     * @param width  The new width of the screen.
+     * @param height The new height of the screen.
+     */
     @Override
     public void resize(int width, int height) {
     }
 
+    /**
+     * Called when the game is paused.
+     */
     @Override
     public void pause() {
     }
 
+    /**
+     * Called when the screen resumes.
+     */
     @Override
     public void resume() {
     }
 
+    /**
+     * Called when the screen is hidden.
+     */
     @Override
     public void hide() {
     }
 
+    /**
+     * Disposes of the resources used by the VictoryScreen.
+     * Including the SpriteBatch, music and background image.
+     */
     @Override
     public void dispose() {
         batch.dispose();
         if (gameOverMusic != null){
             gameOverMusic.dispose();
         }
+        background.dispose();
     }
 }

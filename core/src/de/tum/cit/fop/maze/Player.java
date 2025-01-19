@@ -49,6 +49,7 @@ public class Player {
     private Bomb bomb;
     private Item key;
     private boolean victory;
+    private Sound keycardSound;
 
     /**
      * Constructor for Player. Default values are set and the starting position is determined by finding
@@ -234,6 +235,7 @@ public class Player {
         texture = new Texture(Gdx.files.internal("character.png"));
         movementSound = Gdx.audio.newSound(Gdx.files.internal("walk.mp3"));
         deathSound = Gdx.audio.newSound(Gdx.files.internal("chardefeat.mp3"));
+        keycardSound = Gdx.audio.newSound(Gdx.files.internal("collectkey.mp3"));
 
         int frameWidth = 16;
         int frameHeight = 32;
@@ -282,6 +284,9 @@ public class Player {
     public void receiveItem(Item item) {
         if (item.getType() == Item.types.KEY) {
             key = item;
+            if (keycardSound != null) {
+                keycardSound.play();
+            }
         } else {
             inventory.add(item);
         }
@@ -374,6 +379,9 @@ public class Player {
         movementSound.dispose();
         if (deathSound != null){
             deathSound.dispose();
+        }
+        if (keycardSound != null) {
+            keycardSound.dispose();
         }
     }
 

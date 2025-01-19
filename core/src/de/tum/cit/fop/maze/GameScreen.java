@@ -99,10 +99,11 @@ public class GameScreen implements Screen {
                 vertical = false;
             }
             if (entry.getValue() == 10) {
-                Item.types randomItem = switch (new Random().nextInt(0, 3)) {
+                Item.types randomItem = switch (new Random().nextInt(0, 4)) {
                     case 0 -> Item.types.BOOST;
                     case 1 -> Item.types.BOMB;
-                    default -> Item.types.ARROW;
+                    case 2 -> Item.types.ARROW;
+                    default -> Item.types.SHIELD;
                 };
                 entities.add(new TreasureChest(entry.getKey().x, entry.getKey().y, player, randomItem));
             }

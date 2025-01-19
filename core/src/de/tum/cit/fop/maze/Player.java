@@ -47,6 +47,8 @@ public class Player {
     private Sound deathSound;
     private float boostDuration;
     private Bomb bomb;
+    private Item shield;
+    private float shieldTime;
     private Item key;
     private boolean victory;
     private Sound keycardSound;
@@ -73,6 +75,7 @@ public class Player {
         damageEffectFrames = 0;
         score = 0;
         boostDuration = 0;
+        shieldTime = 0;
     }
 
     /**
@@ -89,6 +92,7 @@ public class Player {
                 bomb = null;
             }
         }
+
         if (damageEffectFrames > 0) {
             batch.setColor(Color.RED);
             damageEffectFrames--;
@@ -101,6 +105,18 @@ public class Player {
                 GameScreen.tileSize * 2
         );
         batch.setColor(Color.WHITE);
+        if (shield != null) {
+            batch.draw(
+                    shield.getTexture(),
+                    x - (float) GameScreen.tileSize / 2,
+                    y - (float) GameScreen.tileSize / 2,
+                    GameScreen.tileSize,
+                    GameScreen.tileSize * 2);
+            shieldTime -= delta;
+            if (shieldTime <= 0) {
+                shield = null;
+            }
+        }
 
     }
 
@@ -121,6 +137,9 @@ public class Player {
                 boostDuration += 7;
             } else if (usedItem.getType().equals(Item.types.BOMB)) {
                 bomb = new Bomb(x / GameScreen.tileSize + DX[dir], y / GameScreen.tileSize + DY[dir], maze);
+            } else if (usedItem.getType().equals(Item.types.SHIELD)) {
+                shield = usedItem;
+                shieldTime = 7;
             }
         }
         boostDuration -= delta;
@@ -259,6 +278,9 @@ public class Player {
      * @param amount The amount of HP to add.
      */
     public void updateHealth(int amount) {
+        if (shield != null && amount < 0) {
+            return;
+        }
         health += amount;
         if (health > MAX_HEALTH){
             health = MAX_HEALTH;

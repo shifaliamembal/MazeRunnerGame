@@ -136,14 +136,14 @@ public class BriefingScreen implements Screen {
     private void skipAnimations() {
         animationsSkipped = true;
 
-        title.clearActions();
-        title.getColor().a = 1;
-
-        briefingLabel.clearActions();
-        briefingLabel.getColor().a = 1;
-
-        startButton.clearActions();
-        startButton.getColor().a = 1;
+//        title.clearActions();
+//        title.getColor().a = 1;
+//
+//        briefingLabel.clearActions();
+//        briefingLabel.getColor().a = 1;
+//
+//        startButton.clearActions();
+//        startButton.getColor().a = 1;
     }
 
     /**

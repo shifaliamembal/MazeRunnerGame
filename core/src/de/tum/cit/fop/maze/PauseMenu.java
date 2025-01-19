@@ -16,22 +16,48 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.badlogic.gdx.audio.Music;
 
+/**
+ * The PauseMenu class represents the pause menu in the game.
+ * It allows the player to resume the game, return to the main menu, mute/unmute the background music, or quit the game.
+ */
 public class PauseMenu extends ScreenAdapter {
 
+    /** The instance of MazeRunnerGame. */
     private final MazeRunnerGame game;
+
+    /** The current GameScreen instance to return to after resuming the game. */
     private final GameScreen gameScreen;
+
+    /** The Stage for rendering UI components in the pause menu. */
     private final Stage stage;
+
+    /** The Skin used for UI styling. */
     private final Skin skin;
+
+    /** The font used for rendering text in the UI. */
     private final BitmapFont font;
+
+    /** The table containing all UI elements in the pause menu. */
     private Table table;
+
+    /** Flag indicating whether the background music is muted. */
     private boolean isMuted = false;
+
+    /** The background music being played in the game. */
     private Music backgroundMusic;
 
+    /**
+     * Constructs a PauseMenu.
+     *
+     * @param game       The instance of MazeRunnerGame.
+     * @param gameScreen The GameScreen to return to after resuming the game.
+     * @param viewport   The viewport used to set up the stage.
+     */
     public PauseMenu(MazeRunnerGame game, GameScreen gameScreen, Viewport viewport) {
         this.game = game;
         this.gameScreen = gameScreen;
         this.stage = new Stage(viewport);
-        this.skin = new Skin(Gdx.files.internal("craft/craftacular-ui.json"));
+        this.skin = game.getSkin();
         this.font = FontManager.getOrbitronFont(24, Color.WHITE);
         skin.add("default-font", font);
         this.backgroundMusic = game.getBackgroundMusic();
@@ -40,6 +66,9 @@ public class PauseMenu extends ScreenAdapter {
         Gdx.input.setInputProcessor(stage);
     }
 
+    /**
+     * Creates and configures the buttons in the pause menu.
+     */
     private void createButtons() {
         BitmapFont titleFont = FontManager.getOrbitronFont(36, Color.WHITE);
         Label.LabelStyle titleStyle = new Label.LabelStyle(titleFont, Color.WHITE);
@@ -50,8 +79,8 @@ public class PauseMenu extends ScreenAdapter {
         resumeButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(gameScreen);
                 gameScreen.unpause();
+                game.setScreen(gameScreen);
             }
         });
 
@@ -102,11 +131,20 @@ public class PauseMenu extends ScreenAdapter {
         stage.addActor(table);
     }
 
+    /**
+     * Called when this screen is displayed.
+     * Sets the input processor to handle stage interactions.
+     */
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
     }
 
+    /**
+     * Renders the pause menu on top of the GameScreen.
+     *
+     * @param delta The time in seconds since the last render.
+     */
     @Override
     public void render(float delta) {
         gameScreen.render(delta);
@@ -115,16 +153,30 @@ public class PauseMenu extends ScreenAdapter {
         stage.draw();
     }
 
+    /**
+     * Called when the screen is resized.
+     * Updates the viewport with the new dimensions.
+     *
+     * @param width  The new width of the screen.
+     * @param height The new height of the screen.
+     */
     @Override
     public void resize(int width, int height) {
         stage.getViewport().update(width, height, true);
     }
 
+    /**
+     * Called when this screen is hidden.
+     * Removes the stage's input processor.
+     */
     @Override
     public void hide() {
         Gdx.input.setInputProcessor(null);
     }
 
+    /**
+     * Disposes of resources used by the pause menu, including the stage.
+     */
     @Override
     public void dispose() {
         stage.dispose();

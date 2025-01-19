@@ -59,7 +59,7 @@ public class Enemy extends Entity {
         pathCooldown = 1;
         attackTime = 0;
         dead = false;
-        attackSound = Gdx.audio.newSound(Gdx.files.internal("spiderattack.mp3"));
+        attackSound = Gdx.audio.newSound(Gdx.files.internal("enemyattack.mp3"));
 
     }
 

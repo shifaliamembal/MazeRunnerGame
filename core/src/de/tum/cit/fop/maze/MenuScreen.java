@@ -19,16 +19,53 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 
+/**
+ * The {@code MenuScreen} class represents the main menu screen of the game.
+ * It provides options for starting the game, muting/unmuting the background music,
+ * viewing information, and exiting the game.
+ */
 public class MenuScreen implements Screen {
 
+    /**
+     * The stage used to organize and render UI elements on the screen.
+     */
     private final Stage stage;
+
+    /**
+     * Reference to the main game instance for navigation between screens.
+     */
     private final MazeRunnerGame game;
+
+    /**
+     * Texture for the menu background image.
+     */
     private final Texture background;
+
+    /**
+     * Flag to track whether the background music is muted.
+     */
     private boolean isMuted = false;
+
+    /**
+     * Table layout used for organizing menu components.
+     */
     private Table table;
+
+    /**
+     * Skin used for styling UI elements.
+     */
     private Skin skin;
+
+    /**
+     * Font used for rendering menu text in the Orbitron style.
+     */
     private final BitmapFont orbitronFont;
 
+    /**
+     * Constructs a new {@code MenuScreen} with the given game instance.
+     *
+     * @param game the {@link MazeRunnerGame} instance for managing screens and game state
+     */
     public MenuScreen(MazeRunnerGame game) {
         this.game = game;
         var camera = new OrthographicCamera();
@@ -52,6 +89,12 @@ public class MenuScreen implements Screen {
         createMenu(titleStyle, buttonStyle);
     }
 
+    /**
+     * Creates the menu layout, including the title and buttons for navigation.
+     *
+     * @param titleStyle   the {@link Label.LabelStyle} for the menu title
+     * @param buttonStyle  the {@link TextButton.TextButtonStyle} for menu buttons
+     */
     private void createMenu(Label.LabelStyle titleStyle, TextButton.TextButtonStyle buttonStyle) {
         table = new Table();
         table.setFillParent(true);
@@ -109,6 +152,11 @@ public class MenuScreen implements Screen {
         table.add(quitButton).width(300).row();
     }
 
+    /**
+     * Renders the menu screen, including the background and UI elements.
+     *
+     * @param delta the time elapsed since the last frame in seconds
+     */
     @Override
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -122,30 +170,51 @@ public class MenuScreen implements Screen {
         stage.draw();
     }
 
+    /**
+     * Updates the screen's viewport dimensions when the window is resized.
+     *
+     * @param width  the new window width
+     * @param height the new window height
+     */
     @Override
     public void resize(int width, int height) {
         stage.getViewport().update(width, height, true);
     }
 
+    /**
+     * Called when the screen becomes visible, setting the input processor.
+     */
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
     }
 
+    /**
+     * Called when the screen is hidden, removing the input processor.
+     */
     @Override
     public void hide() {
         Gdx.input.setInputProcessor(null);
     }
 
+    /**
+     * Called when the game is paused. No additional logic is required.
+     */
     @Override
     public void pause() {}
 
+    /**
+     * Called when the game is resumed. No additional logic is required.
+     */
     @Override
     public void resume() {}
 
+    /**
+     * Disposes of resources used by the menu screen, including the stage and background texture.
+     */
     @Override
     public void dispose() {
         stage.dispose();
-        background.dispose(); // Dispose of the background texture
+        background.dispose();
     }
 }

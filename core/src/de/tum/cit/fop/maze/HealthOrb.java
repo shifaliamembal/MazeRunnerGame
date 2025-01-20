@@ -1,6 +1,7 @@
 package de.tum.cit.fop.maze;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -12,6 +13,7 @@ import com.badlogic.gdx.utils.Array;
  */
 public class HealthOrb extends Entity {
     private boolean collected;
+    private Sound collectOrbSound;
 
     public HealthOrb(int x, int y, Player player) {
         super(x, y, player);
@@ -27,6 +29,8 @@ public class HealthOrb extends Entity {
             frames.add(new TextureRegion(spriteSheets.get(0), 192 * (i % 5), 192 * (i / 5), 192, 192));
         }
         animations.add(new Animation<>(0.1f, frames));
+        collectOrbSound = Gdx.audio.newSound(Gdx.files.internal("collectorbs.mp3"));
+
     }
 
     public void draw(SpriteBatch batch, float delta) {
@@ -40,8 +44,21 @@ public class HealthOrb extends Entity {
             player.updateHealth(15);
             player.addPoints(25);
             collected = true;
+
+            if (collectOrbSound != null) {
+                collectOrbSound.play();
+            }
         }
 
         batch.draw(animations.get(0).getKeyFrame(frameCounter, true), x, y, GameScreen.tileSize, GameScreen.tileSize);
     }
+
+    @Override
+    public void dispose() {
+        super.dispose();
+        if (collectOrbSound != null) {
+            collectOrbSound.dispose();
+        }
+    }
+
 }

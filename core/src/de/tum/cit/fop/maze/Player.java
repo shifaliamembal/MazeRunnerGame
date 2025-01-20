@@ -47,9 +47,16 @@ public class Player {
     private Sound deathSound;
     private float boostDuration;
     private Bomb bomb;
+    private Item shield;
+    private float shieldTime;
     private Item key;
     private boolean victory;
     private Sound keycardSound;
+    private Sound victorySound;
+    private Sound boostSound;
+    private Sound bombSound;
+    private Sound boostUseSound;
+    private Sound bombUseSound;
 
     /**
      * Constructor for Player. Default values are set and the starting position is determined by finding
@@ -73,6 +80,7 @@ public class Player {
         damageEffectFrames = 0;
         score = 0;
         boostDuration = 0;
+        shieldTime = 0;
     }
 
     /**
@@ -89,6 +97,7 @@ public class Player {
                 bomb = null;
             }
         }
+
         if (damageEffectFrames > 0) {
             batch.setColor(Color.RED);
             damageEffectFrames--;
@@ -101,6 +110,18 @@ public class Player {
                 GameScreen.tileSize * 2
         );
         batch.setColor(Color.WHITE);
+        if (shield != null) {
+            batch.draw(
+                    shield.getTexture(),
+                    x - (float) GameScreen.tileSize / 2,
+                    y - (float) GameScreen.tileSize / 2,
+                    GameScreen.tileSize,
+                    GameScreen.tileSize * 2);
+            shieldTime -= delta;
+            if (shieldTime <= 0) {
+                shield = null;
+            }
+        }
 
     }
 
@@ -119,8 +140,18 @@ public class Player {
                     boostDuration = 0;
                 }
                 boostDuration += 7;
+
+                if (boostUseSound != null) {
+                    boostUseSound.play();
+                }
             } else if (usedItem.getType().equals(Item.types.BOMB)) {
                 bomb = new Bomb(x / GameScreen.tileSize + DX[dir], y / GameScreen.tileSize + DY[dir], maze);
+                if (bombUseSound != null) {
+                    bombUseSound.play();
+                }
+            } else if (usedItem.getType().equals(Item.types.SHIELD)) {
+                shield = usedItem;
+                shieldTime = 7;
             }
         }
         boostDuration -= delta;
@@ -191,8 +222,12 @@ public class Player {
         if (isMoving && x < 0 || y < 0 || x > maze.getSize() * GameScreen.tileSize || y > maze.getSize() * GameScreen.tileSize) {
             movementSound.stop();
             victory = true;
+            if (victorySound != null) {
+                victorySound.play();
+            }
         }
         return isMoving;
+
     }
 
     /**
@@ -236,6 +271,11 @@ public class Player {
         movementSound = Gdx.audio.newSound(Gdx.files.internal("walk.mp3"));
         deathSound = Gdx.audio.newSound(Gdx.files.internal("chardefeat.mp3"));
         keycardSound = Gdx.audio.newSound(Gdx.files.internal("collectkey.mp3"));
+        victorySound = Gdx.audio.newSound(Gdx.files.internal("exitsound.wav"));
+        boostSound = Gdx.audio.newSound(Gdx.files.internal("collectsandwich.mp3"));
+        bombSound = Gdx.audio.newSound(Gdx.files.internal("collectbomb.mp3"));
+        boostUseSound = Gdx.audio.newSound(Gdx.files.internal("healthboost.mp3"));
+        bombUseSound = Gdx.audio.newSound(Gdx.files.internal("explosion.mp3"));
 
         int frameWidth = 16;
         int frameHeight = 32;
@@ -259,6 +299,9 @@ public class Player {
      * @param amount The amount of HP to add.
      */
     public void updateHealth(int amount) {
+        if (shield != null && amount < 0) {
+            return;
+        }
         health += amount;
         if (health > MAX_HEALTH){
             health = MAX_HEALTH;
@@ -287,9 +330,20 @@ public class Player {
             if (keycardSound != null) {
                 keycardSound.play();
             }
-        } else {
+        } else if (item.getType() == Item.types.BOOST) {
             inventory.add(item);
+            if (boostSound != null) {
+                boostSound.play();
+            }
+        } else if (item.getType() == Item.types.BOMB) {
+            inventory.add(item);
+            if (bombSound != null) {
+                    bombSound.play();
+            }
         }
+            else {
+                inventory.add(item);
+            }
     }
 
     /**
@@ -382,6 +436,21 @@ public class Player {
         }
         if (keycardSound != null) {
             keycardSound.dispose();
+        }
+        if (victorySound != null) {
+            victorySound.dispose();
+        }
+        if (boostSound != null){
+            boostSound.dispose();
+        }
+        if (bombSound != null){
+                bombSound.dispose();
+        }
+        if (boostUseSound != null) {
+            boostUseSound.dispose();
+        }
+        if (bombUseSound != null) {
+            bombUseSound.dispose();
         }
     }
 

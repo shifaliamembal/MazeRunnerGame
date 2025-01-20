@@ -4,9 +4,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
+
+import java.awt.*;
 
 /**
  * The exit barrier that prevents the player from leaving the maze without the key.
@@ -14,6 +17,8 @@ import com.badlogic.gdx.utils.Array;
 public class ExitBarrier extends Entity {
     private boolean active;
     private boolean vertical;
+    private BitmapFont font;
+    private float textDisplayTime;
 
     /**
      * Constructor for the ExitBarrier. Sets its position, references to the maze and player as well as whether it
@@ -21,12 +26,15 @@ public class ExitBarrier extends Entity {
      * @param x The x position of the exit barrier.
      * @param y The y position of the exit barrier.
      * @param player The player with which to interact.
+     * @param font Font for the warning text if the player attempts to open the gate without a key.
      * @param vertical True if the barrier is vertical, false if it is horizontal.
      */
-    public ExitBarrier(int x, int y, Player player, boolean vertical) {
+    public ExitBarrier(int x, int y, Player player, BitmapFont font, boolean vertical) {
         super(x, y, player);
+        this.font = font;
         this.vertical = vertical;
         active = true;
+        textDisplayTime = 0;
     }
 
     public void loadAssets() {
@@ -66,7 +74,13 @@ public class ExitBarrier extends Entity {
             if (player.getKey() != null) {
                 active = false;
                 player.allowExit();
+            } else if (textDisplayTime <= 0) {
+                textDisplayTime = 2;
             }
+        }
+        if (textDisplayTime > 0) {
+            textDisplayTime -= delta;
+            font.draw(batch, "Override: Code missing!", x, y);
         }
     }
 }

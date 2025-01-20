@@ -99,17 +99,18 @@ public class GameScreen implements Screen {
                 vertical = false;
             }
             if (entry.getValue() == 10) {
-                Item.types randomItem = switch (new Random().nextInt(0, 3)) {
+                Item.types randomItem = switch (new Random().nextInt(0, 4)) {
                     case 0 -> Item.types.BOOST;
                     case 1 -> Item.types.BOMB;
-                    default -> Item.types.ARROW;
+                    case 2 -> Item.types.ARROW;
+                    default -> Item.types.SHIELD;
                 };
                 entities.add(new TreasureChest(entry.getKey().x, entry.getKey().y, player, randomItem));
             }
             else if (entry.getValue() == 11) {
                 entities.add(new Enemy(entry.getKey().x, entry.getKey().y, maze, player, game.getDifficulty()));
             } else if (entry.getValue() == 12) {
-                entities.add(new ExitBarrier(entry.getKey().x, entry.getKey().y, player, vertical));
+                entities.add(new ExitBarrier(entry.getKey().x, entry.getKey().y, player, font, vertical));
                 maze.getMazeMap().put(new Point(a.x + (vertical ? 0 : 1), a.y - (vertical ? 0 : 1)), 2);
                 maze.getMazeMap().put(entry.getKey(), 2);
                 pointer = new ExitPointer(

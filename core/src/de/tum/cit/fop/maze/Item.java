@@ -12,7 +12,7 @@ public class Item {
     private types type;
 
     public enum types {
-        KEY, BOOST, BOMB, ARROW
+        KEY, BOOST, BOMB, ARROW, SHIELD
     }
 
     /**
@@ -34,6 +34,9 @@ public class Item {
                 break;
             case ARROW:
                 texture = new Texture("arrow.png");
+                break;
+            case SHIELD:
+                texture = new Texture("shield.png");
         }
         textureRegion = new TextureRegion(texture);
     }

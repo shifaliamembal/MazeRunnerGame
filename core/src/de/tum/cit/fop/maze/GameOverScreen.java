@@ -40,8 +40,8 @@ public class GameOverScreen implements Screen {
         this.game = game;
         this.player = player;
         this.batch = new SpriteBatch();
-        this.titleFont = game.getSkin().getFont("font");
-        this.font = game.getSkin().getFont("font");
+        this.titleFont = FontManager.getOrbitronTitleFont();
+        this.font = FontManager.getOrbitronBodyFont();
         this.gameOverMusic = Gdx.audio.newMusic(Gdx.files.internal("g_overmusic.mp3"));
         this.gameOverMusic.setLooping(true);
         this.gameOverMusic.setVolume(0.7f);

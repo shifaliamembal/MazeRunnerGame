@@ -40,11 +40,14 @@ public class BriefingScreen implements Screen {
     /** The font used for rendering text in the briefing screen. */
     private final BitmapFont orbitronFont;
 
+    /** Reference to the title label */
     private Label title;
-    private Label briefingLabel;
-    private TextButton startButton;
 
-    private boolean animationsSkipped = false;
+    /** Reference to the briefing label */
+    private Label briefingLabel;
+
+    /** Reference to the start button */
+    private TextButton startButton;
 
     /**
      * Constructs a new BriefingScreen.
@@ -64,7 +67,6 @@ public class BriefingScreen implements Screen {
         skin.add("default", orbitronFont);
 
         createBriefingContent();
-
     }
 
     /**
@@ -82,7 +84,7 @@ public class BriefingScreen implements Screen {
         Label.LabelStyle textStyle = new Label.LabelStyle();
         textStyle.font = orbitronFont;
 
-        Label title = new Label("Briefing", titleStyle);
+        title = new Label("Briefing", titleStyle);
         title.getColor().a = 0;
         title.addAction(Actions.fadeIn(2f));
         table.add(title).padBottom(40).row();
@@ -92,14 +94,14 @@ public class BriefingScreen implements Screen {
                 "- Avoid security drones and traps at all costs.\n" +
                 "- Use your wits and agility to navigate the maze.\n\n" +
                 "Your mission is critical. Good luck!";
-        Label briefingLabel = new Label(briefingText, textStyle);
+        briefingLabel = new Label(briefingText, textStyle);
         briefingLabel.setWrap(true);
         briefingLabel.setAlignment(1);
         briefingLabel.getColor().a = 0;
         briefingLabel.addAction(Actions.sequence(Actions.delay(2f), Actions.fadeIn(2f)));
         table.add(briefingLabel).width(600).padBottom(40).row();
 
-        TextButton startButton = new TextButton("Start", skin);
+        startButton = new TextButton("Start", skin);
         startButton.getColor().a = 0;
         startButton.addAction(Actions.sequence(Actions.delay(4f), Actions.fadeIn(1f)));
         startButton.addListener(new ChangeListener() {
@@ -121,29 +123,30 @@ public class BriefingScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+            skipAnimations();
+        }
+
         game.getSpriteBatch().begin();
         game.getSpriteBatch().draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         game.getSpriteBatch().end();
-
-        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && !animationsSkipped) {
-            skipAnimations();
-        }
 
         stage.act(delta);
         stage.draw();
     }
 
+    /**
+     * Skips the animations and shows the start button immediately.
+     */
     private void skipAnimations() {
-        animationsSkipped = true;
+        title.clearActions();
+        title.getColor().a = 1;
 
-//        title.clearActions();
-//        title.getColor().a = 1;
-//
-//        briefingLabel.clearActions();
-//        briefingLabel.getColor().a = 1;
-//
-//        startButton.clearActions();
-//        startButton.getColor().a = 1;
+        briefingLabel.clearActions();
+        briefingLabel.getColor().a = 1;
+
+        startButton.clearActions();
+        startButton.getColor().a = 1;
     }
 
     /**

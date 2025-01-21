@@ -22,7 +22,7 @@ public class FontManager {
 
     public static BitmapFont getOrbitronTitleFont() {
         if (orbitronTitleFont == null) {
-            orbitronTitleFont = getOrbitronFont(50, Color.WHITE);
+            orbitronTitleFont = getOrbitronFont(42, Color.WHITE);
         }
         return orbitronTitleFont;
     }

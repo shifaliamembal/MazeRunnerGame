@@ -54,7 +54,7 @@ public class Enemy extends Entity {
         this.player = player;
         playerPath = new ArrayList<>();
         patrolPath = new ArrayList<>();
-        waitTime = 3;
+        waitTime = 4;
         damageCooldown = 3;
         pathCooldown = 1;
         attackTime = 0;
@@ -110,9 +110,8 @@ public class Enemy extends Entity {
         attackTime -= delta;
         damageCooldown -= delta;
 
-        if (attackTime <= 0) {
-            handleMovement(delta);
-        }
+
+        handleMovement(delta);
 
         handleProximity();
 
@@ -134,6 +133,10 @@ public class Enemy extends Entity {
         pathCooldown -= delta;
 
         boolean chasePlayer = !playerPath.isEmpty() && playerPath.size() <= 10;
+
+        if (chasePlayer && waitTime < 2) {
+            waitTime = 0;
+        }
 
         if (!playerPath.isEmpty() && playerPath.size() <= 10) {
             currentPath = playerPath;
@@ -158,7 +161,9 @@ public class Enemy extends Entity {
                 patrolPath.remove(0);
                 return;
             }
-            currentFrame = animations.get(0).getKeyFrame(frameCounter, true);
+            if (attackTime <= 0) {
+                currentFrame = animations.get(0).getKeyFrame(frameCounter, true);
+            }
 
             if (xDiff > 0 && xDiff > speed) {
                 x += speed;
@@ -198,7 +203,9 @@ public class Enemy extends Entity {
             }
 
         } else {
-            currentFrame = animations.get(1).getKeyFrame(frameCounter, true);
+            if (attackTime <= 0) {
+                currentFrame = animations.get(1).getKeyFrame(frameCounter, true);
+            }
             if (pathCooldown <= 0) {
                 playerPath = bfs(new Point(x / GameScreen.tileSize, y / GameScreen.tileSize),
                         new Point(player.getX() / GameScreen.tileSize, player.getY() / GameScreen.tileSize));
@@ -219,7 +226,7 @@ public class Enemy extends Entity {
             currentFrame = animations.get(2).getKeyFrame(frameCounter, true);
             if (damageCooldown <= 0 && frameCounter > animations.get(2).getFrameDuration() * 6 && playerDistance() < GameScreen.tileSize * 1.5) {
                 player.updateHealth((int) (-10 * difficulty));
-                damageCooldown = 0.5f;
+                damageCooldown = 1f;
                 attackSound.play();
             }
         }
@@ -307,7 +314,7 @@ public class Enemy extends Entity {
      */
     public void die() {
         dead = true;
-        player.addPoints(200);
+        player.addPoints(100);
         frameCounter = 0;
     }
 

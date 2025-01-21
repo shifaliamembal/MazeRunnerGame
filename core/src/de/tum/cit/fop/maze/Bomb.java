@@ -1,6 +1,7 @@
 package de.tum.cit.fop.maze;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -16,10 +17,12 @@ public class Bomb {
     private int x;
     private int y;
     private float frameCounter;
-    private Texture texture;
+    private Texture bombTexture;
+    private Texture explosionTexture;
     private Animation<TextureRegion> animation;
     private boolean finished;
     private Maze maze;
+    private boolean exploded;
 
     /**
      * Constructor for Bomb. Sets the x and y position where the bomb is places and passes the maze for modification.
@@ -31,7 +34,6 @@ public class Bomb {
         this.x = x;
         this.y = y;
         this.maze = maze;
-        removeWalls(2);
         frameCounter = 0;
         loadAssets();
     }
@@ -40,25 +42,38 @@ public class Bomb {
      * Renders the bomb.
      */
     public void draw(SpriteBatch batch, float delta) {
-        if (frameCounter > animation.getAnimationDuration()) {
+        if (frameCounter > 2 && !exploded) {
+            exploded = true;
+            removeWalls(3);
+            frameCounter = 0;
+        }
+        if (exploded && frameCounter > animation.getAnimationDuration()) {
             finished = true;
             removeWalls(1);
             dispose();
             return;
         }
         frameCounter += delta;
-        batch.draw(animation.getKeyFrame(frameCounter, false), (x - 1f) * GameScreen.tileSize, (y - 1f) * GameScreen.tileSize,
-        GameScreen.tileSize * 3, GameScreen.tileSize * 3);
+        if (!exploded) {
+            batch.setColor(1, 1 - frameCounter / 2, 1 - frameCounter / 2, 1);
+            batch.draw(bombTexture, (x + 0.15f) * GameScreen.tileSize, (y + 0.15f) * GameScreen.tileSize,
+                    GameScreen.tileSize * 0.7f, GameScreen.tileSize * 0.7f);
+            batch.setColor(Color.WHITE);
+        } else {
+            batch.draw(animation.getKeyFrame(frameCounter, false), (x - 1f) * GameScreen.tileSize, (y - 1f) * GameScreen.tileSize,
+                    GameScreen.tileSize * 3, GameScreen.tileSize * 3);
+        }
     }
 
     /**
      * Loads all assets required for the Bomb class.
      */
     private void loadAssets() {
-        texture = new Texture(Gdx.files.internal("explosion.png"));
+        explosionTexture = new Texture(Gdx.files.internal("explosion.png"));
+        bombTexture = new Texture(Gdx.files.internal("bomb.png"));
         Array<TextureRegion> frames = new Array<>(TextureRegion.class);
         for (int i = 0; i < 9; i++) {
-            frames.add(new TextureRegion(texture, (i % 3) * 32, (i / 3) * 32, 32, 32));
+            frames.add(new TextureRegion(explosionTexture, (i % 3) * 32, (i / 3) * 32, 32, 32));
         }
         animation = new Animation<>(0.1f, frames);
     }
@@ -85,12 +100,13 @@ public class Bomb {
      * Disposes all assets.
      */
     private void dispose() {
-        texture.dispose();
+        explosionTexture.dispose();
+        bombTexture.dispose();
     }
 
     /**
      * Returns whether the bomb animation has ended.
-     * @return finished A boolean value which indicates whether the bomb has terminated.
+     * @return true if the bomb has terminated, otherwise false.
      */
     public boolean isFinished() {
         return finished;

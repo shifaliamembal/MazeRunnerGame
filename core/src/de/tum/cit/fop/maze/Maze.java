@@ -72,6 +72,7 @@ public class Maze {
         textures.add(new TextureRegion(texture, 0, 0, tileSize * 2, tileSize * 2));
         textures.add(new TextureRegion(texture, tileSize * 3, tileSize, 0, 0));
         textures.add(new TextureRegion(texture, tileSize * 3, tileSize, 0, 0));
+        textures.add(new TextureRegion(texture, tileSize * 3, tileSize, 0, 0));
         textures.add(new TextureRegion(texture, tileSize * 2, tileSize, 0, 0));
     }
 

@@ -71,7 +71,7 @@ public class TreasureChest extends Entity {
         double deltaX = keyLocation.x - x;
         double deltaY = keyLocation.y - y;
 
-        return (float) Math.toDegrees(Math.atan2(deltaX, -deltaY)) + new Random().nextFloat(-45f, 45f);
+        return (float) Math.toDegrees(Math.atan2(deltaX, -deltaY)) + new Random().nextFloat(-20f, 20f);
     }
 
     /**

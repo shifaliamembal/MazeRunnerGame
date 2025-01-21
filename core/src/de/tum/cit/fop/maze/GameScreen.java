@@ -220,7 +220,7 @@ public class GameScreen implements Screen {
             int space = Gdx.graphics.getHeight() / 80;
             hudBatch.begin();
             font.draw(hudBatch, "Score: " + player.getScore(), space, - space * 8);
-            font.draw(hudBatch, "Time: " + String.format("%d:%d", (int) (timeLimit - sinusInput) / 60, (int) (timeLimit - sinusInput) % 60), space, - space * 12);
+            font.draw(hudBatch, "Time: " + String.format("%d:%02d", (int) (timeLimit - sinusInput) / 60, (int) (timeLimit - sinusInput) % 60), space, - space * 12);
             font.draw(hudBatch, "Items: ", space, - space * 17);
             font.draw(hudBatch, "Key: ", space, - space * 22);
             for (int i = 0; i < player.getInventory().size(); i++) {
@@ -337,7 +337,7 @@ public class GameScreen implements Screen {
      * @return The time in string format.
      */
     public String timeLeft() {
-        return String.format("%d:%d", (int) (timeLimit - sinusInput) / 60, (int) (timeLimit - sinusInput) % 60);
+        return String.format("%d:%02d", (int) (timeLimit - sinusInput) / 60, (int) (timeLimit - sinusInput) % 60);
     }
 
     /**

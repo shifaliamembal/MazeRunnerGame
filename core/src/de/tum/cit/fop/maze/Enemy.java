@@ -97,7 +97,7 @@ public class Enemy extends Entity {
     public void draw(SpriteBatch batch, float delta) {
         frameCounter += delta;
 
-        if (!dead && maze.getMazeMap().get(new Point(x / GameScreen.tileSize, y / GameScreen.tileSize)) == 2) {
+        if (!dead && maze.getMazeMap().get(new Point(x / GameScreen.tileSize, y / GameScreen.tileSize)) == 3) {
             die();
         }
 

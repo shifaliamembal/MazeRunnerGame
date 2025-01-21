@@ -81,6 +81,9 @@ public class Player {
         score = 0;
         boostDuration = 0;
         shieldTime = 0;
+        for (int i = 0; i < 5; i++) {
+            inventory.add(new Item(Item.types.BOMB));
+        }
     }
 
     /**

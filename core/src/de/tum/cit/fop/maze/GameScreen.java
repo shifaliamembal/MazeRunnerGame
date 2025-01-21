@@ -99,34 +99,39 @@ public class GameScreen implements Screen {
             if (vertical && maze.getMazeMap().containsKey(b) && maze.getMazeMap().get(b) != 0) {
                 vertical = false;
             }
-            if (entry.getValue() >= 20) {
-                Item.types chestItem = switch (entry.getValue()) {
-                    case 20 -> Item.types.BOOST;
-                    case 21 -> Item.types.BOMB;
-                    case 22 -> Item.types.ARROW;
-                    case 23 -> Item.types.SHIELD;
-                    default -> Item.types.KEY;
-                };
-                if (chestItem == Item.types.KEY) {
-                    keyChest = new Point(entry.getKey().x, entry.getKey().y);
+
+            switch (entry.getValue()) {
+                case 20, 21, 22, 23, 24 -> {
+                    Item.types chestItem;
+                    switch (entry.getValue()) {
+                        case 20 -> chestItem = Item.types.BOOST;
+                        case 21 -> chestItem = Item.types.BOMB;
+                        case 22 -> chestItem = Item.types.ARROW;
+                        case 23 -> chestItem = Item.types.SHIELD;
+                        default -> chestItem = Item.types.KEY;
+                    }
+                    if (chestItem == Item.types.KEY) {
+                        keyChest = new Point(entry.getKey().x, entry.getKey().y);
+                    }
+                    entities.add(new TreasureChest(entry.getKey().x, entry.getKey().y, player, chestItem));
                 }
-                entities.add(new TreasureChest(entry.getKey().x, entry.getKey().y, player, chestItem));
-            }
-            else if (entry.getValue() == 11) {
-                entities.add(new Enemy(entry.getKey().x, entry.getKey().y, maze, player, game.getDifficulty()));
-            } else if (entry.getValue() == 12) {
-                entities.add(new ExitBarrier(entry.getKey().x, entry.getKey().y, player, font, vertical));
-                maze.getMazeMap().put(new Point(a.x + (vertical ? 0 : 1), a.y - (vertical ? 0 : 1)), 2);
-                maze.getMazeMap().put(entry.getKey(), 2);
-                pointer = new ExitPointer(
-                        (int) (entry.getKey().x * tileSize + (vertical ? 0 : tileSize)),
-                        (int) (entry.getKey().y * tileSize + (vertical ? tileSize: 0)));
-            } else if (entry.getValue() == 13) {
-                entities.add(new LaserTrap(entry.getKey().x, entry.getKey().y, player, vertical, game.getDifficulty()));
-            } else if (entry.getValue() == 14) {
-                entities.add(new SpikeTrap(entry.getKey().x, entry.getKey().y, player, game.getDifficulty()));
-            } else if (entry.getValue() == 15) {
-                entities.add(new HealthOrb(entry.getKey().x, entry.getKey().y, player));
+                case 11 ->
+                        entities.add(new Enemy(entry.getKey().x, entry.getKey().y, maze, player, game.getDifficulty()));
+                case 12 -> {
+                    entities.add(new ExitBarrier(entry.getKey().x, entry.getKey().y, player, font, vertical));
+                    maze.getMazeMap().put(new Point(a.x + (vertical ? 0 : 1), a.y - (vertical ? 0 : 1)), 2);
+                    maze.getMazeMap().put(entry.getKey(), 2);
+                    pointer = new ExitPointer(
+                            (int) (entry.getKey().x * tileSize + (vertical ? 0 : tileSize)),
+                            (int) (entry.getKey().y * tileSize + (vertical ? tileSize : 0))
+                    );
+                }
+                case 13 ->
+                        entities.add(new LaserTrap(entry.getKey().x, entry.getKey().y, player, vertical, game.getDifficulty()));
+                case 14 ->
+                        entities.add(new SpikeTrap(entry.getKey().x, entry.getKey().y, player, game.getDifficulty()));
+                case 15 ->
+                        entities.add(new HealthOrb(entry.getKey().x, entry.getKey().y, player));
             }
 
         }

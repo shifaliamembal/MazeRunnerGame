@@ -165,7 +165,7 @@ public class Maze {
                     maze[i][j] = chestType; //TreasureChest
                     chests.add(new Point(j, i));
                 }
-                if (maze[i][j] == PATH && random.nextInt((int) (200 / difficulty)) == 0) {
+                if (maze[i][j] == PATH && random.nextInt((int) (300 / difficulty)) == 0) {
                     maze[i][j] = 11; //Enemy
                 }
                 if (maze[i][j] == PATH && ((inBounds(maze, j - 1, i) && maze[i][j - 1] == WALL

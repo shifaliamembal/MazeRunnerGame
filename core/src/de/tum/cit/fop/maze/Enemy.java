@@ -132,13 +132,13 @@ public class Enemy extends Entity {
         waitTime -= delta;
         pathCooldown -= delta;
 
-        boolean chasePlayer = !playerPath.isEmpty() && playerPath.size() <= 10;
+        boolean chasePlayer = !playerPath.isEmpty() && playerPath.size() <= 10 * difficulty;
 
         if (chasePlayer && waitTime < 2) {
             waitTime = 0;
         }
 
-        if (!playerPath.isEmpty() && playerPath.size() <= 10) {
+        if (!playerPath.isEmpty() && playerPath.size() <= 10 * difficulty) {
             currentPath = playerPath;
             speed = (int) (9 * GameScreen.tileSize * delta);
             patrolPath = Collections.emptyList();
@@ -225,7 +225,7 @@ public class Enemy extends Entity {
         } else if (attackTime >= 0) {
             currentFrame = animations.get(2).getKeyFrame(frameCounter, true);
             if (damageCooldown <= 0 && frameCounter > animations.get(2).getFrameDuration() * 6 && playerDistance() < GameScreen.tileSize * 1.5) {
-                player.updateHealth((int) (-10 * difficulty));
+                player.updateHealth((int) (-7 * difficulty));
                 damageCooldown = 1f;
                 attackSound.play();
             }
@@ -273,7 +273,7 @@ public class Enemy extends Entity {
                     }
                 } catch (NullPointerException e) {}
             }
-            if (visited.size() > 400) {
+            if (visited.size() > 500) {
                 return Collections.emptyList();
             }
         }

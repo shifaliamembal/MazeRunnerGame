@@ -94,7 +94,7 @@ public class MazeSizeScreen implements Screen {
         mediumButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.setMazeSize(100);
+                game.setMazeSize(101);
                 game.setScreen(new BriefingScreen(game));
             }
         });

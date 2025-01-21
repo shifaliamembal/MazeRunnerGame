@@ -212,13 +212,6 @@ public class Player {
         }
         movementSound.setPitch(soundId, running ? 1.8f : 1.2f);
 
-//        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
-//            maze.getMazeMap().put(new Point(x / GameScreen.tileSize + DX[dir], y / GameScreen.tileSize + DY[dir]), 1);
-//        }
-//        if (Gdx.input.isKeyPressed(Input.Keys.ALT_LEFT)) {
-//            maze.getMazeMap().put(new Point(x / GameScreen.tileSize + DX[dir], y / GameScreen.tileSize + DY[dir]), 0);
-//        }
-
         if (isMoving && x < 0 || y < 0 || x > maze.getSize() * GameScreen.tileSize || y > maze.getSize() * GameScreen.tileSize) {
             movementSound.stop();
             victory = true;
@@ -341,9 +334,9 @@ public class Player {
                     bombSound.play();
             }
         }
-            else {
-                inventory.add(item);
-            }
+        else {
+            inventory.add(item);
+        }
     }
 
     /**

@@ -156,10 +156,14 @@ public class Maze {
      * @param difficulty The difficulty modifier which determines the number of traps and enemies.
      */
     public static void createEntities(int[][] maze, Random random, float difficulty) {
+        List<Point> chests = new ArrayList<>();
+
         for (int i = 0; i < maze.length; i++) {
             for (int j = 0; j < maze[i].length; j++) {
                 if (maze[i][j] == PATH && countSurroundingTiles(maze, j, i, WALL) >= 7 && random.nextInt(4) == 0) {
-                    maze[i][j] = 10; //TreasureChest
+                    int chestType = 20 + random.nextInt(3);
+                    maze[i][j] = chestType; //TreasureChest
+                    chests.add(new Point(j, i));
                 }
                 if (maze[i][j] == PATH && random.nextInt((int) (200 / difficulty)) == 0) {
                     maze[i][j] = 11; //Enemy
@@ -179,6 +183,8 @@ public class Maze {
                 }
             }
         }
+        Point keyChest = chests.get(random.nextInt(chests.size()));
+        maze[keyChest.y][keyChest.x] = 24;
     }
 
     /**

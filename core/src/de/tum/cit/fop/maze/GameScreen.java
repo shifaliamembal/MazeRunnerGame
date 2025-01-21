@@ -91,6 +91,7 @@ public class GameScreen implements Screen {
      * Populates the maze with entities.
      */
     public void spawnEntities() {
+        Point keyChest = new Point(0, 0);
         for (var entry : maze.getEntityMap().entrySet()) {
             Point a = new Point(entry.getKey().x, entry.getKey().y + 1);
             Point b = new Point(entry.getKey().x, entry.getKey().y - 1);
@@ -98,14 +99,18 @@ public class GameScreen implements Screen {
             if (vertical && maze.getMazeMap().containsKey(b) && maze.getMazeMap().get(b) != 0) {
                 vertical = false;
             }
-            if (entry.getValue() == 10) {
-                Item.types randomItem = switch (new Random().nextInt(0, 4)) {
-                    case 0 -> Item.types.BOOST;
-                    case 1 -> Item.types.BOMB;
-                    case 2 -> Item.types.ARROW;
-                    default -> Item.types.SHIELD;
+            if (entry.getValue() >= 20) {
+                Item.types chestItem = switch (entry.getValue()) {
+                    case 20 -> Item.types.BOOST;
+                    case 21 -> Item.types.BOMB;
+                    case 22 -> Item.types.ARROW;
+                    case 23 -> Item.types.SHIELD;
+                    default -> Item.types.KEY;
                 };
-                entities.add(new TreasureChest(entry.getKey().x, entry.getKey().y, player, randomItem));
+                if (chestItem == Item.types.KEY) {
+                    keyChest = new Point(entry.getKey().x, entry.getKey().y);
+                }
+                entities.add(new TreasureChest(entry.getKey().x, entry.getKey().y, player, chestItem));
             }
             else if (entry.getValue() == 11) {
                 entities.add(new Enemy(entry.getKey().x, entry.getKey().y, maze, player, game.getDifficulty()));
@@ -125,13 +130,11 @@ public class GameScreen implements Screen {
             }
 
         }
+
         List<TreasureChest> chests = entities.stream().filter(TreasureChest.class::isInstance).map(TreasureChest.class::cast).toList();
         if (!chests.isEmpty()) {
-            int keyChest = new Random().nextInt(chests.size());
-            chests.get(keyChest).setContent(new Item(Item.types.KEY));
-            Point p = new Point(chests.get(keyChest).x, chests.get(keyChest).y);
             for (TreasureChest chest : chests) {
-                chest.setKeyLocation(p);
+                chest.setKeyLocation(keyChest);
             }
         }
     }
@@ -238,7 +241,7 @@ public class GameScreen implements Screen {
             shapeRenderer.rect(space, - space * 6, width, space * 2);
             shapeRenderer.end();
             hudBatch.begin();
-            if (player.getKey() != null) {
+            if (pointer != null) {
                 pointer.draw(hudBatch, camera, viewport);
             }
             hudBatch.end();

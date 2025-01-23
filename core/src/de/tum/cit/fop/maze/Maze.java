@@ -197,7 +197,7 @@ public class Maze {
         int x = random.nextInt(1,maze[0].length - 1);
         int y = random.nextInt(1, maze.length - 1);
 
-        maze[y][x] = 3;
+        maze[y][x] = 4;
     }
 
     /**

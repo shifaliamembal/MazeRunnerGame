@@ -314,7 +314,7 @@ public class Enemy extends Entity {
      */
     public void die() {
         dead = true;
-        player.addPoints(100);
+        player.addPoints(150);
         frameCounter = 0;
     }
 

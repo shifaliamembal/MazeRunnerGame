@@ -42,7 +42,7 @@ public class Bomb {
      * Renders the bomb.
      */
     public void draw(SpriteBatch batch, float delta) {
-        if (frameCounter > 2 && !exploded) {
+        if (frameCounter > 1 && !exploded) {
             exploded = true;
             removeWalls(3);
             frameCounter = 0;
@@ -55,7 +55,7 @@ public class Bomb {
         }
         frameCounter += delta;
         if (!exploded) {
-            batch.setColor(1, 1 - frameCounter / 2, 1 - frameCounter / 2, 1);
+            batch.setColor(1, 1 - frameCounter, 1 - frameCounter / 2, 1);
             batch.draw(bombTexture, (x + 0.15f) * GameScreen.tileSize, (y + 0.15f) * GameScreen.tileSize,
                     GameScreen.tileSize * 0.7f, GameScreen.tileSize * 0.7f);
             batch.setColor(Color.WHITE);

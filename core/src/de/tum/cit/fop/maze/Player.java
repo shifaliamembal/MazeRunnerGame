@@ -148,10 +148,7 @@ public class Player {
                     boostUseSound.play();
                 }
             } else if (usedItem.getType().equals(Item.types.BOMB)) {
-                bomb = new Bomb(x / GameScreen.tileSize + DX[dir], y / GameScreen.tileSize + DY[dir], maze);
-                if (bombUseSound != null) {
-                    bombUseSound.play();
-                }
+                bomb = new Bomb(x / GameScreen.tileSize + DX[dir], y / GameScreen.tileSize + DY[dir], maze, bombUseSound);
             } else if (usedItem.getType().equals(Item.types.SHIELD)) {
                 shield = usedItem;
                 shieldTime = 7;
@@ -268,9 +265,9 @@ public class Player {
         deathSound = Gdx.audio.newSound(Gdx.files.internal("chardefeat.mp3"));
         keycardSound = Gdx.audio.newSound(Gdx.files.internal("collectkey.mp3"));
         victorySound = Gdx.audio.newSound(Gdx.files.internal("exitsound.wav"));
-        boostSound = Gdx.audio.newSound(Gdx.files.internal("collectsandwich.mp3"));
+        boostSound = Gdx.audio.newSound(Gdx.files.internal("healthboost.mp3"));
         bombSound = Gdx.audio.newSound(Gdx.files.internal("collectbomb.mp3"));
-        boostUseSound = Gdx.audio.newSound(Gdx.files.internal("healthboost.mp3"));
+        boostUseSound = Gdx.audio.newSound(Gdx.files.internal("collectsandwich.mp3"));
         bombUseSound = Gdx.audio.newSound(Gdx.files.internal("explosion.mp3"));
 
         int frameWidth = 16;

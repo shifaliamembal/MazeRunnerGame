@@ -53,10 +53,11 @@ public class Player {
     private boolean victory;
     private Sound keycardSound;
     private Sound victorySound;
-    private Sound boostSound;
+//    private Sound boostSound;
     private Sound bombSound;
     private Sound boostUseSound;
     private Sound bombUseSound;
+    private Sound shieldSound;
 
     /**
      * Constructor for Player. Default values are set and the starting position is determined by finding
@@ -152,6 +153,10 @@ public class Player {
             } else if (usedItem.getType().equals(Item.types.SHIELD)) {
                 shield = usedItem;
                 shieldTime = 7;
+
+                if (shieldSound != null) {
+                    shieldSound.play();
+                }
             }
         }
         boostDuration -= delta;
@@ -265,10 +270,11 @@ public class Player {
         deathSound = Gdx.audio.newSound(Gdx.files.internal("chardefeat.mp3"));
         keycardSound = Gdx.audio.newSound(Gdx.files.internal("collectkey.mp3"));
         victorySound = Gdx.audio.newSound(Gdx.files.internal("exitsound.wav"));
-        boostSound = Gdx.audio.newSound(Gdx.files.internal("healthboost.mp3"));
+//        boostSound = Gdx.audio.newSound(Gdx.files.internal("healthboost.mp3"));
         bombSound = Gdx.audio.newSound(Gdx.files.internal("collectbomb.mp3"));
         boostUseSound = Gdx.audio.newSound(Gdx.files.internal("collectsandwich.mp3"));
         bombUseSound = Gdx.audio.newSound(Gdx.files.internal("explosion.mp3"));
+        shieldSound = Gdx.audio.newSound(Gdx.files.internal("shield.mp3"));
 
         int frameWidth = 16;
         int frameHeight = 32;
@@ -325,16 +331,20 @@ public class Player {
             }
         } else if (item.getType() == Item.types.BOOST) {
             inventory.add(item);
-            if (boostSound != null) {
-                boostSound.play();
+            if (bombSound != null) {
+                bombSound.play();
             }
         } else if (item.getType() == Item.types.BOMB) {
             inventory.add(item);
             if (bombSound != null) {
                     bombSound.play();
             }
-        }
-        else {
+        } else if (item.getType() == Item.types.SHIELD) {
+            inventory.add(item);
+            if (bombSound != null){
+                bombSound.play();
+            }
+        } else {
             inventory.add(item);
         }
     }
@@ -433,9 +443,9 @@ public class Player {
         if (victorySound != null) {
             victorySound.dispose();
         }
-        if (boostSound != null){
-            boostSound.dispose();
-        }
+//        if (boostSound != null){
+//            boostSound.dispose();
+//        }
         if (bombSound != null){
                 bombSound.dispose();
         }
@@ -444,6 +454,9 @@ public class Player {
         }
         if (bombUseSound != null) {
             bombUseSound.dispose();
+        }
+        if (shieldSound != null){
+            shieldSound.dispose();
         }
     }
 

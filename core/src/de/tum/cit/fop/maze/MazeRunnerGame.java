@@ -28,6 +28,7 @@ public class MazeRunnerGame extends Game {
     private int mazeSize;
 
     private Music backgroundMusic;
+    private Music gameMusic;
 
 
     /**
@@ -48,15 +49,32 @@ public class MazeRunnerGame extends Game {
         skin = new Skin(Gdx.files.internal("craft/craftacular-ui.json"));
         this.loadAssets();
 
-        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("MenuSound.mp3"));
+        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("g_overmusic.mp3"));
+        gameMusic = Gdx.audio.newMusic(Gdx.files.internal("MenuSound.mp3"));
         backgroundMusic.setLooping(true);
-        backgroundMusic.play();
+        gameMusic.setLooping(true);
+
+        playBackgroundMusic();
         mazeSize = 101;
 
         fontManager = new FontManager();
         menuScreen = new MenuScreen(this);
-
         goToMenu();
+    }
+
+    public void playBackgroundMusic() {
+        gameMusic.stop();
+        backgroundMusic.play();
+    }
+
+    public void playGameMusic() {
+        backgroundMusic.stop();
+        gameMusic.play();
+    }
+
+    public void stopAllMusic() {
+        backgroundMusic.stop();
+        gameMusic.stop();
     }
 
     /**
@@ -116,6 +134,7 @@ public class MazeRunnerGame extends Game {
         if (fontManager != null) {
             fontManager.dispose();
         }
+        super.dispose();
     }
 
     public Skin getSkin() {

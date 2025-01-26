@@ -75,7 +75,7 @@ public class VictoryScreen implements Screen {
 
         com.badlogic.gdx.graphics.g2d.GlyphLayout layout = new com.badlogic.gdx.graphics.g2d.GlyphLayout();
 
-        titleFont.getData().setScale(1.3f);
+        titleFont.getData().setScale(1.1f);
         titleFont.setColor(Color.YELLOW);
         layout.setText(titleFont, message);
         float messageWidth = layout.width;
@@ -83,12 +83,18 @@ public class VictoryScreen implements Screen {
 
         font.getData().setScale(1.0f);
         font.setColor(Color.WHITE);
-        font.draw(batch, scoreMessage, centerX - font.getScaleX() * scoreMessage.length() * 10, centerY + 80);
+        layout.setText(font, scoreMessage);
+        float scoreMessageWidth = layout.width;
+        font.draw(batch, scoreMessage, centerX - scoreMessageWidth / 2, centerY + 80);
 
-        font.getData().setScale(1.0f);
         font.setColor(Color.WHITE);
-        font.draw(batch, retryMessage, centerX - font.getScaleX() * retryMessage.length() * 10, centerY - 90);
-        font.draw(batch, menuMessage, centerX - font.getScaleX() * menuMessage.length() * 10, centerY - 140);
+        layout.setText(font, retryMessage);
+        float retryMessageWidth = layout.width;
+        font.draw(batch, retryMessage, centerX - retryMessageWidth / 2, centerY - 90);
+
+        layout.setText(font, menuMessage);
+        float menuMessageWidth = layout.width;
+        font.draw(batch, menuMessage, centerX - menuMessageWidth / 2, centerY - 140);
 
         batch.end();
 

@@ -1,6 +1,7 @@
 package de.tum.cit.fop.maze;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -23,6 +24,8 @@ public class Bomb {
     private boolean finished;
     private Maze maze;
     private boolean exploded;
+    private boolean soundPlayed;
+    private Sound explosionSound;
 
     /**
      * Constructor for Bomb. Sets the x and y position where the bomb is places and passes the maze for modification.
@@ -30,10 +33,12 @@ public class Bomb {
      * @param y The y position of the bomb.
      * @param maze The maze in which the game takes place.
      */
-    public Bomb(int x, int y, Maze maze) {
+    public Bomb(int x, int y, Maze maze, Sound explosionSound) {
         this.x = x;
         this.y = y;
         this.maze = maze;
+        this.explosionSound = explosionSound;
+        this.soundPlayed = false;
         frameCounter = 0;
         loadAssets();
     }
@@ -46,6 +51,11 @@ public class Bomb {
             exploded = true;
             removeWalls(3);
             frameCounter = 0;
+
+            if (!soundPlayed && explosionSound != null) {
+                explosionSound.play();
+                soundPlayed = true;
+            }
         }
         if (exploded && frameCounter > animation.getAnimationDuration()) {
             finished = true;

@@ -69,7 +69,7 @@ public class Player {
         loadAssets();
         this.maze = maze;
         for (var entry : maze.getMazeMap().entrySet()) {
-            if (entry.getValue().equals(3)) {
+            if (entry.getValue().equals(4)) {
                 x = entry.getKey().x * GameScreen.tileSize + GameScreen.tileSize / 2;
                 y = entry.getKey().y * GameScreen.tileSize + GameScreen.tileSize / 2;;
             }
@@ -81,9 +81,6 @@ public class Player {
         score = 0;
         boostDuration = 0;
         shieldTime = 0;
-        for (int i = 0; i < 5; i++) {
-            inventory.add(new Item(Item.types.BOMB));
-        }
     }
 
     /**
@@ -164,9 +161,9 @@ public class Player {
 
         if ((Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT))
                 && stamina > 0 && !running_cooldown) {
-            if (boostDuration < 0) {
+            if (boostDuration <= 0) {
                 stamina -= 2;
-            } else {
+            } else if (stamina < MAX_STAMINA) {
                 stamina++;
             }
             speed = (int) (baseSpeed * delta * 1.5);

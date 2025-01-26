@@ -271,7 +271,7 @@ public class Enemy extends Entity {
                         visited.add(neighbor);
                         parent.put(neighbor, current);
                     }
-                } catch (NullPointerException e) {}
+                } catch (NullPointerException ignored) {}
             }
             if (visited.size() > 500) {
                 return Collections.emptyList();
@@ -314,7 +314,7 @@ public class Enemy extends Entity {
      */
     public void die() {
         dead = true;
-        player.addPoints(100);
+        player.addPoints(150);
         frameCounter = 0;
     }
 

@@ -162,7 +162,7 @@ public class Maze {
         for (int i = 0; i < maze.length; i++) {
             for (int j = 0; j < maze[i].length; j++) {
                 if (maze[i][j] == PATH && countSurroundingTiles(maze, j, i, WALL) >= 7 && random.nextInt(4) == 0) {
-                    int chestType = 20 + random.nextInt(3);
+                    int chestType = 20 + random.nextInt(4);
                     maze[i][j] = chestType; //TreasureChest
                     chests.add(new Point(j, i));
                 }
@@ -197,7 +197,7 @@ public class Maze {
         int x = random.nextInt(1,maze[0].length - 1);
         int y = random.nextInt(1, maze.length - 1);
 
-        maze[y][x] = 3;
+        maze[y][x] = 4;
     }
 
     /**

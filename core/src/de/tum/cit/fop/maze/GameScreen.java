@@ -322,11 +322,11 @@ public class GameScreen implements Screen {
      * Adjusts camera zoom based on user input.
      */
     public void zoom() {
-        if (Gdx.input.isKeyPressed(Input.Keys.PLUS) || Gdx.input.isKeyPressed(Input.Keys.NUMPAD_ADD)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.I) || Gdx.input.isKeyPressed(Input.Keys.NUMPAD_ADD)) {
             if (camera.zoom > 0.25) {
                 camera.zoom -= 0.02f;
             }
-        } else if (Gdx.input.isKeyPressed(Input.Keys.MINUS) || Gdx.input.isKeyPressed(Input.Keys.NUMPAD_SUBTRACT)) {
+        } else if (Gdx.input.isKeyPressed(Input.Keys.O) || Gdx.input.isKeyPressed(Input.Keys.NUMPAD_SUBTRACT)) {
             if (camera.zoom < 2) {
                 camera.zoom += 0.02f;
             }

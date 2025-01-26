@@ -3,6 +3,7 @@ package de.tum.cit.fop.maze;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -46,6 +47,8 @@ public class GameScreen implements Screen {
     private float gameOverTime = 3;
     private ShapeRenderer shapeRenderer;
     private int timeLimit;
+    private Music gameMusic;
+
 
     /**
      * Constructor for GameScreen. Sets up the camera and font and initializes the maze.
@@ -85,6 +88,8 @@ public class GameScreen implements Screen {
             case 100 -> timeLimit = 180;
             default -> timeLimit = 240;
         }
+
+        game.playGameMusic();
     }
 
     /**
@@ -155,11 +160,13 @@ public class GameScreen implements Screen {
             if (isPaused) {
                 game.setScreen(this);
                 isPaused = false;
+                gameMusic.play();
             }
             else {
                 game.setScreen(pauseMenu);
                 player.stopSound();
                 isPaused = true;
+                gameMusic.pause();
             }
         }
 
@@ -196,6 +203,7 @@ public class GameScreen implements Screen {
 
             if (player.victory()) {
                 player.addPoints((int) (((timeLimit - sinusInput) / timeLimit) * 2000));
+                game.playBackgroundMusic();
                 game.setScreen(new VictoryScreen(game, player));
             }
 
@@ -253,6 +261,7 @@ public class GameScreen implements Screen {
         } else {
             gameOverTime -= delta;
             if (gameOverTime < 0) {
+                game.playBackgroundMusic();
                 dispose();
                 game.setScreen(new GameOverScreen(game, player));
             }
@@ -307,6 +316,7 @@ public class GameScreen implements Screen {
             e.dispose();
         }
         font.dispose();
+        gameMusic.dispose();
     }
 
     /**

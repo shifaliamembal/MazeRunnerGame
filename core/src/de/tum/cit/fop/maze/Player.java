@@ -53,7 +53,6 @@ public class Player {
     private boolean victory;
     private Sound keycardSound;
     private Sound victorySound;
-//    private Sound boostSound;
     private Sound bombSound;
     private Sound boostUseSound;
     private Sound bombUseSound;
@@ -443,9 +442,6 @@ public class Player {
         if (victorySound != null) {
             victorySound.dispose();
         }
-//        if (boostSound != null){
-//            boostSound.dispose();
-//        }
         if (bombSound != null){
                 bombSound.dispose();
         }

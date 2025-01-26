@@ -29,6 +29,13 @@ _The UML class diagram illustrating the full structure is included in the reposi
    ```
 5. Use the game menu to start, customize settings, or exit the game.
 
+### Note for Mac Users
+Mac users need to add the following VM option when running the game:
+```bash
+-XstartOnFirstThread
+```
+This can be configured in your IDE or command-line execution.
+
 ---
 
 ## Gameplay Mechanics

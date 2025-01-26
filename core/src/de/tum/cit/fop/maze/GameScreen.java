@@ -42,7 +42,6 @@ public class GameScreen implements Screen {
     private SpriteBatch hudBatch;
     private ExitPointer pointer;
     private PauseMenu pauseMenu;
-    private FontManager fontManager;
     private boolean isPaused;
     private float gameOverTime = 3;
     private ShapeRenderer shapeRenderer;
@@ -75,7 +74,7 @@ public class GameScreen implements Screen {
         hudCamera.update();
         hudBatch.setProjectionMatrix(hudCamera.combined);
 
-        font = game.getSkin().getFont("font");
+        font = FontManager.getOrbitronFont(24, Color.WHITE);
 
         pauseMenu = new PauseMenu(game, this, viewport);
 

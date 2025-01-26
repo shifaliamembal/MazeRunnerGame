@@ -160,9 +160,9 @@ public class Player {
 
         if ((Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT))
                 && stamina > 0 && !running_cooldown) {
-            if (boostDuration < 0) {
+            if (boostDuration <= 0) {
                 stamina -= 2;
-            } else {
+            } else if (stamina < MAX_STAMINA) {
                 stamina++;
             }
             speed = (int) (baseSpeed * delta * 1.5);

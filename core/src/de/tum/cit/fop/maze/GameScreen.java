@@ -205,7 +205,7 @@ public class GameScreen implements Screen {
             if (player.victory()) {
                 player.addPoints((int) (((timeLimit - sinusInput) / timeLimit) * 2000));
                 game.playBackgroundMusic();
-                game.setScreen(new VictoryScreen(game, player));
+                game.setScreen(new VictoryScreen(game, player, timeLeft()));
             }
 
             player.draw(game.getSpriteBatch(), delta);

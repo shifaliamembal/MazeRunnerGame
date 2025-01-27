@@ -29,6 +29,8 @@ public class VictoryScreen implements Screen {
     private final String menuMessage = "Press M to return to Menu";
     private Player player;
     private final Texture background;
+    private final String timeLeftMessage;
+
 
     /**
      * Constructs a new VictoryScreen.
@@ -36,7 +38,7 @@ public class VictoryScreen implements Screen {
      * @param game   It is an instance of MazeRunner game.
      * @param player The player whose score will be displayed on the screen when won.
      */
-    public VictoryScreen(MazeRunnerGame game, Player player) {
+    public VictoryScreen(MazeRunnerGame game, Player player, String timeLeft) {
         this.game = game;
         this.player = player;
         this.batch = new SpriteBatch();
@@ -47,6 +49,7 @@ public class VictoryScreen implements Screen {
         this.gameOverMusic.setVolume(0.7f);
         this.gameOverMusic.play();
         this.scoreMessage = "Your Score: " + player.getScore();
+        this.timeLeftMessage = "Time Left: " + timeLeft;
         background = new Texture("victorybg.jpeg");
     }
 
@@ -79,22 +82,27 @@ public class VictoryScreen implements Screen {
         titleFont.setColor(Color.YELLOW);
         layout.setText(titleFont, message);
         float messageWidth = layout.width;
-        titleFont.draw(batch, message, centerX - messageWidth / 2, centerY + 220);
+        titleFont.draw(batch, message, centerX - messageWidth / 2, centerY + 340);
 
         font.getData().setScale(1.0f);
         font.setColor(Color.WHITE);
         layout.setText(font, scoreMessage);
         float scoreMessageWidth = layout.width;
-        font.draw(batch, scoreMessage, centerX - scoreMessageWidth / 2, centerY + 80);
+        font.draw(batch, scoreMessage, centerX - scoreMessageWidth / 2, centerY + 180);
+
+        font.setColor(Color.WHITE);
+        layout.setText(font, timeLeftMessage);
+        float timeLeftMessageWidth = layout.width;
+        font.draw(batch, timeLeftMessage, centerX - timeLeftMessageWidth / 2, centerY + 140);
 
         font.setColor(Color.WHITE);
         layout.setText(font, retryMessage);
         float retryMessageWidth = layout.width;
-        font.draw(batch, retryMessage, centerX - retryMessageWidth / 2, centerY - 90);
+        font.draw(batch, retryMessage, centerX - retryMessageWidth / 2, centerY - 240);
 
         layout.setText(font, menuMessage);
         float menuMessageWidth = layout.width;
-        font.draw(batch, menuMessage, centerX - menuMessageWidth / 2, centerY - 140);
+        font.draw(batch, menuMessage, centerX - menuMessageWidth / 2, centerY - 280);
 
         batch.end();
 

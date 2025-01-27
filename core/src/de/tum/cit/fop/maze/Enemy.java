@@ -138,7 +138,7 @@ public class Enemy extends Entity {
             waitTime = 0;
         }
 
-        if (!playerPath.isEmpty() && playerPath.size() <= 10 * difficulty) {
+        if (chasePlayer) {
             currentPath = playerPath;
             speed = (int) (9 * GameScreen.tileSize * delta);
             patrolPath = Collections.emptyList();
@@ -219,17 +219,20 @@ public class Enemy extends Entity {
      */
     private void handleProximity(){
         if (playerDistance() < GameScreen.tileSize && attackTime <= 0) {
+            System.out.println("HERE" + attackTime);
             frameCounter = 0;
             currentFrame = animations.get(2).getKeyFrame(frameCounter, true);
             attackTime = animations.get(2).getAnimationDuration();
-        } else if (attackTime >= 0) {
+        } else if (attackTime > 0) {
             currentFrame = animations.get(2).getKeyFrame(frameCounter, true);
+            System.out.println("NOT" + attackTime);
             if (damageCooldown <= 0 && frameCounter > animations.get(2).getFrameDuration() * 6 && playerDistance() < GameScreen.tileSize * 1.5) {
                 player.updateHealth((int) (-7 * difficulty));
                 damageCooldown = 1f;
                 attackSound.play();
             }
-        }
+        } else if (playerDistance() < 500)
+            System.out.println(playerDistance() + " " + attackTime + " " + (x - player.getX()) + " " + (y - player.getY()));
     }
 
     /**

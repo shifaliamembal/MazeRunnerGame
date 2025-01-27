@@ -3,13 +3,10 @@ package de.tum.cit.fop.maze;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.utils.Array;
 
 import java.awt.*;
-import java.util.Random;
 
 /**
  * A treasure chest that can be opened by the player to receive an item.
@@ -68,10 +65,10 @@ public class TreasureChest extends Entity {
      * @return The rotation value for the arrow item.
      */
     private float getKeyDirection() {
-        double deltaX = keyLocation.x - x;
-        double deltaY = keyLocation.y - y;
+        double deltaX = keyLocation.x - x / GameScreen.tileSize;
+        double deltaY = keyLocation.y - y / GameScreen.tileSize;
 
-        return (float) Math.toDegrees(Math.atan2(deltaX, -deltaY)) + new Random().nextFloat(-20f, 20f);
+        return (float) Math.toDegrees(Math.atan2(deltaY, deltaX)) + 90;
     }
 
     /**

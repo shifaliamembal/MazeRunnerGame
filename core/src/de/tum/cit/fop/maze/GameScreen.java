@@ -61,6 +61,8 @@ public class GameScreen implements Screen {
         player = new Player(maze);
         entities = new ArrayList<Entity>();
 
+        gameMusic = Gdx.audio.newMusic(Gdx.files.internal("MenuSound.mp3"));
+
         camera = new OrthographicCamera();
         camera.setToOrtho(false);
         camera.zoom = 1f;;

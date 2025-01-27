@@ -40,7 +40,8 @@ public class HealthOrb extends Entity {
 
         frameCounter += delta;
 
-        if (playerDistance() < GameScreen.tileSize / 2) {
+        if (Math.abs(x - player.getX() + GameScreen.tileSize / 2) +
+                Math.abs(y - player.getY() + GameScreen.tileSize / 2) < GameScreen.tileSize /2) {
             player.updateHealth(15);
             player.addPoints(25);
             collected = true;

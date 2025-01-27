@@ -22,8 +22,6 @@ public class MazeRunnerGame extends Game {
 
     private FontManager fontManager;
 
-    private PauseMenu pauseMenu;
-
     private float difficulty = 1f;
     private int mazeSize;
 

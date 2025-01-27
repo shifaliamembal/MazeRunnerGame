@@ -23,7 +23,7 @@ public class VictoryScreen implements Screen {
     private final BitmapFont titleFont;
     private final BitmapFont font;
     private final Music gameOverMusic;
-    private final String message = "You have survived the Lab!!" + "\nThe world is safe... for now.";
+    private final String message = "You have survived the Lab!" + "\nThe world is safe...for now.";
     private final String scoreMessage;
     private final String retryMessage = "Press R to Retry";
     private final String menuMessage = "Press M to return to Menu";

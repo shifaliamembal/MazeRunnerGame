@@ -8,8 +8,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
  */
 public class Item {
     private Texture texture;
-    private TextureRegion textureRegion;
-    private types type;
+    private final TextureRegion textureRegion;
+    private final types type;
 
     public enum types {
         KEY, BOOST, BOMB, ARROW, SHIELD

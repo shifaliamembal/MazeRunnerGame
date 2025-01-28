@@ -23,17 +23,17 @@ public class Enemy extends Entity {
 
     private List<Point> playerPath;
     private List<Point> patrolPath;
-    private Maze maze;
-    private Player player;
+    private final Maze maze;
+    private final Player player;
     private TextureRegion currentFrame;
     private boolean dir;
     private float damageCooldown;
     private float pathCooldown;
     private float waitTime;
     private float attackTime;
-    private float difficulty;
+    private final float difficulty;
     private boolean dead;
-    private Sound attackSound;
+    private final Sound attackSound;
 
 
 

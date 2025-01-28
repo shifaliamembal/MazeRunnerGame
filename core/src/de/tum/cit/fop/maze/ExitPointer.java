@@ -1,7 +1,6 @@
 package de.tum.cit.fop.maze;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -13,9 +12,10 @@ import com.badlogic.gdx.utils.viewport.Viewport;
  * An arrow that points to the exit if it is not on the screen.
  */
 public class ExitPointer {
-    private int x, y, rotation;
-    private TextureRegion textureRegion;
-    private Texture texture;
+    private final int x, y;
+    private int rotation;
+    private final TextureRegion textureRegion;
+    private final Texture texture;
 
     /**
      * Constructor for ExitPointer. Loads its texture and sets the position of the exit it should point towards.

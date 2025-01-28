@@ -27,7 +27,6 @@ public class VictoryScreen implements Screen {
     private final String scoreMessage;
     private final String retryMessage = "Press R to Retry";
     private final String menuMessage = "Press M to return to Menu";
-    private Player player;
     private final Texture background;
 
     /**
@@ -38,7 +37,6 @@ public class VictoryScreen implements Screen {
      */
     public VictoryScreen(MazeRunnerGame game, Player player) {
         this.game = game;
-        this.player = player;
         this.batch = new SpriteBatch();
         this.titleFont = FontManager.getOrbitronTitleFont();
         this.font = FontManager.getOrbitronBodyFont();

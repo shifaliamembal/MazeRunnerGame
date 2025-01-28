@@ -9,17 +9,13 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
-import java.util.stream.Collectors;
 
 /**
  * The GameScreen class is responsible for rendering the gameplay screen.
@@ -86,7 +82,7 @@ public class GameScreen implements Screen {
 
         switch (maze.getSize()) {
             case 75 -> timeLimit = 120;
-            case 100 -> timeLimit = 180;
+            case 101 -> timeLimit = 180;
             default -> timeLimit = 240;
         }
 
@@ -180,8 +176,6 @@ public class GameScreen implements Screen {
             camera.update();
 
             sinusInput += delta;
-            float textX = (float) camera.position.x;
-            float textY = (float) camera.position.y;
 
             game.getSpriteBatch().setProjectionMatrix(camera.combined);
 

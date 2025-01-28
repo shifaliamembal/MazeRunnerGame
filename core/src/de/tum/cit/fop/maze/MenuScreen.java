@@ -15,9 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 
 /**
  * The {@code MenuScreen} class represents the main menu screen of the game.
@@ -54,7 +52,7 @@ public class MenuScreen implements Screen {
     /**
      * Skin used for styling UI elements.
      */
-    private Skin skin;
+    private final Skin skin;
 
     /**
      * Font used for rendering menu text in the Orbitron style.
@@ -73,13 +71,11 @@ public class MenuScreen implements Screen {
         stage = new Stage(viewport, game.getSpriteBatch());
         skin = game.getSkin();
 
-        // Load the background texture
         background = new Texture(Gdx.files.internal("themed_background.jpg"));
 
-        orbitronFont = FontManager.getOrbitronFont(24, Color.WHITE); // Load Orbitron font
-        skin.add("default-font", orbitronFont); // Set the font in the skin
+        orbitronFont = FontManager.getOrbitronFont(24, Color.WHITE);
+        skin.add("default-font", orbitronFont);
 
-        // Adjust title and button styles to use Orbitron
         Label.LabelStyle titleStyle = new Label.LabelStyle();
         titleStyle.font = FontManager.getOrbitronFont(50, Color.WHITE);
 
@@ -100,11 +96,9 @@ public class MenuScreen implements Screen {
         table.setFillParent(true);
         stage.addActor(table);
 
-        // Add title
         Label title = new Label("Lost in the Lab", titleStyle);
         table.add(title).padBottom(80).row();
 
-        // Go to Game Button
         TextButton goToGameButton = new TextButton("To the Lab", skin);
         goToGameButton.addListener(new ChangeListener() {
             @Override
@@ -114,7 +108,6 @@ public class MenuScreen implements Screen {
         });
         table.add(goToGameButton).width(300).padBottom(20).row();
 
-        // Mute/Unmute Button
         TextButton muteButton = new TextButton("Mute", skin);
         muteButton.addListener(new ChangeListener() {
             @Override
@@ -131,7 +124,6 @@ public class MenuScreen implements Screen {
         });
         table.add(muteButton).width(300).padBottom(20).row();
 
-        // Info Button
         TextButton infoButton = new TextButton("Info", skin);
         infoButton.addListener(new ChangeListener() {
             @Override
@@ -141,7 +133,6 @@ public class MenuScreen implements Screen {
         });
         table.add(infoButton).width(300).padBottom(20).row();
 
-        // Quit Button
         TextButton quitButton = new TextButton("Quit", skin);
         quitButton.addListener(new ChangeListener() {
             @Override

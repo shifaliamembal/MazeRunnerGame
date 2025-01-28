@@ -53,10 +53,9 @@ public class MazeSizeScreen implements Screen {
 
         background = new Texture(Gdx.files.internal("themed_background.jpg"));
 
-        orbitronFont = FontManager.getOrbitronFont(24, Color.WHITE); // Load Orbitron font
-        skin.add("default-font", orbitronFont); // Set the font in the skin
+        orbitronFont = FontManager.getOrbitronFont(24, Color.WHITE);
+        skin.add("default-font", orbitronFont);
 
-        // Adjust title and button styles to use Orbitron
         Label.LabelStyle titleStyle = new Label.LabelStyle();
         titleStyle.font = FontManager.getOrbitronFont(36, Color.WHITE);
 

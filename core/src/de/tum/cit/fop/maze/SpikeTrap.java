@@ -16,7 +16,7 @@ import java.util.Random;
 public class SpikeTrap extends Entity {
     private float timeOffset;
     private float damageCooldown;
-    private float difficulty;
+    private final float difficulty;
     private Sound hitSound;
 
     /**

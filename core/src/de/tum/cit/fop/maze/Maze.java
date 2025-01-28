@@ -14,16 +14,16 @@ import java.util.*;
  * The Maze class used to generate, load and render the maze.
  */
 public class Maze {
-    private Properties mazeProperties;
-    private Map<Point, Integer> mazeMap;
-    private Map<Point, Integer> entityMap;
+    private final Properties mazeProperties;
+    private final Map<Point, Integer> mazeMap;
+    private final Map<Point, Integer> entityMap;
     private Texture texture;
     private Array<TextureRegion> textures;
     private static final int WALL = 0;
     private static final int PATH = 1;
     private static final int[] DX = {-1, 1, 0, 0};
     private static final int[] DY = {0, 0, -1, 1};
-    private int size;
+    private final int size;
 
     /**
      * Constructor for Maze, with the name of the properties file from which to load the maze and its size.

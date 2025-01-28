@@ -31,7 +31,7 @@ public class DifficultyScreen implements Screen {
     private final MazeRunnerGame game;
 
     /** The Skin used to style UI components. */
-    private Skin skin;
+    private final Skin skin;
 
     /** The font used for text rendering. */
     private final BitmapFont orbitronFont;

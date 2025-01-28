@@ -15,17 +15,16 @@ import java.awt.*;
  * The bomb item which can be found in treasure chests and used by the player to destroy walls and kill enemies.
  */
 public class Bomb {
-    private int x;
-    private int y;
+    private final int x, y;
     private float frameCounter;
     private Texture bombTexture;
     private Texture explosionTexture;
     private Animation<TextureRegion> animation;
     private boolean finished;
-    private Maze maze;
+    private final Maze maze;
     private boolean exploded;
     private boolean soundPlayed;
-    private Sound explosionSound;
+    private final Sound explosionSound;
 
     /**
      * Constructor for Bomb. Sets the x and y position where the bomb is places and passes the maze for modification.

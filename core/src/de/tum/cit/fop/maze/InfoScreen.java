@@ -20,7 +20,7 @@ public class InfoScreen implements Screen {
 
     private final Stage stage;
     private final MazeRunnerGame game;
-    private Skin skin;
+    private final Skin skin;
     private final Texture background;
 
     public InfoScreen(MazeRunnerGame game) {

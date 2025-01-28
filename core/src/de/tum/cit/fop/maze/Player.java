@@ -22,13 +22,13 @@ public class Player {
     private int x;
     private int y;
     private int dir;
-    private int baseSpeed;
+    private final int baseSpeed;
     private int speed;
     private Texture texture;
-    private List<Animation<TextureRegion>> characterAnimation;
+    private final List<Animation<TextureRegion>> characterAnimation;
     private Animation<TextureRegion> explosionAnimation;
-    private Maze maze;
-    private List<Item> inventory;
+    private final Maze maze;
+    private final List<Item> inventory;
     private int health;
     private int stamina;
     private boolean running_cooldown;

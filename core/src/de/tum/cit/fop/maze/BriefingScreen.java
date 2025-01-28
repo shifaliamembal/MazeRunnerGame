@@ -35,7 +35,7 @@ public class BriefingScreen implements Screen {
     private final Texture background;
 
     /** The skin used for UI styling. */
-    private Skin skin;
+    private final Skin skin;
 
     /** The font used for rendering text in the briefing screen. */
     private final BitmapFont orbitronFont;

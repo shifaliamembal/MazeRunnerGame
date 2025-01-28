@@ -84,7 +84,9 @@ public class SpikeTrap extends Entity {
             player.updateHealth((int) (-20 * difficulty));
             damageCooldown = 1f;
 
-            hitSound.play();
+            if (player.getShield() == null) {
+                hitSound.play();
+            }
         }
     }
 

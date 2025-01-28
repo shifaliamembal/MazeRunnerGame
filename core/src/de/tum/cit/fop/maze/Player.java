@@ -476,6 +476,12 @@ public class Player {
         score += points;
     }
 
+
+    public Item getShield() {
+        return shield;
+    }
+
+
     /**
      * Returns the current score of the player.
      * @return The amount of points the player has.

@@ -98,7 +98,11 @@ public class LaserTrap extends Entity {
                 && player.getY() / GameScreen.tileSize == y / GameScreen.tileSize) {
             player.updateHealth((int) (-10 * difficulty));
             damageCooldown = 0.5f;
-            laserAttack.play();
+
+            if (player.getShield() == null) {
+                laserAttack.play();
+            }
+
         }
     }
 }

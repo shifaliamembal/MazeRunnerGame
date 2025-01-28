@@ -227,7 +227,10 @@ public class Enemy extends Entity {
             if (damageCooldown <= 0 && frameCounter > animations.get(2).getFrameDuration() * 6 && playerDistance() < GameScreen.tileSize * 1.5) {
                 player.updateHealth((int) (-7 * difficulty));
                 damageCooldown = 1f;
-                attackSound.play();
+
+                if (player.getShield() == null) {
+                    attackSound.play();
+                }
             }
         }
     }

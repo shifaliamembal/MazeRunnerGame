@@ -5,11 +5,14 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 /**
  * The GameOverScreen class is displayed when the player dies.
@@ -22,6 +25,10 @@ public class GameOverScreen implements Screen {
     private final SpriteBatch batch;
     private final BitmapFont titleFont;
     private final BitmapFont font;
+
+    private Viewport viewport;
+    private OrthographicCamera hudCamera;
+
     private final Music gameOverMusic;
     private final String message = "Experiment failed - Try again?";
     private final String scoreMessage;
@@ -47,6 +54,10 @@ public class GameOverScreen implements Screen {
         this.scoreMessage = "Your Score: " + player.getScore();
         background = new Texture("gameoverimg.jpeg");
 
+        hudCamera = new OrthographicCamera();
+        hudCamera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        viewport = new StretchViewport(1920, 1080, hudCamera);
+        viewport.apply();
     }
 
     /**
@@ -67,11 +78,14 @@ public class GameOverScreen implements Screen {
     public void render(float delta) {
         ScreenUtils.clear(Color.WHITE);
 
+        hudCamera.update();
+        batch.setProjectionMatrix(hudCamera.combined);
+
         batch.begin();
         batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-        float centerX = Gdx.graphics.getWidth() / 2f;
-        float centerY = Gdx.graphics.getHeight() / 2f;
+        float centerX = hudCamera.viewportWidth / 2f;
+        float centerY = hudCamera.viewportHeight / 2f;
 
         GlyphLayout layout = new GlyphLayout();
 
@@ -117,6 +131,10 @@ public class GameOverScreen implements Screen {
      */
     @Override
     public void resize(int width, int height) {
+        viewport.update(width, height);
+        hudCamera.setToOrtho(false, width, height);
+        hudCamera.position.set(hudCamera.viewportWidth / 2, hudCamera.viewportHeight / 2, 0);
+        hudCamera.update();
     }
 
     /**

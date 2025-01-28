@@ -170,4 +170,8 @@ public class MazeRunnerGame extends Game {
     public Music getBackgroundMusic() {
         return backgroundMusic;
     }
+
+    public Music getGameMusic(){
+        return gameMusic;
+    }
 }

@@ -58,7 +58,7 @@ public class PauseMenu extends ScreenAdapter {
         this.skin = game.getSkin();
         this.font = FontManager.getOrbitronFont(24, Color.WHITE);
         skin.add("default-font", font);
-        this.backgroundMusic = game.getBackgroundMusic();
+        this.backgroundMusic = game.getGameMusic();
 
         createButtons();
         Gdx.input.setInputProcessor(stage);

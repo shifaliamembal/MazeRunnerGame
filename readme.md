@@ -118,6 +118,7 @@ This can be configured in your IDE or command-line execution.
 - **Background Music**: Sci-fi ambiance enhances immersion.
 - **Sound Effects**:
     - Footsteps, laser sounds, zap effects for damage.
+    - Item-collection and usage sounds.
     - Victory and game-over tones.
 - **Visuals**:
     - Minimalistic sci-fi sprites with animations for walking, running, and reactions.
@@ -128,7 +129,9 @@ This can be configured in your IDE or command-line execution.
 ## Additional Information
 - **Supported Platforms**: Desktop (Windows, macOS, Linux).
 - **Rendering**: Top-down 2D view using libGDX.
-- **Dynamic Scaling**: Supports various screen sizes and zoom levels.
+- **Dynamic Scaling**: Supports various screen sizes and zoom levels. 
+  - Zoom-in: Press **I**
+  - Zoom-out: Press **O** 
 
 ---
 
@@ -138,7 +141,7 @@ Our project goes beyond the base requirements with several unique and creative e
 1. **Random Maze Generation**: Each maze is procedurally generated, ensuring every game session is unique. This feature serves as a standout aspect of our project.
 2. **Nine Distinct Map Types**: Players can select from nine combinations of difficulty levels and maze sizes, offering extensive variety and replayability.
 3. **Thematic Consistency**: The story of Dr. Nova is entirely self-made, with all audio-visual elements carefully chosen to align with the high-tech, sci-fi narrative.
-4. **Customized Assets**: Key game elements, including the protagonist (Dr. Nova) and power-up chests, are uniquely modified versions of assets provided in the base repository. This showcases our attention to detail and dedication to originality.
+4. **Customized Assets**: Key game elements, including the character (Dr. Nova) and power-up chests, are uniquely modified versions of assets provided in the base repository. This showcases our attention to detail and dedication to originality.
 5. **Story-Focused Screens**: The addition of unique **Briefing** and **Info** screens provides players with immersive context, flexibility during gameplay, and an enriched experience seamlessly tied to the background story.
 
 ---
@@ -151,7 +154,16 @@ Our project goes beyond the base requirements with several unique and creative e
 - **Sandwich**: [Sandwich Art](https://www.pinterest.com/pin/215258057191207440)
 - **Spike Trap**: [Animated Traps](https://stealthix.itch.io/animated-traps)
 - **Explosion**: [Explosion Animations Pack](https://ansimuz.itch.io/explosion-animations-pack)
-- **Key Collected/Challenge Completed Sound**: [Epidemic Sound](https://www.epidemicsound.com/sound-effects/tracks/f090422d-4b58-42f2-ad3c-2e08850b2bdc/)
-- **Movement Sound**: [Freesound.org](https://freesound.org/people/florianreichelt/sounds/456038/)
+- **Key Card Collected/Challenge Completed Sound**: [Epidemic Sound](https://www.epidemicsound.com/sound-effects/tracks/c80eea09-8a9f-4207-9357-709df1b1848f/)
+- **Movement Sound**: [Uppbeat](https://uppbeat.io/sfx/footsteps-walking-on-concrete/4107/17549)
+- **Lives Collected Sound**: [Epidemic Sound](https://www.epidemicsound.com/sound-effects/tracks/c80eea09-8a9f-4207-9357-709df1b1848f/)
+- **Collect Item from Chest**: [Epidemic Sound](https://www.epidemicsound.com/sound-effects/tracks/8b6ec37b-75fa-4945-975a-9573abbc8a48/)
+- **Laser Grid Sound**: [Epidemic Sound](https://www.epidemicsound.com/sound-effects/tracks/58422a34-2669-47a9-8151-b42d2e8eb345/)
+- **Bomb Explosion Sound**: [Epidemic Sound](https://www.epidemicsound.com/sound-effects/tracks/955d5cf0-6ba1-4b2c-b4e6-3781deeed9d0/)
+- **Rogue Spider Drone Sound**: [Epidemic Sound](https://www.epidemicsound.com/sound-effects/tracks/0fff27ce-4da9-41c0-8e82-c41ea78b201f/)
+- **Shield Sound**: [Epidemic Sound](https://www.epidemicsound.com/sound-effects/tracks/36b53973-c6cc-45f1-b855-97cb7756a59a/)
+- **Sandwich Stamina Sound**: [Pixabay](https://pixabay.com/sound-effects/eating-effect-254996/)
+- **Defeat/Game Over Sound**: [Epidemic Sound](https://www.epidemicsound.com/sound-effects/tracks/e1cfe332-e03a-478d-984b-8e1e7228db41/)
+- **Win/Victory Sound**: [Mixkit](https://mixkit.co/free-sound-effects/game/)
 - **In-Game Music**: [Epidemic Sound](https://www.epidemicsound.com/sound-effects/tracks/b090e0fb-26d7-489f-86c7-b553257da5c3/)
 - **Main Menu and Game Over Music**: [Free Sci-Fi Music](https://alkakrab.itch.io/free-sci-fi-music-2)

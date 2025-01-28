@@ -130,8 +130,8 @@ This can be configured in your IDE or command-line execution.
 - **Supported Platforms**: Desktop (Windows, macOS, Linux).
 - **Rendering**: Top-down 2D view using libGDX.
 - **Dynamic Scaling**: Supports various screen sizes and zoom levels. 
-  - Zoom-in: Press **I**
-  - Zoom-out: Press **O** 
+  - Zoom-in: Press `I`
+  - Zoom-out: Press `O` 
 
 ---
 

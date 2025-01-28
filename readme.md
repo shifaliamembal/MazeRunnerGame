@@ -118,7 +118,7 @@ This can be configured in your IDE or command-line execution.
 - **Background Music**: Sci-fi ambiance enhances immersion.
 - **Sound Effects**:
     - Footsteps, laser sounds, zap effects for damage.
-    - Item-collection and usage sounds.
+    - Item collection and usage sounds.
     - Victory and game-over tones.
 - **Visuals**:
     - Minimalistic sci-fi sprites with animations for walking, running, and reactions.
@@ -166,4 +166,4 @@ Our project goes beyond the base requirements with several unique and creative e
 - **Defeat/Game Over Sound**: [Epidemic Sound](https://www.epidemicsound.com/sound-effects/tracks/e1cfe332-e03a-478d-984b-8e1e7228db41/)
 - **Win/Victory Sound**: [Mixkit](https://mixkit.co/free-sound-effects/game/)
 - **In-Game Music**: [Epidemic Sound](https://www.epidemicsound.com/sound-effects/tracks/b090e0fb-26d7-489f-86c7-b553257da5c3/)
-- **Main Menu and Game Over Music**: [Free Sci-Fi Music](https://alkakrab.itch.io/free-sci-fi-music-2)
+- **Background Music Theme**: [Free Sci-Fi Music](https://alkakrab.itch.io/free-sci-fi-music-2)

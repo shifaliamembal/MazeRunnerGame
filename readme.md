@@ -181,7 +181,7 @@ Our project goes beyond the base requirements with several unique and creative e
 - **Collect Item from Chest**: [Epidemic Sound](https://www.epidemicsound.com/sound-effects/tracks/8b6ec37b-75fa-4945-975a-9573abbc8a48/)
 - **Laser Grid Sound**: [Epidemic Sound](https://www.epidemicsound.com/sound-effects/tracks/58422a34-2669-47a9-8151-b42d2e8eb345/)
 - **Bomb Explosion Sound**: [Epidemic Sound](https://www.epidemicsound.com/sound-effects/tracks/955d5cf0-6ba1-4b2c-b4e6-3781deeed9d0/)
-- **Rogue Spider Drone Sound**: [Epidemic Sound](https://www.epidemicsound.com/sound-effects/tracks/0fff27ce-4da9-41c0-8e82-c41ea78b201f/)
+- **Rogue Spider Drone Sound**: [Epidemic Sound](https://www.epidemicsound.com/sound-effects/tracks/e86aeb9e-5c5a-4276-aa66-69a2e6f49df9/)
 - **Shield Sound**: [Epidemic Sound](https://www.epidemicsound.com/sound-effects/tracks/36b53973-c6cc-45f1-b855-97cb7756a59a/)
 - **Sandwich Stamina Sound**: [Pixabay](https://pixabay.com/sound-effects/eating-effect-254996/)
 - **Defeat/Game Over Sound**: [Epidemic Sound](https://www.epidemicsound.com/sound-effects/tracks/e1cfe332-e03a-478d-984b-8e1e7228db41/)

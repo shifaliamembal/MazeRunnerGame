@@ -90,7 +90,7 @@ public class GameScreen implements Screen {
     }
 
     /**
-     * Populates the maze with entities.
+     * Populates the maze with entities such as enemies, traps and items.
      */
     public void spawnEntities() {
         Point keyChest = new Point(0, 0);
@@ -166,7 +166,6 @@ public class GameScreen implements Screen {
                 gameMusic.pause();
             }
         }
-
 
         if (!isPaused) {
             ScreenUtils.clear(0, 0, 0, 1);
@@ -292,10 +291,16 @@ public class GameScreen implements Screen {
         isPaused = false;
     }
 
+    /**
+     * Called when the screen is set to be visible.
+     */
     @Override
     public void show() {
     }
 
+    /**
+     * Called when the screen is hidden.
+     */
     @Override
     public void hide() {
     }

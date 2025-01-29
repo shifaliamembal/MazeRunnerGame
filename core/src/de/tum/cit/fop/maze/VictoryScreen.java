@@ -17,13 +17,14 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 /**
  * VictoryScreen class is displayed when the player finds the key-card
  * to unlock the exit and wins the game.
- * It shows a congratulatory message along with the player's score
+ * It shows a congratulatory message along with the player's score, time left
  * and provides options to restart the game or return to the main menu.
  */
 public class VictoryScreen implements Screen {
 
     private final MazeRunnerGame game;
     private final SpriteBatch batch;
+
     private final BitmapFont titleFont;
     private final BitmapFont font;
 
@@ -31,6 +32,7 @@ public class VictoryScreen implements Screen {
     private OrthographicCamera hudCamera;
 
     private final Music gameOverMusic;
+
     private final String message = "You have survived the Lab!" + "\nThe world is safe...for now.";
     private final String scoreMessage;
     private final String retryMessage = "Press R to Retry";
@@ -44,6 +46,7 @@ public class VictoryScreen implements Screen {
      *
      * @param game   It is an instance of MazeRunner game.
      * @param player The player whose score will be displayed on the screen when won.
+     * @param timeLeft The remaining time when the player wins.
      */
     public VictoryScreen(MazeRunnerGame game, Player player, String timeLeft) {
         this.game = game;
@@ -131,8 +134,7 @@ public class VictoryScreen implements Screen {
     }
 
     /**
-     * Resizes the screen. This method is empty in the VictoryScreen implementation.
-     *
+     * Updates the screen dimensions when resized.
      * @param width  The new width of the screen.
      * @param height The new height of the screen.
      */

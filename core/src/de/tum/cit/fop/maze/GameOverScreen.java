@@ -16,13 +16,14 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 /**
  * The GameOverScreen class is displayed when the player dies.
- * It shows a 'game-over' message along with the player's score,
- * and provides options to restart the game or return to the main menu.
+ * It shows a 'Game-Over' message along with the player's score.
+ * Additionally, it provides options to restart the game or return to the main menu.
  */
 public class GameOverScreen implements Screen {
 
     private final MazeRunnerGame game;
     private final SpriteBatch batch;
+
     private final BitmapFont titleFont;
     private final BitmapFont font;
 
@@ -30,6 +31,7 @@ public class GameOverScreen implements Screen {
     private OrthographicCamera hudCamera;
 
     private final Music gameOverMusic;
+
     private final String message = "Experiment failed - Try again?";
     private final String scoreMessage;
     private final String retryMessage = "Press R to Retry";
@@ -62,7 +64,6 @@ public class GameOverScreen implements Screen {
 
     /**
      * Called when the screen is set to be visible.
-     * This method is empty in the screen implementation.
      */
     @Override
     public void show() {
@@ -124,8 +125,7 @@ public class GameOverScreen implements Screen {
     }
 
     /**
-     * Resizes the screen.
-     *
+     * Updates the screen dimensions when resized.
      * @param width  The new width of the screen.
      * @param height The new height of the screen.
      */

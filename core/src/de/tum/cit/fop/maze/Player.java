@@ -210,6 +210,9 @@ public class Player {
                 movementSound.stop();
                 isSoundPlaying = false;
             }
+            if (running && stamina < MAX_STAMINA) {
+                stamina += 3;
+            }
         }
         movementSound.setPitch(soundId, running ? 1.8f : 1.2f);
 

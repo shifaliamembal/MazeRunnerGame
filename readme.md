@@ -1,7 +1,7 @@
 # Lost in the Lab
 
 ## Background Story
-You are **Dr. Nova**, a scientist working in a cutting-edge research facility. During an experimental AI system test, an error triggers a self-destruct protocol, sealing you inside a labyrinth of corridors and locked doors. Rogue security drones and traps now threaten your survival. To escape, you must collect override codes (keys) to unlock the exit and navigate the maze of dangers.
+You are **Dr. Nova**, a scientist working in **NovaTech’s** cutting-edge research facility. During an experimental AI system test, **NEURA**, a rogue artificial intelligence developed by Dr. Nova and his team, experiences a critical bug. The malfunction triggers an automatic lockdown sequence and activates the facility’s self-destruct protocol, sealing you inside a labyrinth of corridors and locked doors. Now, the very security systems designed to protect the lab have turned against you—rogue drones patrol the halls, lethal traps block your path, and survival is uncertain. To escape, you must collect override codes (keys) to disable the lockdown and find your way to the exit before time runs out.
 
 ---
 
@@ -15,7 +15,7 @@ The project is organized into distinct components, including screens, entities, 
 - **Utilities**: Handles support functions like font management and a desktop launcher.
 
 ### UML Class Diagram
-_The UML class diagram illustrating the full structure is included in the repository._
+_The UML class diagram illustrating the full structure is included in the repository. All attributes and methods have been omitted for simplicity, focusing solely on the class hierarchy and relationships._
 
 ---
 
@@ -36,6 +36,11 @@ Mac users need to add the following VM option when running the game:
 ```
 This can be configured in your IDE or command-line execution.
 
+### Note for Windows & Linux Users
+Windows and Linux users **should not** include the `-XstartOnFirstThread` option, as it is only required for macOS.  
+Using this option on non-Mac systems may cause errors or prevent the game from running correctly.  
+Simply run the game **without** this VM option in your IDE or command-line execution.
+
 ---
 
 ## Gameplay Mechanics
@@ -47,7 +52,7 @@ This can be configured in your IDE or command-line execution.
 
 - **Limited Lives**: Dr. Nova has a finite number of lives, displayed in the HUD.
 
-- **Key Collection**: Find and collect holographic access keycards to unlock the exit.
+- **Key Collection**: Find a holographic access keycard hidden in **one** of the many chests scattered across the map to unlock the exit.
 
 - **Victory Condition**: Escape the maze by unlocking the exit with the key before losing all lives.
 
@@ -71,9 +76,12 @@ This can be configured in your IDE or command-line execution.
     - **Arrow**: Points toward the keycard location.
     - **Shield**: Provides temporary immunity.
 
+To use a power-up, press the corresponding number key based on its position in the inventory. For example, if slot **3** contains the **Sandwich**, pressing the `3` key equips and activates the Sandwich power-up.
+
+
 ### HUD Features
 - **Lives**: Green bar indicating health.
-- **Stamina**: Displays sprinting energy.
+- **Stamina**: Yellow bar displaying sprinting energy.
 - **Key Indicator**: Shows if the keycard is collected.
 - **Inventory**: Displays collected power-ups.
 - **Exit Arrow**: Points toward the maze exit after collecting the key.
@@ -89,8 +97,8 @@ This can be configured in your IDE or command-line execution.
 
 ## Game Menus
 1. **Main Menu**:
-    - Start the game.
-    - Access background story and settings.
+    - Start the game using `To the Lab`.
+    - Access background story via the `Info`.
     - Mute/unmute music.
     - Exit the game.
 
@@ -131,7 +139,7 @@ This can be configured in your IDE or command-line execution.
 - **Rendering**: Top-down 2D view using libGDX.
 - **Dynamic Scaling**: Supports various screen sizes and zoom levels. 
   - Zoom-in: Press `I`
-  - Zoom-out: Press `O` 
+  - Zoom-out: Press `O`
 
 ---
 
@@ -140,13 +148,22 @@ Our project goes beyond the base requirements with several unique and creative e
 
 1. **Random Maze Generation**: Each maze is procedurally generated, ensuring every game session is unique. This feature serves as a standout aspect of our project.
 2. **Nine Distinct Map Types**: Players can select from nine combinations of difficulty levels and maze sizes, offering extensive variety and replayability.
-3. **Thematic Consistency**: The story of Dr. Nova is entirely self-made, with all audio-visual elements carefully chosen to align with the high-tech, sci-fi narrative.
+3. **Thematic Consistency**: The story of Dr. Nova is entirely self-made, with all multimedia elements carefully chosen to align with the high-tech, sci-fi narrative.
 4. **Customized Assets**: Key game elements, including the character (Dr. Nova) and power-up chests, are uniquely modified versions of assets provided in the base repository. This showcases our attention to detail and dedication to originality.
 5. **Story-Focused Screens**: The addition of unique **Briefing** and **Info** screens provides players with immersive context, flexibility during gameplay, and an enriched experience seamlessly tied to the background story.
 
 ---
 
+## Project Contributors/Members
+
+- **Shifali Shyamsunder Amembal (go49xuw)** – [shifali.amembal@tum.de](mailto:shifali.amembal@tum.de)
+- **Alexandru-Cristian Oprea (go57yub)** – [alexandru.oprea@tum.de](mailto:alexandru.oprea@tum.de)
+- **Ebrahim Shabbir Udaipurwala (go57jod)** – [ebrahim.udaipurwala@tum.de](mailto:ebrahim.udaipurwala@tum.de)
+
+---
+
 ## Credits
+### Visual Assets
 - **Glowing Blue Orb**: [Free Glowing Ball Sprite](https://lvgames.itch.io/free-glowing-ball-sprite-pixel-fx-rpg-maker-ready)
 - **Wall Tiles**: [Free Industrial Zone Tileset](https://free-game-assets.itch.io/free-industrial-zone-tileset-pixel-art)
 - **Spider Drone**: [Spider Drone Sprite](https://vivicat.itch.io/spider-drone)
@@ -154,6 +171,10 @@ Our project goes beyond the base requirements with several unique and creative e
 - **Sandwich**: [Sandwich Art](https://www.pinterest.com/pin/215258057191207440)
 - **Spike Trap**: [Animated Traps](https://stealthix.itch.io/animated-traps)
 - **Explosion**: [Explosion Animations Pack](https://ansimuz.itch.io/explosion-animations-pack)
+- **Orbitron Font**: [Google Fonts](https://fonts.google.com/specimen/Orbitron)
+
+
+### Audio Assets
 - **Key Card Collected/Challenge Completed Sound**: [Epidemic Sound](https://www.epidemicsound.com/sound-effects/tracks/c80eea09-8a9f-4207-9357-709df1b1848f/)
 - **Movement Sound**: [Uppbeat](https://uppbeat.io/sfx/footsteps-walking-on-concrete/4107/17549)
 - **Lives Collected Sound**: [Epidemic Sound](https://www.epidemicsound.com/sound-effects/tracks/c80eea09-8a9f-4207-9357-709df1b1848f/)
@@ -166,4 +187,10 @@ Our project goes beyond the base requirements with several unique and creative e
 - **Defeat/Game Over Sound**: [Epidemic Sound](https://www.epidemicsound.com/sound-effects/tracks/e1cfe332-e03a-478d-984b-8e1e7228db41/)
 - **Win/Victory Sound**: [Mixkit](https://mixkit.co/free-sound-effects/game/)
 - **In-Game Music**: [Epidemic Sound](https://www.epidemicsound.com/sound-effects/tracks/b090e0fb-26d7-489f-86c7-b553257da5c3/)
-- **Background Music Theme**: [Free Sci-Fi Music](https://alkakrab.itch.io/free-sci-fi-music-2)
+- **Background Music Theme**: [Free Sci-Fi Music](https://alkakrab.itch.io/free-sci-fi-music-2)  
+
+### Screen Backdrops
+- **MenuScreen, DifficultyScreen, and MazeSizeScreen Backdrop**: AI-generated using [Google Gemini](https://gemini.google.com)
+- **InfoScreen and BriefingScreen Backdrop**: AI-generated using [Microsoft Copilot](https://copilot.microsoft.com)
+- **VictoryScreen Backdrop**: AI-generated using [Google Gemini](https://gemini.google.com)
+- **GameOverScreen Backdrop**: AI-generated using [Google Gemini](https://gemini.google.com)  

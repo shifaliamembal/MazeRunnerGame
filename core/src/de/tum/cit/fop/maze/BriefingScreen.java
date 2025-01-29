@@ -49,6 +49,9 @@ public class BriefingScreen implements Screen {
     /** Reference to the start button */
     private TextButton startButton;
 
+    /**Reference for the skip text label */
+    private Label skipLabel;
+
     /**
      * Constructs a new BriefingScreen.
      *
@@ -90,9 +93,9 @@ public class BriefingScreen implements Screen {
         table.add(title).padBottom(40).row();
 
         String briefingText = "Welcome, Dr. Nova! Before entering the labyrinth, remember:\n\n" +
-                "- Collect the override code to unlock the exit.\n" +
-                "- Avoid security drones and traps at all costs.\n" +
-                "- Use your wits and agility to navigate the maze.\n\n" +
+                "- The override code is hidden in one of the chests: search carefully.\n" +
+                "- Avoid security drones and traps; they will show no mercy.\n" +
+                "- Use your wits, agility, and power-ups wisely to survive.\n\n" +
                 "Your mission is critical. Good luck!";
         briefingLabel = new Label(briefingText, textStyle);
         briefingLabel.setWrap(true);
@@ -112,6 +115,9 @@ public class BriefingScreen implements Screen {
         });
         table.add(startButton).width(300).padBottom(20).row();
 
+        skipLabel = new Label("Press SPACE to skip", textStyle);
+        skipLabel.getColor().a = 0.6f;  // Slightly faded text
+        table.add(skipLabel).padTop(20);
     }
 
     /**
@@ -147,6 +153,18 @@ public class BriefingScreen implements Screen {
 
         startButton.clearActions();
         startButton.getColor().a = 1;
+
+        removeSkipLabel();
+    }
+
+    /**
+     * Removes the skip label from the stage.
+     */
+    private void removeSkipLabel() {
+        if (skipLabel != null) {
+            skipLabel.remove();
+            skipLabel = null;
+        }
     }
 
     /**

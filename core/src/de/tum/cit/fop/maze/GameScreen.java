@@ -228,11 +228,11 @@ public class GameScreen implements Screen {
             font.draw(hudBatch, "Key: ", space, - space * 22);
             for (int i = 0; i < player.getInventory().size(); i++) {
                 Texture tex = player.getInventory().get(i).getTexture();
-                hudBatch.draw(tex, space * 11 + space * (i + 1) + space * 3 * i, - space * 20,
+                hudBatch.draw(tex, space * 8 + space * (i + 1) + space * 3 * i, - space * 19,
                         space * 3, space * 3);
             }
             if (player.getKey() != null) {
-                hudBatch.draw(player.getKey().getTexture(), space * 9, - space * 25,
+                hudBatch.draw(player.getKey().getTexture(), space * 9, - space * 24,
                         space * 5, space * 3);
             }
             hudBatch.end();

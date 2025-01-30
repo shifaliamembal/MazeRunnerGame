@@ -23,11 +23,11 @@ _The UML class diagram illustrating the full structure is included in the reposi
 1. Clone the repository.
 2. Ensure Java (JDK 8 or higher) is installed.
 3. Install Gradle if not already present.
-4. Run the following commands:
-   ```bash
-   gradle desktop:run
-   ```
+4. Run the game.
 5. Use the game menu to start, customize settings, or exit the game.
+
+### Note
+The `-cp` (classpath) argument must end in `.desktop.main` when configuring the run command manually. 
 
 ### Note for Mac Users
 Mac users need to add the following VM option when running the game:
@@ -47,12 +47,12 @@ Simply run the game **without** this VM option in your IDE or command-line execu
 
 ### Core Features
 - **Character Movement**:
-    - **Walk**: Arrow keys or WASD.
+    - **Walk**: Arrow keys or `W` `A` `S` `D`.
     - **Run**: Hold `Shift` + Arrow keys for faster movement.
 
 - **Limited Lives**: Dr. Nova has a finite number of lives, displayed in the HUD.
 
-- **Key Collection**: Find a holographic access keycard hidden in **one** of the many chests scattered across the map to unlock the exit.
+- **Key Collection**: Find a holographic access keycard hidden in **one** of the many chests scattered across the map to unlock the exit. Press the `E` key to unlock chests and open the exit barrier.
 
 - **Victory Condition**: Escape the maze by unlocking the exit with the key before losing all lives.
 
@@ -70,7 +70,7 @@ Simply run the game **without** this VM option in your IDE or command-line execu
 
 ### Collectibles & Power-Ups
 - **Lives**: Glowing blue orbs restore health.
-- **Power-Ups**: Found in chests and stored in the inventory for later use.
+- **Power-Ups**: Found in chests and stored in the inventory for later use. Press the `E` key near a chest to open it.
     - **Bomb**: Clears surrounding walls or kills enemies.
     - **Sandwich**: Grants endless stamina temporarily.
     - **Arrow**: Points toward the keycard location.
@@ -123,7 +123,7 @@ To use a power-up, press the corresponding number key based on its position in t
 ---
 
 ## Multimedia Elements
-- **Background Music**: Sci-fi ambiance enhances immersion.
+- **Background Music/Scores**: Sci-fi ambiance enhances immersion.
 - **Sound Effects**:
     - Footsteps, laser sounds, zap effects for damage.
     - Item collection and usage sounds.
@@ -137,7 +137,7 @@ To use a power-up, press the corresponding number key based on its position in t
 ## Additional Information
 - **Supported Platforms**: Desktop (Windows, macOS, Linux).
 - **Rendering**: Top-down 2D view using libGDX.
-- **Dynamic Scaling**: Supports various screen sizes and zoom levels. 
+- **Dynamic Scaling**: Supports various screen sizes and zoom levels (in-game). 
   - Zoom-in: Press `I`
   - Zoom-out: Press `O`
 

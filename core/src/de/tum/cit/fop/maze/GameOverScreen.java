@@ -35,7 +35,7 @@ public class GameOverScreen implements Screen {
     private final String message = "Experiment failed - Try again?";
     private final String scoreMessage;
     private final String retryMessage = "Press R to Retry";
-    private final String menuMessage = "Press M to return to Menu";
+    private final String menuMessage = "Press M to Return to Menu";
     private final Texture background;
 
     /**
